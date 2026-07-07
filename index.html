@@ -1,198 +1,213 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0b0f">
+<title>Oto &amp; Emlak Fırsat — Tanıtım</title>
+<meta name="description" content="Yapay zeka, piyasanın altındaki araç ve emlak ilanlarını 7/24 tarar; fırsatı kimse kapmadan önce Telegram'ına getirir. 7 gün bedava.">
 <style>
-  *, *::before, *::after { box-sizing: border-box; }
+  *,*::before,*::after{ box-sizing:border-box; }
   :root{
-    --ground:#0b0f16; --ground2:#0e131c;
-    --gold:#e6b34a; --gold-dim:#9b7f3f;
-    --tg-bg:#0e1621; --tg-header:#17212b; --tg-bubble:#1c2b3a; --tg-bubble2:#213445;
-    --tg-text:#eaf0f5; --tg-dim:#8399ab; --tg-link:#6fb3ef;
-    --ok:#5ac26a; --warn:#e8a13a; --line:#20303f;
+    --ink:#0a0b0f; --ink2:#0f1218; --card:#141924; --card2:#171d29;
+    --line:#232c3b; --line2:#2e3a4d;
+    --gold:#e6b34a; --gold-d:#c8952f; --green:#49c06c; --red:#ef6b6b;
+    --tx:#eef2f7; --dim:#95a1b3; --dim2:#6f7c8e;
     --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    --maxw:560px;
   }
-  body{ margin:0; background:
-      radial-gradient(1200px 600px at 50% -10%, #14202e 0%, transparent 60%),
-      linear-gradient(180deg,var(--ground) 0%, var(--ground2) 100%);
-    color:var(--tg-text); font-family:var(--sans); line-height:1.5;
-    -webkit-font-smoothing:antialiased; padding:38px 16px 60px; }
-  .wrap{ max-width:468px; margin:0 auto; }
-
-  /* ---- brand frame ---- */
-  .frame{ text-align:center; margin-bottom:26px; }
-  .eyebrow{ font-size:11px; letter-spacing:.22em; text-transform:uppercase;
-    color:var(--gold); font-weight:700; margin-bottom:10px; }
-  .frame h1{ font-size:27px; line-height:1.15; margin:0 0 8px; font-weight:800;
-    letter-spacing:-.02em; text-wrap:balance; color:#fff; }
-  .frame h1 b{ color:var(--gold); font-weight:800; }
-  .lede{ margin:0; color:var(--tg-dim); font-size:14.5px; max-width:40ch; margin-inline:auto; }
-
-  /* ---- phone / telegram ---- */
-  .phone{ border:1px solid var(--line); border-radius:20px; overflow:hidden;
-    box-shadow:0 24px 60px -20px rgba(0,0,0,.7), 0 0 0 1px rgba(255,255,255,.02) inset;
-    background:var(--tg-bg); }
-  .tg-header{ display:flex; align-items:center; gap:11px; padding:11px 14px;
-    background:var(--tg-header); border-bottom:1px solid #0c141d; }
-  .avatar{ width:38px; height:38px; border-radius:50%; flex:0 0 auto;
-    background:linear-gradient(145deg,#e6b34a,#b5832a); color:#1a1206; font-weight:800;
-    display:grid; place-items:center; font-size:13px; letter-spacing:.02em; }
-  .botname{ font-weight:600; font-size:15px; }
-  .status{ font-size:12px; color:var(--tg-link); }
-  .status b{ color:var(--ok); font-weight:600; }
-
-  .tg-chat{ padding:16px 12px 20px;
+  html{ -webkit-text-size-adjust:100%; }
+  body{ margin:0; font-family:var(--sans); color:var(--tx); line-height:1.55;
     background:
-      radial-gradient(600px 300px at 90% 8%, rgba(230,179,74,.05), transparent 60%),
-      var(--tg-bg);
-    display:flex; flex-direction:column; gap:9px; }
-  .day{ align-self:center; font-size:11.5px; color:var(--tg-dim);
-    background:#12202e; padding:3px 11px; border-radius:20px; margin:2px 0 6px; }
-
-  .msg{ position:relative; max-width:90%; align-self:flex-start;
-    background:var(--tg-bubble); border-radius:4px 14px 14px 14px; padding:9px 12px 7px;
-    font-size:14.5px; white-space:pre-wrap; box-shadow:0 1px 1px rgba(0,0,0,.25);
-    animation:rise .5s both; }
-  .msg b{ font-weight:700; }
-  .msg .sm{ font-size:12px; color:var(--tg-dim); }
-  .msg .lnk{ color:var(--tg-link); }
-  .msg .time{ float:right; font-size:10.5px; color:var(--tg-dim); margin:4px 0 0 10px; }
+      radial-gradient(120% 60% at 50% -8%, #17202e 0%, transparent 55%),
+      radial-gradient(90% 50% at 100% 100%, rgba(73,192,108,.06), transparent 60%),
+      linear-gradient(180deg,var(--ink) 0%, var(--ink2) 100%);
+    -webkit-font-smoothing:antialiased; }
+  .wrap{ width:100%; max-width:var(--maxw); margin:0 auto; padding:0 18px; }
+  section{ padding:38px 0; }
+  .eyebrow{ display:inline-block; font-size:11px; letter-spacing:.26em; text-transform:uppercase;
+    font-weight:800; color:var(--gold); margin:0 0 14px; }
+  h1,h2,h3{ margin:0; letter-spacing:-.02em; text-wrap:balance; font-weight:850; }
+  h1{ font-size:clamp(30px,8.5vw,44px); line-height:1.08; }
+  h2{ font-size:clamp(22px,6vw,30px); line-height:1.14; margin-bottom:14px; }
+  h1 .g,h2 .g{ color:var(--gold); }
+  h1 .gr{ color:var(--green); }
+  p{ margin:0; }
+  .lead{ color:var(--dim); font-size:clamp(15px,4.2vw,17px); margin-top:16px; }
   .num{ font-variant-numeric:tabular-nums; }
 
-  /* pills inside a card head */
-  .head{ display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-bottom:5px; }
-  .pill{ font-size:11px; font-weight:700; padding:2px 8px; border-radius:20px; letter-spacing:.01em; }
-  .p-band{ background:rgba(230,179,74,.16); color:var(--gold); border:1px solid rgba(230,179,74,.35); }
-  .p-tekel{ background:rgba(90,194,106,.14); color:var(--ok); border:1px solid rgba(90,194,106,.3); }
-  .fresh{ color:var(--ok); } .warn{ color:var(--warn); }
-  hr.d{ border:0; border-top:1px solid var(--line); margin:7px 0; opacity:.6; }
+  .bar{ position:sticky; top:0; z-index:20; backdrop-filter:blur(10px);
+    background:rgba(10,11,15,.72); border-bottom:1px solid var(--line);
+    display:flex; align-items:center; justify-content:space-between; padding:11px 16px; }
+  .brand{ display:flex; align-items:center; gap:9px; font-weight:800; font-size:14.5px; }
+  .brand .mk{ width:27px;height:27px;border-radius:8px; display:grid;place-items:center; font-size:12px; font-weight:900; color:#1a1206;
+    background:linear-gradient(150deg,#f0c25a,#c8952f); box-shadow:0 3px 10px -2px rgba(230,179,74,.5); }
+  .brand small{ display:block; font-size:9.5px; letter-spacing:.16em; color:var(--gold); font-weight:700; text-transform:uppercase; line-height:1; margin-top:2px; }
+  .bar .go{ font-size:12.5px; font-weight:800; color:#1a1206; text-decoration:none; padding:8px 13px; border-radius:9px;
+    background:linear-gradient(150deg,#f0c25a,#d4a03c); white-space:nowrap; }
 
-  /* telegram inline keyboard */
-  .kbd{ display:grid; grid-template-columns:1fr 1fr; gap:5px; margin-top:9px; }
-  .kbd button{ font-family:inherit; font-size:13px; font-weight:600; color:var(--tg-text);
-    background:var(--tg-bubble2); border:0; border-radius:9px; padding:9px 8px; cursor:pointer;
-    display:flex; align-items:center; justify-content:center; gap:6px; transition:background .15s; }
-  .kbd button:hover{ background:#2a4056; }
-  .kbd button:focus-visible{ outline:2px solid var(--tg-link); outline-offset:2px; }
-  .kbd .wide{ grid-column:1 / -1; }
+  .hero{ padding-top:34px; }
+  .flag{ display:inline-flex; gap:7px; align-items:center; font-size:12px; color:var(--dim);
+    border:1px solid var(--line2); border-radius:20px; padding:5px 12px; margin-bottom:18px; }
+  .flag .dot{ width:7px;height:7px;border-radius:50%; background:var(--green); box-shadow:0 0 0 3px rgba(73,192,108,.18); }
+  .cta{ display:block; text-align:center; text-decoration:none; font-weight:850; font-size:17px; color:#1a1206;
+    background:linear-gradient(150deg,#f4c85f,#d4a03c); padding:16px 20px; border-radius:14px; letter-spacing:.01em;
+    box-shadow:0 14px 30px -10px rgba(230,179,74,.55), inset 0 1px 0 rgba(255,255,255,.35);
+    transition:transform .12s ease; }
+  .cta:active{ transform:translateY(1px) scale(.995); }
+  .cta.big{ font-size:18px; padding:18px; }
+  .cta-sub{ text-align:center; font-size:12.5px; color:var(--dim2); margin-top:10px; }
+  .cta-sub b{ color:var(--dim); font-weight:600; }
+  .herocta{ margin-top:26px; }
 
-  /* nabiz bubble tint */
-  .msg.nabiz{ background:#182130; border-left:3px solid var(--gold-dim); }
+  .loss{ background:linear-gradient(180deg, rgba(239,107,107,.08), transparent);
+    border:1px solid rgba(239,107,107,.22); border-radius:16px; padding:20px 18px; }
+  .loss h2{ font-size:clamp(19px,5.4vw,25px); }
+  .loss .r{ color:var(--red); }
 
-  /* ---- backstage ---- */
-  .backstage{ margin-top:26px; padding:20px 18px; border:1px solid var(--line);
-    border-radius:16px; background:linear-gradient(180deg,#111826,#0e131c); }
-  .bs-eye{ font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--gold);
-    font-weight:700; margin-bottom:12px; }
-  .chips{ display:flex; flex-wrap:wrap; gap:7px; }
-  .chip{ font-size:12.5px; color:#cbd8e2; background:#16202d; border:1px solid var(--line);
-    padding:6px 11px; border-radius:9px; }
-  .chip b{ color:var(--gold); }
-  .moat{ margin:16px 0 0; font-size:15px; line-height:1.5; color:#dfe8ef; text-align:center;
-    font-weight:600; }
-  .moat b{ color:var(--gold); }
-  .foot{ text-align:center; margin-top:18px; font-size:12px; color:var(--tg-dim); }
+  .steps{ display:flex; flex-direction:column; gap:12px; margin-top:22px; }
+  .step{ display:flex; gap:14px; align-items:flex-start; background:var(--card); border:1px solid var(--line);
+    border-radius:14px; padding:15px 16px; }
+  .step .n{ flex:0 0 auto; width:30px;height:30px;border-radius:9px; display:grid;place-items:center; font-weight:900; font-size:14px;
+    color:var(--gold); background:rgba(230,179,74,.12); border:1px solid rgba(230,179,74,.3); }
+  .step .t{ font-weight:750; font-size:15.5px; }
+  .step .d{ color:var(--dim); font-size:13.5px; margin-top:2px; }
 
-  @keyframes rise{ from{ opacity:0; transform:translateY(9px); } to{ opacity:1; transform:none; } }
-  .tg-chat .msg:nth-child(2){ animation-delay:.05s; }
-  .tg-chat .msg:nth-child(3){ animation-delay:.15s; }
-  .tg-chat .msg:nth-child(4){ animation-delay:.28s; }
-  .tg-chat .msg:nth-child(5){ animation-delay:.40s; }
-  .tg-chat .msg:nth-child(6){ animation-delay:.52s; }
-  @media (prefers-reduced-motion:reduce){ .msg{ animation:none; } }
+  .deals{ display:flex; flex-direction:column; gap:12px; margin-top:20px; }
+  .deal{ background:linear-gradient(180deg,var(--card2),var(--card)); border:1px solid var(--line);
+    border-radius:15px; padding:15px 16px; box-shadow:0 10px 26px -18px rgba(0,0,0,.8); }
+  .deal .hd{ display:flex; flex-wrap:wrap; gap:7px; align-items:center; margin-bottom:9px; }
+  .pill{ font-size:10.5px; font-weight:800; padding:3px 9px; border-radius:20px; letter-spacing:.02em; }
+  .pill.g{ color:var(--gold); background:rgba(230,179,74,.14); border:1px solid rgba(230,179,74,.34); }
+  .pill.gr{ color:var(--green); background:rgba(73,192,108,.13); border:1px solid rgba(73,192,108,.32); }
+  .deal .ttl{ font-weight:800; font-size:16px; }
+  .deal .meta{ color:var(--dim); font-size:13px; margin-top:2px; }
+  .deal .row{ display:flex; align-items:baseline; gap:9px; margin-top:9px; flex-wrap:wrap; }
+  .deal .price{ font-size:20px; font-weight:850; }
+  .deal .disc{ color:var(--green); font-weight:800; font-size:13.5px;
+    background:rgba(73,192,108,.1); padding:2px 8px; border-radius:7px; }
+  .deal .foot{ margin-top:9px; padding-top:9px; border-top:1px dashed var(--line2); font-size:12.5px; color:var(--dim); display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
+  .cap{ text-align:center; color:var(--dim2); font-size:12.5px; margin-top:14px; }
+
+  .moat{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:22px 18px; text-align:center; }
+  .moat .vs{ font-size:clamp(19px,5.6vw,26px); font-weight:850; line-height:1.3; }
+  .moat .vs .d{ color:var(--dim2); }
+  .moat .vs .g{ color:var(--gold); }
+  .grid2{ display:grid; grid-template-columns:1fr; gap:12px; margin-top:20px; }
+  .who{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:17px; }
+  .who .k{ font-size:11px; letter-spacing:.16em; text-transform:uppercase; font-weight:800; }
+  .who.a .k{ color:var(--gold); } .who.b .k{ color:var(--green); }
+  .who .h{ font-weight:800; font-size:17px; margin:6px 0 4px; }
+  .who .p{ color:var(--dim); font-size:13.5px; }
+
+  .trust{ display:flex; flex-direction:column; gap:9px; margin-top:8px; }
+  .tr{ display:flex; gap:11px; align-items:flex-start; font-size:14px; }
+  .tr .i{ color:var(--green); flex:0 0 auto; font-weight:900; }
+  .tr b{ font-weight:700; }
+  .tr span{ color:var(--dim); }
+
+  .final{ text-align:center; background:radial-gradient(90% 80% at 50% 0%, rgba(230,179,74,.12), transparent 60%);
+    border-top:1px solid var(--line); }
+  .final .handle{ font-weight:800; font-size:15px; margin-top:16px; }
+  .final .handle .g{ color:var(--gold); }
+  footer{ text-align:center; color:var(--dim2); font-size:11.5px; padding:24px 18px 40px; border-top:1px solid var(--line); }
+  footer .dis{ max-width:44ch; margin:0 auto; line-height:1.5; }
+
+  @media (min-width:520px){ .grid2{ grid-template-columns:1fr 1fr; } }
+  @media (prefers-reduced-motion:reduce){ *{ transition:none!important; } }
 </style>
+</head>
+<body>
 
-<div class="wrap">
-  <header class="frame">
-    <div class="eyebrow">Galericinin Telegram'ında</div>
-    <h1><b>Akıllı Fırsat</b> ne gösterir?</h1>
-    <p class="lede">İlanları 7/24 tarar, piyasa-altı fırsatı — kimse kapmadan — ilk sana yollar. İşte esnafın ekranında göreceği:</p>
-  </header>
-
-  <div class="phone">
-    <div class="tg-header">
-      <div class="avatar">AF</div>
-      <div>
-        <div class="botname">Akıllı Fırsat</div>
-        <div class="status"><b>çevrimiçi</b> · 7/24 tarıyor</div>
-      </div>
-    </div>
-
-    <div class="tg-chat">
-      <div class="day">Bugün</div>
-
-      <div class="msg">👋 Takibindeki modelleri (Egea, Clio, Corolla…) ilan sitelerinde <b>7/24 tarıyorum.</b> Piyasa-altı bir fırsat çıkınca — kimse kapmadan — ilk sana düşer.<span class="time">01:22</span></div>
-
-      <div class="msg">
-<div class="head"><span class="pill p-band">🅰 SWEET-SPOT A</span><span class="pill p-tekel">🥇 İLK SANA · 15 dk tekel</span></div>
-<b>Fiat Egea 2019</b> · <span class="num">90.000</span> km
-💰 <b class="num">495.000 TL</b> · 📍 İstanbul / Kadıköy
-📊 Emsal ~<span class="num">560.000</span> → <b>%12 altı</b> <span class="sm">(14 emsal)</span>
-🚚 <b>Arbitraj:</b> Manisa'da sat → <b class="num">+160.000</b>
-🏷️ Al-sat marjı · bireysel-kaynak, pazarlık payı geniş
-<span class="warn">⚠️ Tramer/hasar belirtilmemiş — teyit et</span>
-<span class="fresh">🟢 Son kontrol: az önce · güven yüksek</span>
-<span class="lnk">🔗 İlana git → satıcıyla görüş</span>
-<span class="sm">Ön analizdir; ekspertiz + pazarlık sizde.</span>
-        <div class="kbd">
-          <button>🔵 İlgileniyorum</button>
-          <button>👀 Takibe al</button>
-          <button>✅ Aldım</button>
-          <button>🚫 Pas geç</button>
-        </div>
-        <span class="time">01:22</span>
-      </div>
-
-      <div class="msg">
-<div class="head"><span class="pill p-band">🅱 SWEET-SPOT B</span></div>
-<b>Renault Clio 2018</b> · <span class="num">75.000</span> km
-💰 <b class="num">380.000 TL</b> · 📍 Bursa / Nilüfer
-📊 Emsal ~<span class="num">410.000</span> → <b>%7 altı</b> <span class="sm">(11 emsal)</span>
-<span class="fresh">✅ Temiz · hasar/hukuk kaydı yok</span>
-<span class="fresh">🟢 Son kontrol: 4 dk önce · güven yüksek</span>
-<span class="lnk">🔗 İlana git</span>
-        <div class="kbd">
-          <button>🔵 İlgileniyorum</button>
-          <button>👀 Takibe al</button>
-        </div>
-        <span class="time">01:31</span>
-      </div>
-
-      <div class="msg">
-<div class="head"><span class="pill p-band">🅰 SWEET-SPOT A</span><span class="pill p-tekel">🥇 İLK SANA</span></div>
-<b>Satılık Daire · 3+1 · 110 m²</b>
-💰 <b class="num">4.200.000 TL</b> · 📍 İstanbul / Kadıköy / <b>Caddebostan</b>
-📊 Emsal ~<span class="num">4.850.000</span> → <b>%13 altı</b> <span class="sm">(18 emsal)</span>
-<span class="fresh">🟢 Son kontrol: 8 dk önce</span>
-<span class="lnk">🔗 İlana git</span>
-<span class="sm">Mahalle-bazlı emsal · hukuk kalkanı geçti.</span>
-        <div class="kbd">
-          <button>🔵 İlgileniyorum</button>
-          <button>👀 Takibe al</button>
-        </div>
-        <span class="time">01:44</span>
-      </div>
-
-      <div class="msg nabiz">
-🔔 <b>Günlük Nabız</b> · Tokat
-📡 <b class="num">412</b> ilan tarandı
-🎯 Eşiği geçen fırsat YOK — çıtayı düşürüp <b>çöp GÖNDERMEDİK</b>
-👀 8 aday izlemede <span class="sm">(veri gelince terfi eder)</span>
-➕ Havuza <b class="num">45</b> taze ilan girdi
-<span class="sm">Sessizlik = kalite. Fırsat çıkınca anında haber.</span><span class="time">09:00</span>
-      </div>
-
-    </div>
+  <div class="bar">
+    <div class="brand"><span class="mk">AF</span><div>Oto &amp; Emlak Fırsat<small>yapay zeka</small></div></div>
+    <a class="go" href="https://t.me/akilli_firsat_bot">Başla</a>
   </div>
 
-  <section class="backstage">
-    <div class="bs-eye">Her kartın arkasında</div>
-    <div class="chips">
-      <span class="chip">km/yaş-düzeltilmiş <b>emsal</b></span>
-      <span class="chip">scam + hasar <b>kalkanı</b></span>
-      <span class="chip">şehirler-arası <b>arbitraj</b></span>
-      <span class="chip">şehir-bazlı <b>tekel</b></span>
-      <span class="chip">canlılık / <b>tazelik</b></span>
-      <span class="chip">galerici ↔ bireysel <b>ayrı</b></span>
+  <section class="hero"><div class="wrap">
+    <div class="flag"><span class="dot"></span> Her il taranıyor · 7/24 canlı</div>
+    <span class="eyebrow">Oto &amp; Emlak Fırsat</span>
+    <h1>Piyasanın <span class="g">altındaki</span> araç ve evler, kimse kapmadan <span class="gr">senin telefonunda.</span></h1>
+    <p class="lead">Yapay zeka binlerce ilanı senin yerine 7/24 tarar; emsalinin altında bir fırsat çıkınca — daha kimse görmeden — Telegram'ına düşürür. Sen aramazsın, <b style="color:var(--tx)">fırsat sana gelir.</b></p>
+    <div class="herocta">
+      <a class="cta big" href="https://t.me/akilli_firsat_bot">🚀 7 GÜN BEDAVA BAŞLA</a>
+      <p class="cta-sub">Kart yok · kurulum yok · <b>beğenmezsen tek tık çıkış</b></p>
     </div>
-    <p class="moat">İlan siteleri <b>fiyatı</b> gösterir.<br>Akıllı Fırsat <b>değeri</b> gösterir.</p>
-  </section>
+  </div></section>
 
-  <p class="foot">Önizleme — bu gece kurulan motorun çıktısı · 11 modül, 90 test yeşil</p>
-</div>
+  <section><div class="wrap">
+    <div class="loss">
+      <h2>Şu an bakmadığın her dakika, <span class="r">bir fırsat başkasına gidiyor.</span></h2>
+      <p class="lead" style="margin-top:12px">Piyasa-altı bir araç 2 saat, iyi bir daire yarım gün durur. Sen fark etmeden satılır. Kaçan her fırsat = cebinden çıkan <b style="color:var(--tx)">on binlerce lira.</b> Bot uyumaz — senin yerine nöbette.</p>
+    </div>
+  </div></section>
+
+  <section><div class="wrap">
+    <span class="eyebrow">3 adımda</span>
+    <h2>Kurulum yok. <span class="g">Sadece söyle, o baksın.</span></h2>
+    <div class="steps">
+      <div class="step"><span class="n">1</span><div><div class="t">Ne aradığını yaz</div><div class="d">"Egea 750 bin altı" · "3+1 daire Tokat" · "dizel SUV" — cümleyle söyle, anlar.</div></div></div>
+      <div class="step"><span class="n">2</span><div><div class="t">AI 7/24 tarar</div><div class="d">Binlerce ilanı emsaliyle karşılaştırır; ucuzu, temizi, gerçek fırsatı ayıklar.</div></div></div>
+      <div class="step"><span class="n">3</span><div><div class="t">Fırsat çıkınca haber verir</div><div class="d">"%X emsal-altı" kartı Telegram'ına düşer. İlk sana — 15 dk tekel, hızlı davran.</div></div></div>
+    </div>
+  </div></section>
+
+  <section><div class="wrap">
+    <span class="eyebrow">Telefonuna böyle düşer</span>
+    <h2>Fiyat değil — <span class="g">kâr</span> gösterir.</h2>
+    <div class="deals">
+      <div class="deal">
+        <div class="hd"><span class="pill g">🎯 FIRSAT</span><span class="pill gr">%19 emsal-altı</span></div>
+        <div class="ttl">Fiat Egea 2023 · <span class="num">62.000</span> km</div>
+        <div class="meta">📍 İstanbul / Esenyurt</div>
+        <div class="row"><span class="price num">915.000 ₺</span><span class="disc">Emsal ~1.132.000 ₺ · 22 emsal</span></div>
+        <div class="foot">✅ Temiz · 🟢 az önce doğrulandı · 🔗 ilana git, kendin görüş</div>
+      </div>
+      <div class="deal">
+        <div class="hd"><span class="pill g">🏠 EMLAK</span><span class="pill gr">%13 emsal-altı</span></div>
+        <div class="ttl">3+1 Daire · 110 m² · Kadıköy</div>
+        <div class="meta">📍 İstanbul / Caddebostan</div>
+        <div class="row"><span class="price num">4.200.000 ₺</span><span class="disc">Emsal ~4.850.000 ₺</span></div>
+        <div class="foot">✅ Mahalle emsalli · 🔗 ilana git, kendin görüş</div>
+      </div>
+    </div>
+    <p class="cap">Örnek kart. Numara kazımayız — <b>sen ilandan kendin ulaşırsın.</b></p>
+  </div></section>
+
+  <section><div class="wrap">
+    <div class="moat">
+      <span class="eyebrow">Neden farklı</span>
+      <p class="vs"><span class="d">İlan siteleri</span> fiyatı gösterir.<br>Biz <span class="g">değeri</span> gösteririz.</p>
+      <p class="lead" style="margin-top:14px">Emsal-altı yüzdesi, tazelik, "neden ucuz" notu, tramer uyarısı, şehirler-arası arbitraj — bir uzman gibi bakar, saniyede.</p>
+    </div>
+    <div class="grid2">
+      <div class="who a"><div class="k">Galerici / Esnaf</div><div class="h">Al-sat kârı ayağına gelsin</div><div class="p">Ucuz aracı kimse kapmadan yakala, kâra çevir. Saatlerce ilan taramak yok.</div></div>
+      <div class="who b"><div class="k">Kendine Alan</div><div class="h">Doğru arabayı ucuza bul</div><div class="p">Araba/ev ararken tek tek gezme. Uygun fırsat çıkınca bot seni uyarır.</div></div>
+    </div>
+  </div></section>
+
+  <section><div class="wrap">
+    <span class="eyebrow">Güven</span>
+    <h2>Kurallara <span class="g">saygılı,</span> sana dürüst.</h2>
+    <div class="trust">
+      <div class="tr"><span class="i">✓</span><span><b>KVKK uyumlu.</b> Kişisel numara/plaka kazımaz, satmayız.</span></div>
+      <div class="tr"><span class="i">✓</span><span><b>Ön analizdir, tavsiye değil.</b> Ekspertiz ve pazarlık her zaman sende.</span></div>
+      <div class="tr"><span class="i">✓</span><span><b>Bağımsız bir araçtır</b> — hiçbir ilan sitesinin resmi ürünü/ortağı değildir.</span></div>
+      <div class="tr"><span class="i">✓</span><span><b>Risksiz dene.</b> 7 gün bedava, beğenmezsen tek tıkla çıkarsın.</span></div>
+    </div>
+  </div></section>
+
+  <section class="final"><div class="wrap">
+    <span class="eyebrow">Şimdi başla</span>
+    <h2 style="margin-bottom:6px">Bir sonraki fırsatı <span class="g">kaçırma.</span></h2>
+    <p class="lead" style="margin:0 auto 22px; max-width:34ch">7 gün bedava. Bugün kur, ilk fırsatın bu hafta gelsin.</p>
+    <a class="cta big" href="https://t.me/akilli_firsat_bot">🚀 7 GÜN BEDAVA BAŞLA</a>
+    <div class="handle">Telegram: <span class="g">@akilli_firsat_bot</span></div>
+  </div></section>
+
+  <footer>
+    <p class="dis">Oto &amp; Emlak Fırsat · yapay zeka destekli ilan tarama ve bildirim aracı. Sunulan fırsatlar bilgilendirme amaçlıdır; yatırım/alım tavsiyesi değildir. Bağımsız bir araçtır, hiçbir ilan sitesinin resmi ürünü değildir.</p>
+  </footer>
+
+</body>
+</html>
