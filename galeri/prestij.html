@@ -1,0 +1,71 @@
+<!DOCTYPE html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Prestij Karnesi</title></head><body style="margin:0">
+<style>
+  *,*::before,*::after{ box-sizing:border-box; }
+  :root{
+    --ink:#0b0d12; --gold:#e2ac44; --green:#43b063; --line:#252c38; --dim:#93a0b1; --text:#eef2f7;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  }
+  body{ margin:0; font-family:var(--sans); background:#05070b; color:var(--text); padding:26px 14px 46px; -webkit-font-smoothing:antialiased; }
+  .hint{ max-width:420px; margin:0 auto 20px; text-align:center; color:var(--dim); font-size:13.5px; line-height:1.55; }
+  .hint b{ color:var(--gold); }
+  .num{ font-variant-numeric:tabular-nums; }
+
+  /* 9:16 story */
+  .story{ width:min(340px,86vw); aspect-ratio:9/16; margin:0 auto; border-radius:26px; overflow:hidden; position:relative;
+    box-shadow:0 30px 70px -24px rgba(0,0,0,.85);
+    background:
+      radial-gradient(460px 360px at 84% 4%, rgba(226,172,68,.20), transparent 58%),
+      radial-gradient(420px 380px at 10% 104%, rgba(67,176,99,.10), transparent 58%),
+      linear-gradient(170deg,#0f1219,#0a0c11);
+    display:flex; flex-direction:column; padding:30px 26px 28px; }
+
+  .brand{ display:flex; align-items:center; gap:8px; font-weight:800; font-size:13px; letter-spacing:.01em; }
+  .brand .mk{ width:24px;height:24px;border-radius:7px; background:linear-gradient(145deg,#e8b64a,#b5832a); color:#1a1206; display:grid;place-items:center; font-size:11px; font-weight:900; }
+  .brand .ai{ font-size:9.5px; font-weight:700; color:var(--gold); letter-spacing:.14em; text-transform:uppercase; }
+  .lab{ margin-top:20px; font-size:11px; letter-spacing:.24em; text-transform:uppercase; color:var(--gold); font-weight:700; }
+
+  .big{ margin-top:8px; font-size:34px; line-height:1.05; font-weight:850; letter-spacing:-.03em; text-wrap:balance; }
+  .big .g{ color:var(--gold); }
+
+  .stats{ margin-top:22px; display:flex; flex-direction:column; gap:12px; }
+  .st{ display:flex; align-items:baseline; gap:12px; border-bottom:1px solid var(--line); padding-bottom:11px; }
+  .st .v{ font-size:26px; font-weight:850; letter-spacing:-.02em; min-width:92px; }
+  .st .v.g{ color:var(--gold); } .st .v.gr{ color:var(--green); }
+  .st .k{ font-size:13.5px; color:#c3ccd8; line-height:1.3; }
+
+  .hi{ margin-top:auto; background:#16202e; border:1px solid var(--line); border-radius:13px; padding:12px 14px; }
+  .hi .t{ font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--dim); font-weight:700; }
+  .hi .m{ font-weight:800; font-size:15px; margin-top:3px; }
+  .hi .d{ font-size:12.5px; color:var(--green); margin-top:2px; }
+
+  .foot{ margin-top:18px; text-align:center; }
+  .foot .cta{ font-weight:800; font-size:15px; color:#1a1206; background:linear-gradient(160deg,#f0c25a,#d29a30); padding:11px 16px; border-radius:11px; display:inline-block; }
+  .foot .h{ margin-top:9px; font-size:12.5px; color:var(--dim); } .foot .h b{ color:var(--text); }
+</style>
+
+<p class="hint">Instagram <b>hikâye (9:16)</b> — galericinin her hafta alıp <b>paylaşacağı</b> karne. Paylaştıkça senin reklamın. Ekran görüntüsü al → hikâyeye at.</p>
+
+<div class="story">
+  <div class="brand"><span class="mk">AF</span> AKILLI FIRSAT <span class="ai">yapay zeka</span></div>
+  <div class="lab">Haftalık Karnem · 12–18 Tem</div>
+
+  <div class="big">Bu hafta <span class="g">3 fırsat</span> yakaladım. 🎯</div>
+
+  <div class="stats">
+    <div class="st"><span class="v g num">3</span><span class="k">emsal-altı fırsat bana düştü</span></div>
+    <div class="st"><span class="v num">%20</span><span class="k">en iyisi piyasanın altında</span></div>
+    <div class="st"><span class="v gr num">185.000₺</span><span class="k">potansiyel kâr yakaladım</span></div>
+  </div>
+
+  <div class="hi">
+    <div class="t">Haftanın fırsatı</div>
+    <div class="m">Mercedes A180 · 2017 · 102.000 km</div>
+    <div class="d">%20 emsal-altı · Mersin → İstanbul arbitraj</div>
+  </div>
+
+  <div class="foot">
+    <span class="cta">Sen de dene — 7 gün BEDAVA</span>
+    <div class="h">Telegram: <b>@akilli_firsat_bot</b></div>
+  </div>
+</div>
+</body></html>

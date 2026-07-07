@@ -1,0 +1,285 @@
+<!DOCTYPE html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tanitim v2</title></head><body style="margin:0">
+<style>
+  :root{
+    --ground:#0B2524; --ground2:#123E3A; --ground3:#0e2f2c;
+    --paper:#F6F2E8; --paper2:#EFEADC; --card:#FFFFFF;
+    --ink:#0F1E1B; --ink2:#22332F; --muted:#59685F;
+    --gold:#E7AC3D; --gold-d:#A9781F;
+    --green:#2FA06E; --green-d:#1c7a51; --terra:#C9603C;
+    --line:rgba(11,37,36,.12); --line-d:rgba(255,255,255,.10);
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --serif:Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,"SF Mono","Cascadia Code",Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  .wrap{max-width:620px;margin:0 auto;background:var(--paper);color:var(--ink);
+        font-family:var(--sans);font-size:17px;line-height:1.6;overflow:hidden;
+        -webkit-font-smoothing:antialiased;box-shadow:0 30px 90px rgba(0,0,0,.28)}
+  .wrap p{margin:0}
+  .chip{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:800;
+        letter-spacing:.12em;text-transform:uppercase;padding:6px 12px;border-radius:999px;
+        background:rgba(231,172,61,.16);color:var(--gold);border:1px solid rgba(231,172,61,.35)}
+
+  /* ---------- HERO ---------- */
+  .hero{position:relative;background:radial-gradient(130% 100% at 82% -12%,var(--ground2),var(--ground) 62%);
+        color:#EEF5F2;padding:46px 32px 38px;overflow:hidden}
+  .radar{position:absolute;right:-90px;top:-90px;width:300px;height:300px;border-radius:50%;
+         border:1px solid rgba(231,172,61,.22);
+         box-shadow:0 0 0 46px rgba(231,172,61,.045),0 0 0 92px rgba(231,172,61,.03)}
+  .radar::after{content:"";position:absolute;inset:0;border-radius:50%;
+        background:conic-gradient(from 0deg,rgba(231,172,61,.34),transparent 68%);
+        animation:spin 7s linear infinite}
+  .radar b{position:absolute;left:50%;top:50%;width:9px;height:9px;margin:-4px;border-radius:50%;
+        background:var(--gold);box-shadow:0 0 14px 3px rgba(231,172,61,.8)}
+  @media(prefers-reduced-motion:reduce){.radar::after{animation:none}}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .hero h1{position:relative;margin:18px 0 0;font-size:56px;line-height:.98;font-weight:800;
+           letter-spacing:-.03em;text-wrap:balance}
+  .hero h1 span{color:var(--gold)}
+  .hero .lede{position:relative;margin-top:16px;font-size:20.5px;line-height:1.5;color:#D5E2DD;max-width:44ch}
+  .hero .lede b{color:#fff;font-weight:700}
+  .stats{position:relative;display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+  .stat{flex:1;min-width:120px;background:rgba(255,255,255,.05);border:1px solid var(--line-d);
+        border-radius:14px;padding:12px 14px}
+  .stat .k{font-size:22px;font-weight:800;color:var(--gold);letter-spacing:-.01em}
+  .stat .l{font-size:12.5px;color:#A9BDB7;margin-top:2px}
+  .hero .go{position:relative;display:inline-flex;align-items:center;gap:9px;margin-top:24px;
+        background:var(--gold);color:#2A1D06;font-weight:800;font-size:19px;
+        padding:17px 32px;border-radius:13px;text-decoration:none}
+  .hero-handle{position:relative;margin-top:14px;font-family:var(--mono);font-size:15px;color:#B7CAC4}
+  .hero-handle b{color:var(--gold);font-weight:700}
+
+  /* ---------- THESIS BAND ---------- */
+  .thesis{background:var(--paper2);padding:34px 32px;border-bottom:1px solid var(--line)}
+  .thesis p{font-family:var(--serif);font-style:italic;font-size:26px;line-height:1.34;
+        color:var(--ink);text-wrap:balance}
+  .thesis p b{font-style:normal;color:var(--gold-d)}
+
+  /* ---------- SECTIONS ---------- */
+  .sec{padding:44px 32px}
+  .kicker{font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-d);font-weight:800}
+  .sec h2{margin:10px 0 6px;font-size:31px;line-height:1.12;font-weight:800;letter-spacing:-.02em;text-wrap:balance}
+  .sec .sub{color:var(--muted);font-size:16.5px;max-width:50ch}
+
+  /* AI band (dark) */
+  .ai{background:linear-gradient(180deg,var(--ground3),var(--ground));color:#EEF5F2}
+  .ai .kicker{color:var(--gold)} .ai h2{color:#fff} .ai .sub{color:#AEC2BC}
+  .ailist{display:grid;gap:13px;margin-top:24px}
+  .ai-item{display:grid;grid-template-columns:52px 1fr;gap:15px;align-items:start;
+        background:rgba(255,255,255,.04);border:1px solid var(--line-d);border-radius:16px;padding:16px}
+  .ai-item .ic{width:52px;height:52px;border-radius:13px;display:grid;place-items:center;font-size:25px;
+        background:rgba(231,172,61,.14)}
+  .ai-item h3{margin:2px 0 4px;font-size:18px;font-weight:750;color:#fff}
+  .ai-item p{font-size:15.5px;color:#B9CBC5}
+  .ai-item code{font-family:var(--mono);background:rgba(231,172,61,.16);color:var(--gold);
+        padding:2px 7px;border-radius:6px;font-size:14px}
+
+  /* feature cards */
+  .grid{display:grid;gap:13px;margin-top:24px}
+  .f{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:17px 18px;
+     display:grid;grid-template-columns:50px 1fr;gap:15px;align-items:start;
+     box-shadow:0 1px 0 rgba(11,37,36,.04)}
+  .f .ic{width:50px;height:50px;border-radius:13px;display:grid;place-items:center;font-size:25px;
+         background:rgba(231,172,61,.13)}
+  .f h3{margin:2px 0 5px;font-size:20.5px;font-weight:750;letter-spacing:-.01em}
+  .f p{font-size:17px;color:var(--muted)}
+  .f p b{color:var(--ink2)}
+  .f .tag{display:inline-block;margin-top:10px;font-size:12px;font-weight:800;letter-spacing:.05em;
+          padding:4px 11px;border-radius:999px;background:rgba(47,160,110,.14);color:var(--green-d)}
+  .soon{margin-top:18px;background:rgba(231,172,61,.10);border:1px dashed rgba(231,172,61,.5);
+        border-radius:15px;padding:16px 18px;display:flex;gap:13px;align-items:flex-start}
+  .soon-tag{flex:none;font-size:12.5px;font-weight:800;letter-spacing:.03em;color:var(--gold-d);
+        background:rgba(231,172,61,.2);padding:5px 12px;border-radius:999px;white-space:nowrap}
+  .soon p{font-size:16.5px;color:var(--ink2);line-height:1.5}
+
+  /* ---------- MENU SHOWCASE ---------- */
+  .phone{margin:24px auto 0;max-width:360px;background:#0e1a26;border:1px solid rgba(255,255,255,.10);
+         border-radius:24px;padding:15px;box-shadow:0 22px 55px rgba(0,0,0,.42)}
+  .bubble{background:#182a39;border-radius:16px;padding:16px 17px}
+  .bubble .th{font-weight:800;color:#fff;font-size:16px;margin-bottom:3px}
+  .bubble .hint{color:#8fa6b3;font-size:13px;margin-bottom:13px;line-height:1.4}
+  .bubble .hint code{font-family:var(--mono);color:var(--gold)}
+  .mrow{display:flex;gap:12px;align-items:baseline;padding:5.5px 0;color:#dde8ef;font-size:14.5px}
+  .mrow b{font-family:var(--mono);color:var(--gold);min-width:26px;text-align:right;font-size:13.5px;font-weight:700}
+  .mrow .s{margin-left:auto;font-size:10.5px;font-weight:800;padding:2px 8px;border-radius:999px;
+           background:rgba(47,160,110,.2);color:#7fe0b3}
+  .mrow .s.soon{background:rgba(255,255,255,.08);color:#9fb0ba}
+  .youtype{margin-top:14px;text-align:center;color:#8fa6b3;font-size:14px}
+  .youtype code{font-family:var(--mono);background:rgba(231,172,61,.16);color:var(--gold);
+                padding:4px 11px;border-radius:8px;font-weight:700;font-size:14px}
+
+  /* ---------- STEPS ---------- */
+  .steps{display:grid;gap:16px;margin-top:24px}
+  .step{display:grid;grid-template-columns:44px 1fr;gap:16px;align-items:start}
+  .step .n{width:44px;height:44px;border-radius:50%;background:var(--ink);color:var(--paper);
+           display:grid;place-items:center;font-weight:800;font-size:18px}
+  .step h3{margin:6px 0 4px;font-size:18px;font-weight:750}
+  .step p{font-size:15.5px;color:var(--muted)}
+  .step code{font-family:var(--mono);background:var(--ink);color:var(--gold);padding:2px 9px;border-radius:6px;font-size:14px}
+
+  /* ---------- CTA ---------- */
+  .cta{background:linear-gradient(180deg,var(--ground2),var(--ground));color:#EEF5F2;text-align:center;padding:48px 32px}
+  .cta .chip{margin-bottom:16px}
+  .cta h2{color:#fff;font-size:32px;line-height:1.1;margin:0 0 10px;letter-spacing:-.02em}
+  .cta p{color:#BACCC6;font-size:16.5px;margin:0 auto 24px;max-width:38ch}
+  .btn{display:inline-block;background:var(--gold);color:#2A1D06;font-weight:800;font-size:18px;
+       padding:17px 34px;border-radius:14px;text-decoration:none}
+  .handle{margin-top:18px;font-family:var(--mono);font-size:14.5px;color:#cddad4}
+  .handle b{color:var(--gold)}
+
+  /* ---------- FOOT ---------- */
+  .foot{padding:26px 32px 32px;color:var(--muted);font-size:13px;text-align:center;line-height:1.7}
+  .foot b{color:var(--ink)}
+</style>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="radar" aria-hidden="true"><b></b></div>
+    <span class="chip">🤖 Telegram'da · Dijital Yapay Zekâ Asistanın</span>
+    <h1>Akıllı <span>Fırsat</span></h1>
+    <p class="lede">ilan siteleri'deki araç ve emlak ilanlarını <b>senin yerine</b> tarayan, puanlayan ve riskini söyleyen bir <b>dijital yapay zekâ asistanı.</b> Sen yalnızca kararı verirsin.</p>
+
+    <div class="stats">
+      <div class="stat"><div class="k">7/24</div><div class="l">Durmadan tarar</div></div>
+      <div class="stat"><div class="k">Saniyeler</div><div class="l">İçinde puanlar</div></div>
+      <div class="stat"><div class="k">7 gün</div><div class="l">Bedava dene</div></div>
+    </div>
+
+    <a class="go" href="https://t.me/akilli_firsat_bot">🚀 Telegram'da hemen başla</a>
+    <div class="hero-handle">📌 Telegram'da ara: <b>@akilli_firsat_bot</b></div>
+  </header>
+
+  <section class="thesis">
+    <p>Sen uyurken bile, <b>gözün ilanların üzerinde.</b> Fırsat çıktığı an, rakip görmeden senin telefonuna düşer.</p>
+  </section>
+
+  <section class="sec ai">
+    <div class="kicker">Neden "Akıllı"?</div>
+    <h2>İçinde gerçek bir yapay zekâ çalışıyor.</h2>
+    <p class="sub">Bu bir arama kutusu değil. Ne aradığını anlayan, ilanı emsaliyle kıyaslayan ve seni riske karşı uyaran bir asistan.</p>
+
+    <div class="ailist">
+      <div class="ai-item"><div class="ic">🧠</div><div>
+        <h3>Senin dilinden anlar</h3>
+        <p>Kod, filtre, menü ezberi yok. <code>egea 2020 hasarsız 900 bin altı</code> diye yaz — ne aradığını kendisi çözer.</p></div></div>
+
+      <div class="ai-item"><div class="ic">📊</div><div>
+        <h3>Emsaline göre puanlar</h3>
+        <p>İlanı benzerleriyle kıyaslar, adil değeri hesaplar ve <b>"%15 altı — fırsat"</b> gibi net bir skor verir.</p></div></div>
+
+      <div class="ai-item"><div class="ic">🛡️</div><div>
+        <h3>Risk sinyallerini önden gösterir</h3>
+        <p>Oynanmış kilometre, şişirilmiş "indirim", olağandışı ucuz kapora tuzağı gibi <b>şüpheli işaretlere dikkat çeker</b> — son teyit ekspertizde.</p></div></div>
+
+      <div class="ai-item"><div class="ic">⏱️</div><div>
+        <h3>Uyumadan çalışır</h3>
+        <p>Sen ilgilenmesen bile havuzu tarar; kriterine uyan bir fırsat çıktığı an, otomatik haber verir.</p></div></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="kicker">Neler yapıyor?</div>
+    <h2>Tek sohbette, 8 iş birden.</h2>
+    <p class="sub">Bir galericinin, bir emlakçının gün boyu yaptığı taramayı; bu asistan saniyeler içinde yapar.</p>
+
+    <div class="grid">
+      <div class="f"><div class="ic">🔍</div><div>
+        <h3>Fırsat arama</h3>
+        <p>Serbestçe yaz → havuzu tarayıp emsale göre <b>puanlı</b> ilan kartları getirir.</p>
+        <span class="tag">● Canlı</span></div></div>
+
+      <div class="f"><div class="ic">🔔</div><div>
+        <h3>Takip &amp; otomatik alarm</h3>
+        <p>Aradığını takibe al; uygun fırsat çıktığı an <b>otomatik bildirim</b> gelir.</p>
+        <span class="tag">● Canlı</span></div></div>
+
+      <div class="f"><div class="ic">📊</div><div>
+        <h3>Emsal değer analizi</h3>
+        <p>"Adil değer 1.3M, bu 1.1'e satılıyor" — kazık mı, temiz mi net görürsün.</p>
+        <span class="tag">● Canlı</span></div></div>
+
+      <div class="f"><div class="ic">🛡️</div><div>
+        <h3>Risk kalkanı</h3>
+        <p>Şüpheli fiyat, oynanmış kilometre, tuzak ilan — <b>uyarı olarak</b> önüne düşer.</p>
+        <span class="tag">● Canlı</span></div></div>
+
+      <div class="f"><div class="ic">🏷️</div><div>
+        <h3>Satıcı modu (al-sat)</h3>
+        <p>Elindekini yaz → adil değer + 3 satış stratejisi: <b>🔥 hızlı · 💰 dengeli · 📈 maksimum.</b></p>
+        <span class="tag">● Canlı</span></div></div>
+
+      <div class="f"><div class="ic">🚚</div><div>
+        <h3>Şehirler arası AL-SAT köprüsü</h3>
+        <p>Galericinin ekmeği: <b>"burada al, Samsun'da sat → ~95.000 TL fark"</b> — aynı aracın şehirler arası fiyat farkını söyler.</p>
+        <span class="tag">● Canlı</span></div></div>
+
+      <div class="f"><div class="ic">🤝</div><div>
+        <h3>Pazarlık koçu</h3>
+        <p>Karşına yapay zekâ "satıcı" çıkar; prova yaparsın, sana taktik verir. <b>ilan siteleri'de yok.</b></p>
+        <span class="tag">● Canlı</span></div></div>
+
+      <div class="f"><div class="ic">📋</div><div>
+        <h3>Numaralı yardım menüsü</h3>
+        <p><b>"yardım"</b> yaz → her şey rakamla önüne gelir. Komut ezberi yok; rakamı yaz, o iş açılır.</p>
+        <span class="tag">● Canlı</span></div></div>
+    </div>
+
+    <div class="soon">
+      <span class="soon-tag">🔜 Yakında</span>
+      <p><b>Yapay zekâ araçları</b> (daha akıllı öneriler, otomatik analiz) ve <b>görsel düzenleme</b> (ilan fotoğraflarını tek tıkla profesyonelleştir) yolda. Denemeye bugün başla — yenilikler açıldıkça hesabına düşsün.</p>
+    </div>
+  </section>
+
+  <section class="sec ai">
+    <div class="kicker">Kullanımı bu kadar kolay</div>
+    <h2>"yardım" yaz — gerisi rakamla gelir.</h2>
+    <p class="sub">Nasıl kullanacağını düşünme. Bota <b>yardım</b> yazarsın, menü açılır; hangi işi istersen o rakamı yazarsın, o bölüme girer.</p>
+
+    <div class="phone">
+      <div class="bubble">
+        <div class="th">📋 AKILLI FIRSAT — MENÜ</div>
+        <div class="hint">Rakam yaz ya da doğrudan ara: <code>egea 900 bin altı</code></div>
+        <div class="mrow"><b>1</b> Nasıl başlarım <span class="s">canlı</span></div>
+        <div class="mrow"><b>2</b> Fırsat arama <span class="s">canlı</span></div>
+        <div class="mrow"><b>3</b> Takip &amp; otomatik alarm <span class="s">canlı</span></div>
+        <div class="mrow"><b>4</b> Satıcı modu <span class="s">canlı</span></div>
+        <div class="mrow"><b>5</b> Pazarlık koçu <span class="s">canlı</span></div>
+        <div class="mrow"><b>6</b> Paketler &amp; ödeme <span class="s">canlı</span></div>
+        <div class="mrow"><b>7</b> Gizlilik / KVKK <span class="s">canlı</span></div>
+        <div class="mrow"><b>8</b> Hesabım / limitler <span class="s">canlı</span></div>
+        <div class="mrow"><b>13</b> Özet / radar durumu <span class="s">canlı</span></div>
+        <div class="mrow"><b>10-11</b> Yapay zekâ araçları · Görsel <span class="s soon">yakında</span></div>
+      </div>
+      <div class="youtype">Tek yapman gereken: <code>yardım</code> yaz.</div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="kicker">Kurulum</div>
+    <h2>2 adımda başla — 1 dakika.</h2>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><div>
+        <h3>Linke dokun, bot açılsın</h3>
+        <p>Telegram linkine dokunman yeter — bot <b>doğrudan açılır.</b> İsim yazmana, arama yapmana gerek yok.</p></div></div>
+      <div class="step"><div class="n">2</div><div>
+        <h3><code>/start</code> yaz — denemen başlasın</h3>
+        <p>7 günlük ücretsiz deneme anında açılır. Sonra <code>yardım</code> yaz → menüden dilediğini seç. Takıldığın yerde bota yazman yeter — <b>yapay zekâ asistanın anında yol gösterir.</b> 👍</p></div></div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <span class="chip">🎁 7 Gün Bedava · Kart Bilgisi Yok</span>
+    <h2>Bir fırsat bul, kararını ver.</h2>
+    <p>Taahhüt yok, kart yok. Yedi gün boyunca dene; beğenmezsen tek kelimeyle bırakırsın.</p>
+    <a class="btn" href="https://t.me/akilli_firsat_bot">🚀 Telegram'da başla</a>
+    <div class="handle"><b>@akilli_firsat_bot</b> · aç, <b>/start</b> yaz · denemen başlasın</div>
+  </section>
+
+  <footer class="foot">
+    <b>Akıllı Fırsat</b>, ilan siteleri'un resmi ürünü veya iş ortağı <b>değildir</b>; kamuya açık ilanları senin kriterlerine göre takip eden bağımsız bir analiz asistanıdır.<br>
+    Sonuçlar bilgilendirme amaçlıdır; nihai ekspertiz, tramer, tapu ve satıcı teyidi <b>kullanıcının sorumluluğundadır.</b>
+  </footer>
+
+</div>
+</body></html>

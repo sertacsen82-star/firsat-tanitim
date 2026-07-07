@@ -1,0 +1,89 @@
+<!DOCTYPE html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Reels</title></head><body style="margin:0">
+<style>
+  *,*::before,*::after{ box-sizing:border-box; }
+  :root{
+    --ink:#0a0c11; --gold:#e6b34a; --green:#48b866; --line:#252c38; --dim:#94a1b2; --text:#eef2f7;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  }
+  body{ margin:0; font-family:var(--sans); background:#05070b; color:var(--text); padding:24px 14px 44px; -webkit-font-smoothing:antialiased; }
+  .hint{ max-width:400px; margin:0 auto 18px; text-align:center; color:var(--dim); font-size:13.5px; line-height:1.55; }
+  .hint b{ color:var(--gold); }
+  .num{ font-variant-numeric:tabular-nums; }
+
+  .reel{ width:min(340px,86vw); aspect-ratio:9/16; margin:0 auto; border-radius:24px; overflow:hidden; position:relative;
+    box-shadow:0 30px 70px -24px rgba(0,0,0,.85);
+    background:
+      radial-gradient(460px 360px at 82% 2%, rgba(230,179,74,.16), transparent 58%),
+      radial-gradient(420px 380px at 12% 104%, rgba(72,184,102,.09), transparent 58%),
+      linear-gradient(170deg,#0e1119,#0a0c11); }
+
+  /* persistent chrome */
+  .bar{ position:absolute; top:14px; left:16px; right:16px; height:3px; background:rgba(255,255,255,.14); border-radius:3px; overflow:hidden; z-index:3; }
+  .bar::after{ content:""; position:absolute; inset:0; background:var(--gold); transform-origin:left; animation:prog 13s linear infinite; }
+  .brand{ position:absolute; top:26px; left:16px; display:flex; align-items:center; gap:7px; font-weight:800; font-size:12.5px; z-index:3; }
+  .brand .mk{ width:22px;height:22px;border-radius:6px; background:linear-gradient(145deg,#e8b64a,#b5832a); color:#1a1206; display:grid;place-items:center; font-size:10px; font-weight:900; }
+  .brand .ai{ font-size:9px; font-weight:700; color:var(--gold); letter-spacing:.14em; text-transform:uppercase; }
+
+  .scene{ position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center; padding:0 30px; opacity:0; }
+  .scene .big{ font-size:30px; line-height:1.1; font-weight:850; letter-spacing:-.03em; text-wrap:balance; }
+  .scene .big .g{ color:var(--gold); }
+  .scene .sub{ margin-top:12px; font-size:15px; color:#c3ccd8; }
+
+  .s1{ animation:s1 13s infinite; } .s2{ animation:s2 13s infinite; } .s3{ animation:s3 13s infinite; } .s4{ animation:s4 13s infinite; }
+
+  /* card in scene 3 */
+  .card{ background:#16202e; border:1px solid var(--line); border-radius:14px; padding:14px 15px; font-size:13.5px; white-space:pre-wrap; }
+  .card .hd{ display:flex; gap:6px; margin-bottom:6px; }
+  .pill{ font-size:10px; font-weight:700; padding:2px 8px; border-radius:20px; background:rgba(230,179,74,.16); color:var(--gold); border:1px solid rgba(230,179,74,.35); }
+  .card b{ font-weight:700; } .card .fr{ color:var(--green); } .card .sm{ color:var(--dim); font-size:11.5px; }
+
+  /* CTA scene */
+  .s4{ align-items:center; text-align:center; }
+  .cta{ font-weight:800; font-size:17px; color:#1a1206; background:linear-gradient(160deg,#f0c25a,#d29a30); padding:13px 22px; border-radius:12px; }
+  .handle{ margin-top:14px; font-size:15px; color:var(--text); font-weight:700; }
+  .handle span{ color:var(--gold); }
+
+  @keyframes prog{ from{transform:scaleX(0);} to{transform:scaleX(1);} }
+  @keyframes s1{ 0%{opacity:0;transform:translateY(10px);} 3%{opacity:1;transform:none;} 20%{opacity:1;} 23%{opacity:0;} 100%{opacity:0;} }
+  @keyframes s2{ 0%,23%{opacity:0;transform:translateY(10px);} 26%{opacity:1;transform:none;} 43%{opacity:1;} 46%{opacity:0;} 100%{opacity:0;} }
+  @keyframes s3{ 0%,46%{opacity:0;transform:translateY(12px);} 49%{opacity:1;transform:none;} 74%{opacity:1;} 77%{opacity:0;} 100%{opacity:0;} }
+  @keyframes s4{ 0%,77%{opacity:0;transform:scale(.96);} 80%{opacity:1;transform:none;} 97%{opacity:1;} 100%{opacity:0;} }
+  @media (prefers-reduced-motion:reduce){
+    .bar::after,.s1,.s2,.s3{ animation:none; } .s1,.s2,.s3{ opacity:0; } .s4{ animation:none; opacity:1; }
+  }
+</style>
+
+<p class="hint">Bu bir <b>oynayan reels</b> (9:16). Telefonla <b>ekran kaydı</b> al → Instagram reels/story olur. Yazı + kart + CTA hepsi burada, tam kontrol.</p>
+
+<div class="reel">
+  <div class="bar"></div>
+  <div class="brand"><span class="mk">AF</span> Akıllı Fırsat <span class="ai">yapay zeka</span></div>
+
+  <div class="scene s1">
+    <div class="big">Kendine araba mı alıyorsun? 🚗</div>
+    <div class="sub">Saatlerce ilan karıştırmayı bırak.</div>
+  </div>
+
+  <div class="scene s2">
+    <div class="big"><span class="g">Yapay zeka</span> senin yerine 7/24 tarar.</div>
+    <div class="sub">Fırsat çıkınca — kimse kapmadan — sana gelir.</div>
+  </div>
+
+  <div class="scene s3">
+    <div class="sub" style="margin:0 0 12px; color:var(--gold); font-weight:700; letter-spacing:.06em;">TELEGRAM'INA BÖYLE DÜŞER</div>
+    <div class="card">
+<div class="hd"><span class="pill">🅱 SWEET-SPOT B</span></div>
+<b>Renault Clio 2018</b> · <span class="num">75.000</span> km
+💰 <b class="num">380.000 TL</b> · 📍 Bursa
+📊 Emsal ~<span class="num">410.000</span> → <b>%7 altı</b> <span class="sm">(11 emsal)</span>
+<span class="fr">✅ Temiz · 🟢 4 dk önce doğrulandı</span>
+    </div>
+  </div>
+
+  <div class="scene s4">
+    <div class="big" style="font-size:26px; margin-bottom:20px;">İlk aracını <span class="g">bot</span> bulsun.</div>
+    <div class="cta">7 GÜN BEDAVA</div>
+    <div class="handle">Telegram: <span>@akilli_firsat_bot</span></div>
+  </div>
+</div>
+</body></html>
