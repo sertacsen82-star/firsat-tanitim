@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0C2726">
 <title>Akıllı Fırsat — Oto &amp; Emlak</title>
-<meta name="description" content="Yapay zeka, piyasanın altındaki araç ve emlak ilanlarını 7/24 tarar, puanlar, riskini söyler; fırsatı Telegram'ına getirir. 7 gün ücretsiz.">
+<meta name="description" content="Yapay zeka, piyasanın altındaki araç ve emlak ilanlarını 7/24 tarar, puanlar, riskini ve şehir arbitrajını söyler; fırsatı Telegram'ına getirir. 7 gün ücretsiz.">
 <style>
   :root{
     --ground:#0C2726; --ground2:#123E3A; --paper:#F6F2E8; --card:#FFFFFF;
     --ink:#132320; --muted:#5B6A64; --gold:#E4A93C; --gold-d:#B5822A;
-    --green:#2FA06E; --terra:#C9603C; --line:rgba(14,42,42,.12);
+    --green:#2FA06E; --green-d:#1c7a51; --terra:#C9603C; --line:rgba(14,42,42,.12);
     --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     --mono:ui-monospace,"SF Mono","Cascadia Code",Consolas,monospace;
   }
@@ -18,85 +18,76 @@
   html{-webkit-text-size-adjust:100%}
   body{margin:0;min-height:100vh;font-family:var(--sans);
        background:radial-gradient(130% 80% at 50% -5%,var(--ground2),var(--ground) 65%);}
-  .wrap{max-width:620px;margin:0 auto;background:var(--paper);color:var(--ink);
-        line-height:1.55;overflow:hidden}
+  .wrap{max-width:640px;margin:0 auto;background:var(--paper);color:var(--ink);line-height:1.55;overflow:hidden}
   .wrap p{margin:0}
   @media(min-width:680px){
     body{padding:44px 20px}
     .wrap{border-radius:22px;box-shadow:0 40px 100px -30px rgba(0,0,0,.6)}
   }
-  /* ---------- HERO ---------- */
-  .hero{position:relative;background:radial-gradient(120% 90% at 80% -10%,var(--ground2),var(--ground) 60%);
-        color:#EAF2EF;padding:46px 30px 42px;overflow:hidden}
+  .hero{position:relative;background:radial-gradient(120% 90% at 80% -10%,var(--ground2),var(--ground) 60%);color:#EAF2EF;padding:46px 30px 42px;overflow:hidden}
   .radar{position:absolute;right:-70px;top:-70px;width:270px;height:270px;border-radius:50%;
          border:1px solid rgba(228,169,60,.25);box-shadow:0 0 0 40px rgba(228,169,60,.04),0 0 0 80px rgba(228,169,60,.03)}
-  .radar::after{content:"";position:absolute;inset:0;border-radius:50%;
-        background:conic-gradient(from 0deg,rgba(228,169,60,.38),transparent 70%);
-        animation:spin 6s linear infinite}
-  .radar::before{content:"";position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px;
-        border-radius:50%;background:var(--gold);box-shadow:0 0 12px 2px rgba(228,169,60,.6)}
+  .radar::after{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,rgba(228,169,60,.38),transparent 70%);animation:spin 6s linear infinite}
+  .radar::before{content:"";position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px;border-radius:50%;background:var(--gold);box-shadow:0 0 12px 2px rgba(228,169,60,.6)}
   @media(prefers-reduced-motion:reduce){.radar::after{animation:none}}
   @keyframes spin{to{transform:rotate(360deg)}}
-  .eyebrow{position:relative;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;
-           color:var(--gold);font-weight:700;margin-bottom:14px}
-  .hero h1{position:relative;margin:0;font-size:clamp(38px,10vw,46px);line-height:1.02;font-weight:800;
-           letter-spacing:-.02em;text-wrap:balance}
+  .eyebrow{position:relative;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:14px}
+  .hero h1{position:relative;margin:0;font-size:clamp(38px,10vw,46px);line-height:1.02;font-weight:800;letter-spacing:-.02em;text-wrap:balance}
   .hero h1 span{color:var(--gold)}
   .hero .lede{position:relative;margin-top:14px;font-size:16.5px;color:#C7D6D1;max-width:44ch}
-  .badge{position:relative;display:inline-flex;align-items:center;gap:8px;margin-top:22px;
-         background:var(--gold);color:#2A1D06;font-weight:800;font-size:14px;
-         padding:11px 18px;border-radius:999px;text-decoration:none}
+  .badge{position:relative;display:inline-flex;align-items:center;gap:8px;margin-top:22px;background:var(--gold);color:#2A1D06;font-weight:800;font-size:14px;padding:11px 18px;border-radius:999px;text-decoration:none}
   .badge small{font-weight:600;opacity:.85}
-  /* ---------- SECTIONS ---------- */
   .sec{padding:38px 30px}
   .kicker{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-d);font-weight:700}
   .sec h2{margin:8px 0 4px;font-size:26px;line-height:1.12;font-weight:800;letter-spacing:-.01em;text-wrap:balance}
   .sec .sub{color:var(--muted);font-size:15px;max-width:48ch}
   .grid{display:grid;gap:12px;margin-top:22px}
   @media(min-width:560px){.grid{grid-template-columns:1fr 1fr}}
-  .f{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 16px 15px;
-     display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:start}
-  .f .ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:22px;
-         background:rgba(228,169,60,.14)}
+  .f{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 16px 15px;display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:start}
+  .f .ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:22px;background:rgba(228,169,60,.14)}
   .f h3{margin:1px 0 3px;font-size:16.5px;font-weight:750}
   .f p{font-size:14px;color:var(--muted)}
-  .f .tag{display:inline-block;margin-top:7px;font-size:11px;font-weight:700;letter-spacing:.04em;
-          padding:3px 9px;border-radius:999px}
-  .tag.live{background:rgba(47,160,110,.14);color:#1c7a51}
-  /* ---------- MENU SHOWCASE ---------- */
-  .menuwrap{background:var(--ground);color:#EAF2EF}
-  .menuwrap .kicker{color:var(--gold)}
-  .menuwrap h2{color:#fff}
-  .menuwrap .sub{color:#A9BDB7}
-  .phone{margin:22px auto 0;max-width:340px;background:#0f1b28;border:1px solid rgba(255,255,255,.09);
-         border-radius:22px;padding:14px;box-shadow:0 20px 50px rgba(0,0,0,.4)}
+  .f .tag{display:inline-block;margin-top:7px;font-size:11px;font-weight:700;letter-spacing:.04em;padding:3px 9px;border-radius:999px}
+  .tag.live{background:rgba(47,160,110,.14);color:var(--green-d)}
+  /* ORNEK FIRSATLAR */
+  .exwrap{background:var(--ground);color:#EAF2EF}
+  .exwrap .kicker{color:var(--gold)} .exwrap h2{color:#fff} .exwrap .sub{color:#A9BDB7}
+  .ex{display:grid;gap:12px;margin-top:22px}
+  .card2{background:#122b2a;border:1px solid rgba(228,169,60,.16);border-radius:16px;padding:16px 17px}
+  .card2 .p{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.03em;padding:3px 10px;border-radius:999px;background:rgba(228,169,60,.16);color:var(--gold);margin-bottom:9px}
+  .card2 .p.gr{background:rgba(47,160,110,.2);color:#7fe0b3}
+  .card2 .ttl{font-weight:800;font-size:16px;color:#fff}
+  .card2 .meta{color:#9fb6af;font-size:13px;margin-top:1px}
+  .card2 .row{display:flex;align-items:baseline;gap:10px;margin-top:10px;flex-wrap:wrap}
+  .card2 .pr{font-size:19px;font-weight:800;color:#fff}
+  .card2 .win{color:#7fe0b3;font-weight:800;font-size:13.5px;background:rgba(47,160,110,.16);padding:3px 9px;border-radius:8px}
+  .card2 .fo{margin-top:9px;padding-top:9px;border-top:1px solid rgba(255,255,255,.08);font-size:12.5px;color:#9fb6af}
+  .excap{text-align:center;color:#8fa6b3;font-size:12px;margin-top:14px}
+  /* MENU */
+  .menuwrap{background:var(--paper)}
+  .phone{margin:22px auto 0;max-width:340px;background:#0f1b28;border:1px solid rgba(255,255,255,.09);border-radius:22px;padding:14px;box-shadow:0 20px 50px rgba(0,0,0,.35)}
   .bubble{background:#182b3a;border-radius:14px;padding:15px 16px;font-size:14px}
   .bubble .th{font-weight:800;color:#fff;font-size:15px;margin-bottom:2px}
   .bubble .hint{color:#8fa6b3;font-size:12.5px;margin-bottom:12px}
   .mrow{display:flex;gap:11px;align-items:baseline;padding:5px 0;color:#dbe7ee}
   .mrow b{font-family:var(--mono);color:var(--gold);min-width:22px;text-align:right;font-size:13px}
-  .mrow .s{margin-left:auto;font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:999px;
-           background:rgba(47,160,110,.2);color:#7fe0b3}
-  .youtype{margin-top:12px;text-align:center;color:#8fa6b3;font-size:13px}
-  .youtype code{font-family:var(--mono);background:rgba(228,169,60,.16);color:var(--gold);
-                padding:3px 9px;border-radius:7px;font-weight:700}
-  /* ---------- STEPS ---------- */
+  .mrow .s{margin-left:auto;font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:999px;background:rgba(47,160,110,.2);color:#7fe0b3}
+  .youtype{margin-top:12px;text-align:center;color:var(--muted);font-size:13px}
+  .youtype code{font-family:var(--mono);background:rgba(228,169,60,.16);color:var(--gold-d);padding:3px 9px;border-radius:7px;font-weight:700}
+  /* STEPS */
   .steps{display:grid;gap:14px;margin-top:22px}
   .step{display:grid;grid-template-columns:38px 1fr;gap:15px;align-items:start}
-  .step .n{width:38px;height:38px;border-radius:50%;background:var(--ink);color:var(--paper);
-           display:grid;place-items:center;font-weight:800;font-size:16px}
+  .step .n{width:38px;height:38px;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-weight:800;font-size:16px}
   .step h3{margin:4px 0 3px;font-size:16.5px;font-weight:750}
   .step p{font-size:14px;color:var(--muted)}
   .step code{font-family:var(--mono);background:var(--ink);color:var(--gold);padding:2px 8px;border-radius:6px;font-size:13px}
-  /* ---------- CTA ---------- */
+  /* CTA */
   .cta{background:linear-gradient(180deg,var(--ground2),var(--ground));color:#EAF2EF;text-align:center;padding:46px 30px}
   .cta h2{color:#fff;font-size:27px;margin:0 0 8px}
   .cta p{color:#B7CAC4;font-size:15px;margin:0 auto 22px;max-width:40ch}
-  .btn{display:inline-block;background:var(--gold);color:#2A1D06;font-weight:800;font-size:17px;
-       padding:16px 30px;border-radius:14px;text-decoration:none}
+  .btn{display:inline-block;background:var(--gold);color:#2A1D06;font-weight:800;font-size:17px;padding:16px 30px;border-radius:14px;text-decoration:none}
   .handle{margin-top:16px;font-family:var(--mono);font-size:14px;color:#cddad4}
   .handle b{color:var(--gold)}
-  /* ---------- FOOT ---------- */
   .foot{padding:24px 30px 30px;color:var(--muted);font-size:12.5px;text-align:center;line-height:1.6}
   .foot b{color:var(--ink)}
 </style>
@@ -106,66 +97,74 @@
 
   <header class="hero">
     <div class="radar" aria-hidden="true"></div>
-    <div class="eyebrow">Oto &amp; Emlak · Telegram Yapay Zeka Asistanı</div>
+    <div class="eyebrow">Oto &amp; Emlak · Yapay Zeka Fırsat Asistanı</div>
     <h1>Akıllı <span>Fırsat</span></h1>
-    <p class="lede">Araç ve emlak ilanlarını <b>senin yerine</b> tarar, puanlar, riskini söyler. Piyasa-altı fırsatı kimse kapmadan getirir; sen sadece kararı verirsin.</p>
+    <p class="lede"><b>Yapay zeka</b> araç ve emlak ilanlarını senin yerine tarar, puanlar, riskini ve <b>şehir arbitrajını</b> söyler. Piyasa-altı fırsatı kimse kapmadan getirir; sen kararı verirsin.</p>
     <a class="badge" href="https://t.me/akilli_firsat_bot">🎁 7 GÜN ÜCRETSİZ <small>· kart bilgisi yok</small></a>
   </header>
 
   <section class="sec">
     <div class="kicker">Ne işe yarar?</div>
-    <h2>Günde saatlerce ilan taramaya son.</h2>
-    <p class="sub">Bir kötü alım aylık kârını götürür, bir fırsatı geç görürsün rakip kapar. Akıllı Fırsat 7 iş birden yapar — hepsi tek Telegram sohbetinde.</p>
+    <h2>Fiyat değil — <span style="color:var(--gold-d)">kâr</span> gösterir.</h2>
+    <p class="sub">Bir kötü alım aylık kârını götürür; bir fırsatı geç görürsün rakip kapar. Akıllı Fırsat 8 iş birden yapar — hepsi tek Telegram sohbetinde.</p>
 
     <div class="grid">
-      <div class="f"><div class="ic">🔍</div><div>
-        <h3>Fırsat arama</h3>
-        <p>«egea 2020 900 bin altı» yaz → havuzu tarayıp emsale göre <b>puanlı</b> kart getirir.</p>
-        <span class="tag live">● Canlı</span></div></div>
-
-      <div class="f"><div class="ic">🔔</div><div>
-        <h3>Otomatik alarm</h3>
-        <p>Takip kur, uyusan bile kaçmasın — uygun fırsat çıktığı an haber verir.</p>
-        <span class="tag live">● Canlı</span></div></div>
-
-      <div class="f"><div class="ic">📊</div><div>
-        <h3>Emsal değer</h3>
-        <p>«Adil değer 1.3M, bu 1.1'e satılıyor — %15 altı» der. Kazık mı, temiz mi belli olur.</p>
-        <span class="tag live">● Canlı</span></div></div>
-
-      <div class="f"><div class="ic">🛡️</div><div>
-        <h3>Risk kalkanı</h3>
-        <p>Oynanmış km, şişirilmiş "indirim", olağandışı ucuz kapora tuzağı — <b>işaretler.</b></p>
-        <span class="tag live">● Canlı</span></div></div>
-
-      <div class="f"><div class="ic">🏷️</div><div>
-        <h3>Satıcı modu</h3>
-        <p>Elindekini yaz → adil değer + 3 satış stratejisi (🔥 hızlı · 💰 dengeli · 📈 max).</p>
-        <span class="tag live">● Canlı</span></div></div>
-
-      <div class="f"><div class="ic">🤝</div><div>
-        <h3>Pazarlık koçu</h3>
-        <p>Karşına gerçek satıcı gibi AI çıkar — prova yaparsın, taktik verir. (Başka yerde YOK.)</p>
-        <span class="tag live">● Canlı</span></div></div>
+      <div class="f"><div class="ic">🧠</div><div><h3>Yapay zeka motoru</h3><p>Binlerce ilanı emsaliyle, geçmiş fiyatıyla, riskiyle <b>saniyede</b> değerlendirir — bir uzman gibi.</p><span class="tag live">● Canlı</span></div></div>
+      <div class="f"><div class="ic">🔍</div><div><h3>Fırsat arama</h3><p>«egea 2023 900 bin altı» yaz → havuzu tarayıp emsale göre <b>puanlı</b> kart getirir.</p><span class="tag live">● Canlı</span></div></div>
+      <div class="f"><div class="ic">📊</div><div><h3>Emsal-altı değer</h3><p>«Adil değer 1.13M, bu 915 bine — <b>%19 altı</b>» der. Kazık mı, temiz mi belli olur.</p><span class="tag live">● Canlı</span></div></div>
+      <div class="f"><div class="ic">🔀</div><div><h3>Şehir arbitrajı</h3><p>Bir ilde ucuz, başka ilde pahalı aracı yakalar — <b>al, taşı, kâr et.</b> Kurnaz galericinin işi.</p><span class="tag live">● Canlı</span></div></div>
+      <div class="f"><div class="ic">🔔</div><div><h3>Otomatik alarm</h3><p>Takip kur, uyusan bile kaçmasın — uygun fırsat çıktığı an haber verir.</p><span class="tag live">● Canlı</span></div></div>
+      <div class="f"><div class="ic">🛡️</div><div><h3>Risk kalkanı</h3><p>Oynanmış km, şişirilmiş "indirim", olağandışı ucuz kapora tuzağı — <b>işaretler.</b></p><span class="tag live">● Canlı</span></div></div>
+      <div class="f"><div class="ic">🏷️</div><div><h3>Satıcı modu</h3><p>Elindekini yaz → adil değer + 3 satış stratejisi (🔥 hızlı · 💰 dengeli · 📈 max).</p><span class="tag live">● Canlı</span></div></div>
+      <div class="f"><div class="ic">🤝</div><div><h3>Pazarlık koçu</h3><p>Karşına gerçek satıcı gibi AI çıkar — prova yaparsın, taktik verir. (Başka yerde YOK.)</p><span class="tag live">● Canlı</span></div></div>
     </div>
+  </section>
+
+  <section class="sec exwrap">
+    <div class="kicker">Telefonuna böyle düşer</div>
+    <h2>Örnek fırsatlar</h2>
+    <p class="sub">Bot, emsalin altını + şehir farkını + temizliği hesaplar; sana hazır kart yollar.</p>
+    <div class="ex">
+      <div class="card2">
+        <span class="p gr">🏙️ EMLAK · %13 emsal-altı</span>
+        <div class="ttl">3+1 Daire · 110 m² · Caddebostan</div>
+        <div class="meta">📍 İstanbul / Kadıköy</div>
+        <div class="row"><span class="pr num">4.200.000 ₺</span><span class="win">Emsal ~4.850.000 ₺</span></div>
+        <div class="fo">✅ Mahalle emsalli · ilana git, kendin görüş</div>
+      </div>
+      <div class="card2">
+        <span class="p">🔀 ŞEHİR ARBİTRAJI</span>
+        <div class="ttl">VW Passat 2020 · 96.000 km</div>
+        <div class="meta">📍 Ankara'da bulundu</div>
+        <div class="row"><span class="pr num">985.000 ₺</span><span class="win">İzmir emsali ~1.150.000 → +165.000 ₺</span></div>
+        <div class="fo">🚚 Al, taşı, kâr et — galericinin kurnazlığı</div>
+      </div>
+      <div class="card2">
+        <span class="p gr">🚗 SWEET-SPOT B · %7 altı</span>
+        <div class="ttl">Renault Clio 2018 · 75.000 km</div>
+        <div class="meta">📍 Bursa · bireysel satıcı</div>
+        <div class="row"><span class="pr num">380.000 ₺</span><span class="win">Emsal ~410.000 ₺</span></div>
+        <div class="fo">✅ Temiz · sana uygun · taze doğrulandı</div>
+      </div>
+    </div>
+    <p class="excap">Örnek kartlardır. Numara kazımayız — sen ilandan kendin ulaşırsın.</p>
   </section>
 
   <section class="sec menuwrap">
     <div class="kicker">Kullanımı bu kadar kolay</div>
     <h2>«yardım» yaz — gerisi rakamla.</h2>
-    <p class="sub">Nasıl kullanacağını düşünme. Bota <b>yardım</b> yazınca menü açılır; hangi işi istersen o rakamı yazarsın, o bölüme girer.</p>
-
+    <p class="sub">Nasıl kullanacağını düşünme. Bota <b>yardım</b> yazınca menü açılır; hangi işi istersen o rakamı yazarsın.</p>
     <div class="phone">
       <div class="bubble">
         <div class="th">📋 AKILLI FIRSAT — MENÜ</div>
         <div class="hint">Rakam yaz ya da direkt ara: «egea 900 bin altı»</div>
         <div class="mrow"><b>1</b> Fırsat arama <span class="s">canlı</span></div>
-        <div class="mrow"><b>2</b> Takip &amp; otomatik alarm <span class="s">canlı</span></div>
-        <div class="mrow"><b>3</b> Emsal değer &amp; risk <span class="s">canlı</span></div>
-        <div class="mrow"><b>4</b> Satıcı modu <span class="s">canlı</span></div>
-        <div class="mrow"><b>5</b> Pazarlık koçu <span class="s">canlı</span></div>
-        <div class="mrow"><b>6</b> İşlem defteri <span class="s">canlı</span></div>
-        <div class="mrow"><b>7</b> Seni tanır · DNA <span class="s">canlı</span></div>
+        <div class="mrow"><b>2</b> Şehir arbitrajı <span class="s">canlı</span></div>
+        <div class="mrow"><b>3</b> Takip &amp; otomatik alarm <span class="s">canlı</span></div>
+        <div class="mrow"><b>4</b> Emsal değer &amp; risk <span class="s">canlı</span></div>
+        <div class="mrow"><b>5</b> Satıcı modu <span class="s">canlı</span></div>
+        <div class="mrow"><b>6</b> Pazarlık koçu <span class="s">canlı</span></div>
+        <div class="mrow"><b>7</b> İşlem defteri · DNA <span class="s">canlı</span></div>
         <div class="mrow"><b>8</b> Hesap &amp; KVKK <span class="s">canlı</span></div>
       </div>
       <div class="youtype">Sen sadece <code>yardım</code> yaz → bu menü gelir.</div>
@@ -176,12 +175,8 @@
     <div class="kicker">Kurulum</div>
     <h2>2 adımda başla — 1 dakika.</h2>
     <div class="steps">
-      <div class="step"><div class="n">1</div><div>
-        <h3>Telegram'da botu aç</h3>
-        <p>Telegram'da <code>@akilli_firsat_bot</code> ara ve aç.</p></div></div>
-      <div class="step"><div class="n">2</div><div>
-        <h3><code>/start</code> yaz</h3>
-        <p>7 günlük deneme anında başlar. Sonra <code>yardım</code> yaz → menüden istediğini seç. Takıldığın yerde beni ara, birlikte kurarız 👍</p></div></div>
+      <div class="step"><div class="n">1</div><div><h3>Telegram'da botu aç</h3><p>Telegram'da <code>@akilli_firsat_bot</code> ara ve aç.</p></div></div>
+      <div class="step"><div class="n">2</div><div><h3><code>/start</code> yaz</h3><p>7 günlük deneme anında başlar. Sonra <code>yardım</code> yaz → menüden seç. Takıldığın yerde beni ara, birlikte kurarız 👍</p></div></div>
     </div>
   </section>
 
