@@ -69,15 +69,15 @@
   @media(min-width:900px){.hero .shell{grid-template-columns:1.05fr .95fr}}
 
   .radar{position:absolute;z-index:1;left:50%;top:50%;transform:translate(-50%,-50%);
-    width:min(660px,92vw);height:min(660px,92vw);border-radius:50%;
-    border:1px solid rgba(228,169,60,.20);
-    box-shadow:0 0 0 60px rgba(228,169,60,.028),0 0 0 130px rgba(228,169,60,.016)}
+    width:min(880px,98vw);height:min(880px,98vw);border-radius:50%;
+    border:1.5px solid rgba(228,169,60,.34);
+    box-shadow:0 0 0 1px rgba(228,169,60,.10) inset,0 0 0 80px rgba(228,169,60,.04),0 0 0 170px rgba(228,169,60,.022)}
   .radar::after{content:"";position:absolute;inset:0;border-radius:50%;
-    background:conic-gradient(from 0deg,rgba(228,169,60,.24),transparent 68%);animation:spin 7s linear infinite}
-  .radar::before{content:"";position:absolute;left:50%;top:50%;width:8px;height:8px;margin:-4px;border-radius:50%;
-    background:var(--gold);box-shadow:0 0 14px 3px rgba(228,169,60,.55)}
-  .blip{position:absolute;z-index:1;width:9px;height:9px;border-radius:50%;background:var(--green-l);
-    box-shadow:0 0 14px 3px rgba(127,224,179,.6);animation:blip 3.2s var(--ease) infinite}
+    background:conic-gradient(from 0deg,rgba(228,169,60,.42),rgba(228,169,60,.12) 40%,transparent 70%);animation:spin 7s linear infinite}
+  .radar::before{content:"";position:absolute;left:50%;top:50%;width:11px;height:11px;margin:-5.5px;border-radius:50%;
+    background:var(--gold);box-shadow:0 0 22px 5px rgba(228,169,60,.8)}
+  .blip{position:absolute;z-index:1;width:11px;height:11px;border-radius:50%;background:var(--green-l);
+    box-shadow:0 0 18px 4px rgba(127,224,179,.75);animation:blip 3.2s var(--ease) infinite}
   .blip.b1{left:57%;top:42%;animation-delay:.2s}
   .blip.b2{left:46%;top:26%;animation-delay:1.3s}
   .blip.b3{left:60%;top:62%;animation-delay:2.2s}
