@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+  <meta name="theme-color" content="#0c2726">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://telegram.org; style-src 'self' 'unsafe-inline'; connect-src https://srv1756048.hstgr.cloud; img-src 'self' data: https:; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <title>Akıllı Fırsat · Ara</title>
+  <meta name="description" content="Oto ve emlak ilanlarını ara, fırsat skorunu ve adil değerini gör.">
+  <script src="https://telegram.org/js/telegram-web-app.js?59"></script>
+  <style>
+    :root{
+      color-scheme:dark;
+      --ground:#071c1b;--ground2:#0c2b29;--surface:#123633;--surface2:#17413d;
+      --paper:#f7f2e7;--ink:#142622;--muted:#8eaaa4;--muted2:#617d77;
+      --gold:#e4aa3c;--gold2:#f4d58b;--green:#49c88a;--red:#ef765f;--line:rgba(255,255,255,.11);
+      --shadow:0 22px 60px rgba(0,0,0,.25);--radius:22px;
+      --safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px);
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    }
+    *{box-sizing:border-box}
+    html{background:var(--ground);-webkit-text-size-adjust:100%}
+    body{margin:0;min-height:100vh;color:#fff;background:
+      radial-gradient(90% 55% at 8% -5%,rgba(54,131,117,.34),transparent 62%),
+      radial-gradient(70% 45% at 100% 15%,rgba(228,170,60,.13),transparent 70%),var(--ground)}
+    button,input{font:inherit}
+    button{-webkit-tap-highlight-color:transparent}
+    .app{width:min(100%,820px);min-height:100vh;margin:auto;padding:calc(16px + var(--safe-top)) 16px calc(34px + var(--safe-bottom))}
+    .top{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+    .mark{width:42px;height:42px;display:grid;place-items:center;border:1px solid rgba(244,213,139,.42);border-radius:14px;color:var(--gold2);font-size:25px;background:rgba(228,170,60,.09);box-shadow:inset 0 0 24px rgba(228,170,60,.08)}
+    .brand{min-width:0}.brand b{display:block;font-size:16px;letter-spacing:-.01em}.brand span{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+    .live{margin-left:auto;display:flex;align-items:center;gap:7px;color:#b7ccc7;font-size:12px;border:1px solid var(--line);padding:8px 10px;border-radius:999px;background:rgba(255,255,255,.04)}
+    .live i{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(73,200,138,.13)}
+    .hero{position:relative;overflow:hidden;padding:25px 20px 20px;border:1px solid rgba(228,170,60,.17);border-radius:28px;background:linear-gradient(145deg,rgba(24,68,63,.93),rgba(10,38,36,.95));box-shadow:var(--shadow)}
+    .hero:after{content:"";position:absolute;width:180px;height:180px;border:1px solid rgba(228,170,60,.12);border-radius:50%;right:-92px;top:-88px;box-shadow:0 0 0 35px rgba(228,170,60,.035),0 0 0 70px rgba(228,170,60,.02);pointer-events:none}
+    .eyebrow{display:flex;align-items:center;gap:8px;color:var(--gold2);font-size:11px;font-weight:800;letter-spacing:.11em;text-transform:uppercase}
+    .eyebrow:before{content:"";width:19px;height:1px;background:var(--gold)}
+    h1{font-size:clamp(30px,8vw,48px);line-height:1.02;letter-spacing:-.045em;margin:15px 0 12px;max-width:650px}
+    h1 span{color:var(--gold2)}
+    .lead{color:#b7cbc6;line-height:1.55;font-size:14px;margin:0 0 20px;max-width:620px}
+    .search{position:relative;display:flex;align-items:center;gap:8px;padding:7px 7px 7px 16px;border:1px solid rgba(255,255,255,.16);border-radius:17px;background:#fff;box-shadow:0 12px 28px rgba(0,0,0,.19)}
+    .search:focus-within{outline:3px solid rgba(228,170,60,.22);border-color:var(--gold)}
+    .search input{width:100%;min-width:0;border:0;outline:0;background:transparent;color:var(--ink);font-size:16px;line-height:1.3;padding:10px 0}
+    .search input::placeholder{color:#82928e}
+    .search button{flex:none;border:0;border-radius:12px;padding:12px 15px;background:var(--gold);color:#172720;font-weight:850;cursor:pointer;box-shadow:0 7px 18px rgba(228,170,60,.23)}
+    .search button:disabled{opacity:.58;cursor:wait}
+    .examples{display:flex;gap:8px;overflow:auto;padding:12px 1px 2px;scrollbar-width:none}.examples::-webkit-scrollbar{display:none}
+    .chip{flex:none;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.055);color:#cad9d5;padding:9px 12px;font-size:12px;cursor:pointer}
+    .chip:active{transform:translateY(1px);background:rgba(228,170,60,.13)}
+    .status{display:none;align-items:center;gap:13px;margin:18px 0 0;padding:16px;border-radius:17px;border:1px solid rgba(228,170,60,.15);background:rgba(7,28,27,.48)}
+    .status.show{display:flex}
+    .spinner{width:24px;height:24px;flex:none;border:2px solid rgba(255,255,255,.15);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
+    .status b{display:block;font-size:13px}.status span{display:block;color:var(--muted);font-size:12px;margin-top:3px}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .auth{display:none;margin-top:18px;padding:18px;border-radius:18px;background:#fff4d8;color:#2d2b22}
+    .auth.show{display:block}.auth b{display:block;margin-bottom:6px}.auth p{font-size:13px;line-height:1.5;margin:0 0 13px;color:#665f4e}.auth a{display:inline-block;text-decoration:none;background:#172f2c;color:#fff;padding:10px 13px;border-radius:11px;font-weight:800;font-size:13px}
+    .section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:26px 3px 12px}
+    .section-head h2{font-size:20px;letter-spacing:-.025em;margin:0}.section-head span{font-size:12px;color:var(--muted)}
+    .results{display:grid;gap:13px}
+    .empty{display:none;text-align:center;padding:32px 22px;border:1px dashed rgba(255,255,255,.16);border-radius:20px;color:var(--muted);background:rgba(255,255,255,.025)}
+    .empty.show{display:block}.empty b{display:block;color:#e5eeeb;margin-bottom:5px}.empty p{font-size:13px;line-height:1.5;margin:0}
+    .card{overflow:hidden;border-radius:var(--radius);background:var(--paper);color:var(--ink);box-shadow:0 14px 35px rgba(0,0,0,.2);animation:rise .35s ease both}
+    @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+    .visual{position:relative;height:185px;background:linear-gradient(145deg,#31534f,#173936);overflow:hidden}
+    .visual img{width:100%;height:100%;object-fit:cover;display:block}.visual.no-image img{display:none}
+    .placeholder{position:absolute;inset:0;display:grid;place-items:center;color:rgba(255,255,255,.62);font-weight:900;letter-spacing:.16em;font-size:12px}
+    .visual:not(.no-image) .placeholder{display:none}
+    .badge{position:absolute;left:13px;top:13px;padding:8px 10px;border-radius:10px;background:rgba(9,28,27,.87);backdrop-filter:blur(8px);color:#fff;font-size:11px;font-weight:850;letter-spacing:.04em}
+    .badge.SUPER{background:#16704d}.badge.IYI{background:#257557}.badge.MAKUL,.badge.ADAY{background:#8d6820}.badge.RISKLI,.badge.YOK{background:#8a3e34}
+    .score{position:absolute;right:13px;top:13px;width:45px;height:45px;display:grid;place-items:center;border-radius:13px;background:rgba(248,243,231,.94);color:#17312d;font-weight:900;font-size:15px;box-shadow:0 7px 18px rgba(0,0,0,.16)}
+    .body{padding:17px}
+    .place{color:var(--muted2);font-size:11px;font-weight:750;text-transform:uppercase;letter-spacing:.055em;margin-bottom:6px}
+    .title{font-size:16px;line-height:1.3;font-weight:850;letter-spacing:-.015em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:42px}
+    .price-row{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-top:14px;padding-top:13px;border-top:1px solid rgba(20,38,34,.1)}
+    .price{font-size:22px;font-weight:900;letter-spacing:-.035em}.fair{text-align:right;color:#597069;font-size:11px}.fair b{display:block;color:#247d58;font-size:13px;margin-top:2px}
+    .meta{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}.meta span{padding:6px 8px;border-radius:8px;background:#e9e4d8;color:#50635e;font-size:11px;font-weight:700}
+    .signal{margin-top:12px;padding:10px 11px;border-left:3px solid var(--gold);border-radius:0 9px 9px 0;background:#eee7d7;color:#52615d;font-size:11px;line-height:1.45}
+    .actions{display:flex;gap:8px;margin-top:14px}.open{width:100%;border:0;border-radius:12px;padding:12px;background:#153c37;color:#fff;font-weight:850;cursor:pointer}.open:active{transform:translateY(1px)}
+    .footnote{text-align:center;color:#617d77;font-size:11px;line-height:1.45;margin:24px auto 0;max-width:580px}
+    @media(min-width:680px){.app{padding-left:24px;padding-right:24px}.hero{padding:34px}.results{grid-template-columns:repeat(2,minmax(0,1fr))}.visual{height:170px}.card{display:flex;flex-direction:column}.body{display:flex;flex:1;flex-direction:column}.actions{margin-top:auto;padding-top:4px}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}.spinner{animation-duration:1.6s}.card{animation:none}}
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="top">
+      <div class="mark" aria-hidden="true">◎</div>
+      <div class="brand"><b>Akıllı Fırsat</b><span>Oto &amp; Emlak analiz motoru</span></div>
+      <div class="live"><i></i><span id="liveText">Motor hazır</span></div>
+    </header>
+
+    <section class="hero" aria-labelledby="headline">
+      <div class="eyebrow">38 bin+ ilanlık havuz</div>
+      <h1 id="headline">Fırsatı ara, <span>skorunu gör.</span></h1>
+      <p class="lead">Marka, model, şehir, bütçe veya oda sayısını yaz. Sistem ilanları karşılaştırıp adil değeri, fırsat payını ve riski çıkarsın.</p>
+      <form class="search" id="searchForm">
+        <input id="query" name="q" type="search" maxlength="180" autocomplete="off" enterkeyhint="search" aria-label="Araç veya emlak ara" placeholder="Ör. Tokat otomatik Clio 1.2 milyon altı">
+        <button id="searchButton" type="submit">Ara</button>
+      </form>
+      <div class="examples" aria-label="Örnek aramalar">
+        <button class="chip" type="button" data-query="tokat clio">Tokat Clio</button>
+        <button class="chip" type="button" data-query="1.5 milyon altı otomatik araba">1.5M altı otomatik</button>
+        <button class="chip" type="button" data-query="tokatta 3+1 satılık daire">Tokat 3+1</button>
+        <button class="chip" type="button" data-query="istanbul yatırım daire">İstanbul yatırım</button>
+      </div>
+      <div class="status" id="status" role="status" aria-live="polite">
+        <div class="spinner" aria-hidden="true"></div>
+        <div><b id="statusTitle">Araman alındı</b><span id="statusText">İlan havuzu taranıyor…</span></div>
+      </div>
+      <div class="auth" id="authGate">
+        <b>Uygulamayı Telegram içinden aç</b>
+        <p>Güvenli giriş ve kişisel sonuçların için bot sohbetindeki “Fırsatları Aç” düğmesini kullan.</p>
+        <a href="https://t.me/akilli_firsat_bot">Telegram botuna git</a>
+      </div>
+    </section>
+
+    <div class="section-head"><h2>Sonuçlar</h2><span id="resultCount">Arama bekleniyor</span></div>
+    <section class="results" id="results" aria-live="polite"></section>
+    <div class="empty show" id="empty"><b>Aramak istediğini yaz</b><p>Şehir + model veya bütçe eklersen daha net fırsatlar buluruz.</p></div>
+    <p class="footnote">Skorlar karar desteğidir; satın almadan önce ekspertiz, tramer, tapu ve satıcı bilgilerini mutlaka doğrula.</p>
+  </main>
+
+  <template id="cardTemplate">
+    <article class="card">
+      <div class="visual no-image">
+        <img alt="" loading="lazy" referrerpolicy="no-referrer">
+        <div class="placeholder"></div><span class="badge"></span><span class="score"></span>
+      </div>
+      <div class="body">
+        <div class="place"></div><div class="title"></div>
+        <div class="price-row"><div class="price"></div><div class="fair"></div></div>
+        <div class="meta"></div><div class="signal" hidden></div>
+        <div class="actions"><button class="open" type="button">İlanı aç →</button></div>
+      </div>
+    </article>
+  </template>
+
+  <script>
+  (() => {
+    'use strict';
+    const API = 'https://srv1756048.hstgr.cloud/api/app/search';
+    const tg = window.Telegram && window.Telegram.WebApp;
+    const initData = tg && tg.initData ? tg.initData : '';
+    const form = document.getElementById('searchForm');
+    const input = document.getElementById('query');
+    const button = document.getElementById('searchButton');
+    const statusBox = document.getElementById('status');
+    const statusTitle = document.getElementById('statusTitle');
+    const statusText = document.getElementById('statusText');
+    const results = document.getElementById('results');
+    const empty = document.getElementById('empty');
+    const count = document.getElementById('resultCount');
+    const authGate = document.getElementById('authGate');
+    const template = document.getElementById('cardTemplate');
+    let searchVersion = 0;
+    let progressTimer = 0;
+
+    if (tg) {
+      tg.ready();
+      tg.expand();
+      try { tg.setHeaderColor('#0c2726'); tg.setBackgroundColor('#071c1b'); } catch (_) {}
+    }
+    if (!initData) authGate.classList.add('show');
+
+    const money = value => {
+      const n = Number(value || 0);
+      return n ? new Intl.NumberFormat('tr-TR', {maximumFractionDigits:0}).format(n) + ' ₺' : 'Fiyat yok';
+    };
+    const ratingLabel = value => ({SUPER:'Süper Fırsat',IYI:'İyi Fırsat',MAKUL:'Makul',ADAY:'Aday',RISKLI:'Riskli',YOK:'Zayıf'})[value] || 'Analiz';
+    const safeListingUrl = value => {
+      try {
+        const u = new URL(value);
+        return u.protocol === 'https:' && (u.hostname === 'sahibinden.com' || u.hostname.endsWith('.sahibinden.com')) ? u.href : '';
+      } catch (_) { return ''; }
+    };
+    const safeImageUrl = value => {
+      try { const u = new URL(value); return /^https?:$/.test(u.protocol) ? u.href : ''; } catch (_) { return ''; }
+    };
+    const text = (node, value) => { node.textContent = value == null ? '' : String(value); };
+
+    function setStatus(show, title, detail) {
+      statusBox.classList.toggle('show', show);
+      if (title) text(statusTitle, title);
+      if (detail) text(statusText, detail);
+    }
+    function startProgress(version) {
+      clearInterval(progressTimer);
+      const started = Date.now();
+      progressTimer = setInterval(() => {
+        if (version !== searchVersion) return clearInterval(progressTimer);
+        const seconds = (Date.now() - started) / 1000;
+        if (seconds > 55) setStatus(true, 'Arama sürüyor', 'Yoğunluk var; sıran korunuyor, sonuç gelince açılacak.');
+        else if (seconds > 22) setStatus(true, 'Fırsatlar puanlanıyor', 'Adil değer ve risk sinyalleri hesaplanıyor…');
+        else if (seconds > 7) setStatus(true, 'Havuz karşılaştırılıyor', 'Uygun ilanlar emsalleriyle eşleştiriliyor…');
+      }, 1500);
+    }
+    async function request(url, options = {}) {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 15000);
+      try {
+        const response = await fetch(url, {...options, signal:controller.signal, headers:{...(options.headers || {}),'X-Telegram-Init-Data':initData}});
+        let body = {};
+        try { body = await response.json(); } catch (_) {}
+        if (!response.ok) {
+          const error = new Error(body.error || 'request_failed');
+          error.status = response.status;
+          throw error;
+        }
+        return body;
+      } finally { clearTimeout(timer); }
+    }
+    const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+    async function poll(jobId, version) {
+      const deadline = Date.now() + 180000;
+      while (Date.now() < deadline && version === searchVersion) {
+        await delay(1500);
+        const data = await request(API + '?id=' + encodeURIComponent(jobId));
+        if (version !== searchVersion) return;
+        if (data.state === 'done') return showResults(data.result || {});
+        if (data.state === 'failed') throw new Error('search_failed');
+        if (data.state === 'queued' && Number(data.queue_ahead) > 0) {
+          setStatus(true, 'Araman sırada', 'Önünde ' + data.queue_ahead + ' arama var; bu ekranı açık tutabilirsin.');
+        }
+      }
+      if (version === searchVersion) throw new Error('search_timeout');
+    }
+
+    function addMeta(container, value) {
+      if (value === null || value === undefined || value === '') return;
+      const item = document.createElement('span'); text(item, value); container.appendChild(item);
+    }
+    function renderCard(item, index) {
+      const card = template.content.firstElementChild.cloneNode(true);
+      card.style.animationDelay = Math.min(index * 45, 260) + 'ms';
+      const visual = card.querySelector('.visual');
+      const image = card.querySelector('img');
+      const imageUrl = safeImageUrl(item.image);
+      if (imageUrl) {
+        image.src = imageUrl; image.alt = String(item.title || 'İlan görseli');
+        image.addEventListener('load', () => visual.classList.remove('no-image'), {once:true});
+        image.addEventListener('error', () => visual.classList.add('no-image'), {once:true});
+      }
+      text(card.querySelector('.placeholder'), item.category === 'emlak' ? 'EMLAK' : 'OTO');
+      const badge = card.querySelector('.badge');
+      const rating = String(item.rating || 'RISKLI').toUpperCase();
+      badge.classList.add(rating); text(badge, ratingLabel(rating));
+      text(card.querySelector('.score'), Number(item.value || 0));
+      text(card.querySelector('.place'), [item.city, item.district].filter(Boolean).join(' · ') || (item.category === 'emlak' ? 'Emlak' : 'Araç'));
+      text(card.querySelector('.title'), item.title || 'İlan');
+      text(card.querySelector('.price'), money(item.price));
+      const fair = card.querySelector('.fair');
+      if (Number(item.fair) > 0) {
+        const label = document.createElement('span'); text(label, 'Adil değer');
+        const val = document.createElement('b'); text(val, money(item.fair));
+        fair.append(label, val);
+      }
+      const meta = card.querySelector('.meta');
+      addMeta(meta, item.year ? item.year + ' model' : '');
+      addMeta(meta, item.km ? new Intl.NumberFormat('tr-TR').format(item.km) + ' km' : '');
+      addMeta(meta, item.rooms || '');
+      addMeta(meta, item.m2 ? item.m2 + ' m²' : '');
+      if (Number(item.discount) > 0) addMeta(meta, '%' + Number(item.discount).toFixed(0) + ' emsal altı');
+      const flags = Array.isArray(item.flags) ? item.flags.filter(Boolean).slice(0, 2) : [];
+      if (flags.length) { const signal = card.querySelector('.signal'); signal.hidden = false; text(signal, flags.join(' · ')); }
+      const url = safeListingUrl(item.url);
+      const open = card.querySelector('.open');
+      if (!url) open.disabled = true;
+      open.addEventListener('click', () => {
+        if (!url) return;
+        if (tg && tg.openLink) tg.openLink(url); else window.open(url, '_blank', 'noopener,noreferrer');
+      });
+      return card;
+    }
+    function showResults(payload) {
+      clearInterval(progressTimer); setStatus(false); button.disabled = false;
+      const items = Array.isArray(payload.results) ? payload.results : [];
+      results.replaceChildren();
+      if (!items.length) {
+        empty.classList.add('show');
+        empty.querySelector('b').textContent = 'Bu aramada net sonuç çıkmadı';
+        empty.querySelector('p').textContent = 'Şehir, model veya bütçeyi değiştirip tekrar dene.';
+        text(count, '0 sonuç');
+        return;
+      }
+      empty.classList.remove('show');
+      const fragment = document.createDocumentFragment();
+      items.forEach((item, index) => fragment.appendChild(renderCard(item, index)));
+      results.appendChild(fragment); text(count, items.length + ' fırsat');
+      try { tg && tg.HapticFeedback && tg.HapticFeedback.notificationOccurred('success'); } catch (_) {}
+    }
+    function friendlyError(error) {
+      if (error && error.status === 401) return ['Oturum yenilenmeli', 'Uygulamayı kapatıp bot menüsünden yeniden aç.'];
+      if (error && error.status === 429) return ['Çok hızlı arama yaptın', 'Bir dakika bekleyip tekrar dene.'];
+      if (error && error.status === 503) return ['Arama sırası dolu', 'Kısa bir süre sonra tekrar dene; mevcut aramalar korunuyor.'];
+      if (error && error.message === 'search_timeout') return ['Arama uzun sürdü', 'Sistem çalışıyor; sorguyu biraz daraltıp tekrar deneyebilirsin.'];
+      return ['Şu an sonuç alınamadı', 'Bağlantını kontrol edip tekrar dene.'];
+    }
+    async function search(query) {
+      if (!initData) { authGate.classList.add('show'); return; }
+      const q = String(query || '').trim().replace(/\s+/g, ' ');
+      if (q.length < 2) { input.focus(); return; }
+      input.value = q; input.blur();
+      const version = ++searchVersion;
+      button.disabled = true; results.replaceChildren(); empty.classList.remove('show'); text(count, 'Hazırlanıyor');
+      setStatus(true, 'Araman alındı', 'İlan havuzu taranıyor…'); startProgress(version);
+      try {
+        const job = await request(API, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({q})});
+        if (version !== searchVersion) return;
+        await poll(job.job_id, version);
+      } catch (error) {
+        if (version !== searchVersion) return;
+        clearInterval(progressTimer); button.disabled = false;
+        const message = friendlyError(error); setStatus(true, message[0], message[1]); text(count, 'Tekrar denenebilir');
+        try { tg && tg.HapticFeedback && tg.HapticFeedback.notificationOccurred('error'); } catch (_) {}
+      }
+    }
+    form.addEventListener('submit', event => { event.preventDefault(); search(input.value); });
+    document.querySelectorAll('[data-query]').forEach(chip => chip.addEventListener('click', () => search(chip.dataset.query)));
+    input.addEventListener('input', () => { if (input.value.length) authGate.classList.remove('show'); });
+  })();
+  </script>
+</body>
+</html>
