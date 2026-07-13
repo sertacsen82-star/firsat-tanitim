@@ -173,9 +173,16 @@
     background:linear-gradient(90deg,var(--gold),transparent);opacity:0;transition:opacity var(--dur) var(--ease)}
   .f:hover{transform:translateY(-4px);box-shadow:0 24px 50px -26px rgba(14,42,42,.5);border-color:var(--line-d)}
   .f:hover::after{opacity:1}
-  .f .ic{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;font-size:23px;
+  .f .ic{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;
     background:linear-gradient(145deg,rgba(228,169,60,.18),rgba(228,169,60,.06));
     border:1px solid rgba(228,169,60,.16)}
+  /* kurumsal SVG ikon seti (emoji yerine — keskin, altın-tema, statik) */
+  .ic svg{width:25px;height:25px;stroke:var(--gold);stroke-width:1.9;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .btn svg,.nav-cta svg{width:18px;height:18px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .meta svg,.meta2 svg,.fo svg,.card2 .p svg,.msg .p svg,.th svg,.note svg{width:13px;height:13px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;vertical-align:-2px;margin-right:3px;flex:0 0 auto}
+  .card2 .p,.msg .p{display:inline-flex;align-items:center}
+  .float .em svg{width:20px;height:20px;stroke:var(--green-d);stroke-width:2.1;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .fo{display:flex;align-items:center;gap:6px}
   .f h3{margin:15px 0 5px;font-size:16.5px;font-weight:800;letter-spacing:-.01em}
   .f p{font-size:13.5px;color:var(--muted);line-height:1.5}
   .f p b{color:var(--ink)}
@@ -284,7 +291,7 @@
     <div class="spacer"></div>
     <a class="ghost" href="#ozellikler">Ne yapar?</a>
     <a class="ghost" href="#nasil">Nasıl çalışır?</a>
-    <a class="nav-cta" href="https://t.me/akilli_firsat_bot">🎁 7 gün ücretsiz</a>
+    <a class="nav-cta" href="https://t.me/akilli_firsat_bot"><svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8M16.5 8a2.5 2.5 0 0 0 0-5C13 3 12 8 12 8"/></svg>7 gün ücretsiz</a>
   </div>
 </nav>
 
@@ -299,7 +306,7 @@
       <h1>Piyasa-altı fırsatı <span class="g">kimse kapmadan</span> sana getirir.</h1>
       <p class="lede"><b>Yapay zeka</b> araç ve emlak ilanlarını senin yerine 7/24 tarar, puanlar, riskini ve <b>şehir arbitrajını</b> söyler. Sen sadece kararı verirsin.</p>
       <div class="cta-row">
-        <a class="btn primary" href="https://t.me/akilli_firsat_bot">🚀 Telegram'da başla <small>· kart bilgisi yok</small></a>
+        <a class="btn primary" href="https://t.me/akilli_firsat_bot"><svg viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>Telegram'da başla <small>· kart bilgisi yok</small></a>
         <a class="btn link" href="#ozellikler">Ne yapar? →</a>
       </div>
       <div class="trust">
@@ -316,20 +323,20 @@
           <div><b>Akıllı Fırsat</b><span>çevrimiçi · yazıyor…</span></div>
         </div>
         <div class="msg">
-          <span class="p gr">🚗 SWEET-SPOT · %19 emsal-altı</span>
+          <span class="p gr">SWEET-SPOT · %19 emsal-altı</span>
           <div class="ttl2">Fiat Egea 2023 · 28.000 km</div>
-          <div class="meta2">📍 Bursa · bireysel satıcı</div>
+          <div class="meta2"><svg viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg> Bursa · bireysel satıcı</div>
           <div class="prow"><span class="pr2">915.000 ₺</span><span class="win2">Adil ~1.13M</span></div>
         </div>
         <div class="msg">
-          <span class="p gold">🔀 ŞEHİR ARBİTRAJI</span>
+          <span class="p gold">ŞEHİR ARBİTRAJI</span>
           <div class="ttl2">VW Passat 2020 · 96.000 km</div>
           <div class="prow"><span class="pr2">985.000 ₺</span><span class="win2">+165.000 ₺ kâr</span></div>
         </div>
         <div class="typing"><i></i><i></i><i></i></div>
       </div>
       <div class="float">
-        <span class="em">🔔</span>
+        <span class="em"><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></span>
         <div>Yeni fırsat!<br><b>%19 emsal-altı</b></div>
       </div>
     </div>
@@ -346,14 +353,31 @@
         <p class="sub">Bir kötü alım aylık kârını götürür; bir fırsatı geç görürsün rakip kapar. Akıllı Fırsat 8 iş birden yapar — hepsi tek Telegram sohbetinde.</p>
       </div>
       <div class="grid">
-        <div class="f"><div class="ic">🧠</div><h3>Yapay zeka motoru</h3><p>Binlerce ilanı emsaliyle, geçmiş fiyatıyla, riskiyle <b>saniyede</b> değerlendirir — bir uzman gibi.</p><span class="tag live">Canlı</span></div>
-        <div class="f"><div class="ic">🔍</div><h3>Fırsat arama</h3><p>«egea 2023 900 bin altı» yaz → havuzu tarayıp emsale göre <b>puanlı</b> kart getirir.</p><span class="tag live">Canlı</span></div>
-        <div class="f"><div class="ic">📊</div><h3>Emsal-altı değer</h3><p>«Adil değer 1.13M, bu 915 bine — <b>%19 altı</b>» der. Kazık mı, temiz mi belli olur.</p><span class="tag live">Canlı</span></div>
-        <div class="f"><div class="ic">🔀</div><h3>Şehir arbitrajı</h3><p>Bir ilde ucuz, başka ilde pahalı aracı yakalar — <b>al, taşı, kâr et.</b> Kurnaz galericinin işi.</p><span class="tag live">Canlı</span></div>
-        <div class="f"><div class="ic">🔔</div><h3>Otomatik alarm</h3><p>Takip kur, uyusan bile kaçmasın — uygun fırsat çıktığı an haber verir.</p><span class="tag live">Canlı</span></div>
-        <div class="f"><div class="ic">🛡️</div><h3>Risk kalkanı</h3><p>Oynanmış km, şişirilmiş "indirim", olağandışı ucuz kapora tuzağı — <b>işaretler.</b></p><span class="tag live">Canlı</span></div>
-        <div class="f"><div class="ic">🏷️</div><h3>Satıcı modu</h3><p>Elindekini yaz → adil değer + 3 satış stratejisi (🔥 hızlı · 💰 dengeli · 📈 max).</p><span class="tag live">Canlı</span></div>
-        <div class="f"><div class="ic">🤝</div><h3>Pazarlık koçu</h3><p>Karşına gerçek satıcı gibi AI çıkar — prova yaparsın, taktik verir.</p><span class="tag new">Başka yerde YOK</span></div>
+        <div class="f"><div class="ic"><svg viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M19 9h3M19 14h3M2 9h3M2 14h3"/></svg></div><h3>Yapay zeka motoru</h3><p>Binlerce ilanı emsaliyle, geçmiş fiyatıyla, riskiyle <b>saniyede</b> değerlendirir — bir uzman gibi.</p><span class="tag live">Canlı</span></div>
+        <div class="f"><div class="ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></div><h3>Fırsat arama</h3><p>«egea 2023 900 bin altı» yaz → havuzu tarayıp emsale göre <b>puanlı</b> kart getirir.</p><span class="tag live">Canlı</span></div>
+        <div class="f"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15v3M12 9v9M17 5v13"/></svg></div><h3>Emsal-altı değer</h3><p>«Adil değer 1.13M, bu 915 bine — <b>%19 altı</b>» der. Kazık mı, temiz mi belli olur.</p><span class="tag live">Canlı</span></div>
+        <div class="f"><div class="ic"><svg viewBox="0 0 24 24"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg></div><h3>Şehir arbitrajı</h3><p>Bir ilde ucuz, başka ilde pahalı aracı yakalar — <b>al, taşı, kâr et.</b> Kurnaz galericinin işi.</p><span class="tag live">Canlı</span></div>
+        <div class="f"><div class="ic"><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></div><h3>Otomatik alarm</h3><p>Takip kur, uyusan bile kaçmasın — uygun fırsat çıktığı an haber verir.</p><span class="tag live">Canlı</span></div>
+        <div class="f"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg></div><h3>Risk kalkanı</h3><p>Oynanmış km, şişirilmiş "indirim", olağandışı ucuz kapora tuzağı — <b>işaretler.</b></p><span class="tag live">Canlı</span></div>
+        <div class="f"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 11V4a1 1 0 0 1 1-1h7l9 9-8 8-9-9z"/><circle cx="7.5" cy="7.5" r="1.3"/></svg></div><h3>Satıcı modu</h3><p>Elindekini yaz → <b>adil değer + 3 satış stratejisi:</b> hızlı · dengeli · maksimum.</p><span class="tag live">Canlı</span></div>
+        <div class="f"><div class="ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H8l-4 4V5a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2z"/></svg></div><h3>Pazarlık koçu</h3><p>Karşına gerçek satıcı gibi AI çıkar — prova yaparsın, taktik verir.</p><span class="tag new">Başka yerde YOK</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EMLAKÇI -->
+  <section class="sec" id="emlakci" style="padding-top:0">
+    <div class="shell">
+      <div class="head">
+        <span class="kicker">Emlakçıysan — sana özel</span>
+        <h2>Şahıstan yeni ilanı, <span class="g">rakibinden önce</span> yakala.</h2>
+        <p class="sub">Emlakçının ekmeği: sahibinden'e <b>şahıstan (emlakçısız)</b> düşen yeni ilanı ilk sen görürsün, sahibini ilk sen ararsın, portföyüne katarsın.</p>
+      </div>
+      <div class="grid">
+        <div class="f"><div class="ic"><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></div><h3>Portföy Radarı</h3><p>Sahibinden'e <b>şahıstan</b> yeni ilan düştüğü an kart düşer: konum, oda, m², fiyat, link. Sahibini <b>ilk sen</b> ara.</p><span class="tag live">Canlı</span></div>
+        <div class="f"><div class="ic"><svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div><h3>Her fırsat TEK kişiye</h3><p>Sana gelen ilan <b>rakibine gitmez.</b> Aynı ilanı 10 kişiye yollayan sistem değil — <b>sana düşen senindir.</b></p><span class="tag new">Tekel</span></div>
+        <div class="f"><div class="ic"><svg viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg></div><h3>Kendi bölgen</h3><p>Bir kez söyle: <b>«Tokat Merkez, 3+1».</b> Sadece sana uyan ilanlar süzülür; gerisi seni yormaz.</p><span class="tag live">Canlı</span></div>
+        <div class="f"><div class="ic"><svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div><h3>Bu daire kaç eder?</h3><p>Bölgenin emsaliyle <b>adil değer + satış stratejisi.</b> Müşteriye güvenle fiyat ver, pazarlığa hazır gir.</p><span class="tag live">Canlı</span></div>
       </div>
     </div>
   </section>
@@ -370,25 +394,25 @@
     </div>
     <div class="ex">
       <div class="card2">
-        <span class="p gr">🏙️ EMLAK · %13 emsal-altı</span>
+        <span class="p gr">EMLAK · %13 emsal-altı</span>
         <div class="ttl">3+1 Daire · 110 m² · Caddebostan</div>
-        <div class="meta">📍 İstanbul / Kadıköy</div>
+        <div class="meta"><svg viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg> İstanbul / Kadıköy</div>
         <div class="row"><span class="pr">4.200.000 ₺</span><span class="win">Emsal ~4.850.000 ₺</span></div>
-        <div class="fo">✅ Mahalle emsalli · ilana git, kendin görüş</div>
+        <div class="fo"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Mahalle emsalli · ilana git, kendin görüş</div>
       </div>
       <div class="card2">
-        <span class="p">🔀 ŞEHİR ARBİTRAJI</span>
+        <span class="p">ŞEHİR ARBİTRAJI</span>
         <div class="ttl">VW Passat 2020 · 96.000 km</div>
-        <div class="meta">📍 Ankara'da bulundu</div>
+        <div class="meta"><svg viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg> Ankara'da bulundu</div>
         <div class="row"><span class="pr">985.000 ₺</span><span class="win">İzmir ~1.150.000 → +165.000 ₺</span></div>
-        <div class="fo">🚚 Al, taşı, kâr et — galericinin kurnazlığı</div>
+        <div class="fo"><svg viewBox="0 0 24 24"><path d="M10 17h4V5H2v12h3"/><path d="M20 17h2v-3.3a4 4 0 0 0-1.2-2.9L19 9h-5v8h1"/><circle cx="7.5" cy="17.5" r="2.2"/><circle cx="17.5" cy="17.5" r="2.2"/></svg>Al, taşı, kâr et — galericinin kurnazlığı</div>
       </div>
       <div class="card2">
-        <span class="p gr">🚗 SWEET-SPOT B · %7 altı</span>
+        <span class="p gr">SWEET-SPOT B · %7 altı</span>
         <div class="ttl">Renault Clio 2018 · 75.000 km</div>
-        <div class="meta">📍 Bursa · bireysel satıcı</div>
+        <div class="meta"><svg viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg> Bursa · bireysel satıcı</div>
         <div class="row"><span class="pr">380.000 ₺</span><span class="win">Emsal ~410.000 ₺</span></div>
-        <div class="fo">✅ Temiz · sana uygun · taze doğrulandı</div>
+        <div class="fo"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Temiz · sana uygun · taze doğrulandı</div>
       </div>
     </div>
     <p class="excap">Örnek kartlardır. Numara kazımayız — sen ilandan kendin ulaşırsın.</p>
@@ -408,7 +432,7 @@
       <div class="how">
         <div class="phone2" aria-hidden="true">
           <div class="bubble">
-            <div class="th">📋 AKILLI FIRSAT — MENÜ</div>
+            <div class="th"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>AKILLI FIRSAT — MENÜ</div>
             <div class="hint">Rakam yaz ya da direkt ara: «egea 900 bin altı»</div>
             <div class="mrow"><b>1</b> Nasıl başlarım <span class="s">canlı</span></div>
             <div class="mrow"><b>2</b> Fırsat arama <span class="s">canlı</span></div>
@@ -424,7 +448,7 @@
         <div class="steps">
           <div class="step"><div class="n">1</div><div><h3>Telegram'da botu aç</h3><p>Telegram'da <code class="k">@akilli_firsat_bot</code> ara ve aç.</p></div></div>
           <div class="step"><div class="n">2</div><div><h3><code class="k">/start</code> yaz</h3><p>7 günlük deneme anında başlar. Sonra <code class="k">yardım</code> yaz → menüden seç.</p></div></div>
-          <div class="note">Takıldığın yerde beni ara, birlikte kurarız 👍 — <b>hiçbir kart bilgisi istenmez.</b></div>
+          <div class="note">Takıldığın yerde beni ara, birlikte kurarız — <b>hiçbir kart bilgisi istenmez.</b></div>
         </div>
       </div>
     </div>
@@ -437,7 +461,7 @@
     <span class="pill"><span class="live"></span> 7 gün ücretsiz · kart bilgisi yok</span>
     <h2>Bir fırsat bul, kararını ver.</h2>
     <p>Taahhüt yok. Beğenmezsen bırakırsın. Kaybedeceğin tek şey: kaçırdığın fırsatlar.</p>
-    <a class="btn primary" href="https://t.me/akilli_firsat_bot">🚀 Telegram'da başla</a>
+    <a class="btn primary" href="https://t.me/akilli_firsat_bot"><svg viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>Telegram'da başla</a>
     <div class="handle">Aç · <b>/start</b> yaz · denemen başlasın</div>
   </div>
 </section>
