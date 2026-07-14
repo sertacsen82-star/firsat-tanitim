@@ -167,8 +167,8 @@
         <div id="fEmlakNot" hidden class="f-label"><small>Oda sayısı ve m² filtresi yakında — şimdilik konum + bütçe ile ara.</small></div>
         <div class="f-label">Bütçe (₺)</div>
         <div class="frow">
-          <input id="fPmin" type="number" inputmode="numeric" min="0" placeholder="En az — boş bırakılabilir">
-          <input id="fPmax" type="number" inputmode="numeric" min="0" placeholder="En çok">
+          <input id="fPmin" type="text" inputmode="numeric" placeholder="En az — boş bırakılabilir">
+          <input id="fPmax" type="text" inputmode="numeric" placeholder="En çok (ör. 900.000)">
         </div>
         <div class="chips2" id="fHizli" style="margin-top:8px">
           <button type="button" data-max="500000">≤500 bin</button>
@@ -184,7 +184,7 @@
             <input id="fYmax" type="number" inputmode="numeric" min="1980" max="2026" placeholder="Yıl — en yeni">
           </div>
           <div class="frow">
-            <input id="fKm" type="number" inputmode="numeric" min="0" placeholder="Km — en fazla">
+            <input id="fKm" type="text" inputmode="numeric" placeholder="Km — en fazla (ör. 150.000)">
             <select id="fYakit" aria-label="Yakıt">
               <option value="">Yakıt — fark etmez</option>
               <option value="dizel">Dizel</option><option value="benzin">Benzin</option>
@@ -430,8 +430,14 @@
 
     async function katalogGetir(tur, parent) {
       const url = API_KATALOG + '?tur=' + tur + (parent ? '&parent=' + parent : '');
-      const data = await request(url);
-      return Array.isArray(data.items) ? data.items : [];
+      try {
+        const data = await request(url);
+        return Array.isArray(data.items) ? data.items : [];
+      } catch (ilkHata) {
+        await delay(700);                       // tek otomatik tekrar (WebView gecici ag hatasi)
+        const data = await request(url);
+        return Array.isArray(data.items) ? data.items : [];
+      }
     }
     function selectDoldur(sel, items, bosEtiket) {
       sel.replaceChildren(new Option(bosEtiket, ''));
@@ -460,6 +466,15 @@
       [...secModel].forEach(id => { if (!hepsi.some(m => m.id === id)) secModel.delete(id); });
       chipListe(fModel, hepsi, secModel, (it, on) => { on ? secModel.add(it.id) : secModel.delete(it.id); sayacYenile(); });
     }
+    const sayi = v => { const d = String(v || '').replace(/\D/g, ''); return d ? parseInt(d, 10) : 0; };
+    function binlik(el) {                              // 2500000 -> 2.500.000 (yazarken)
+      el.addEventListener('input', () => {
+        const d = el.value.replace(/\D/g, '');
+        const yeni = d ? Number(d).toLocaleString('tr-TR') : '';
+        if (el.value !== yeni) el.value = yeni;
+      });
+    }
+    binlik($('fPmin')); binlik($('fPmax')); binlik($('fKm'));
     function specKur() {
       const spec = { version: 2, category: kategori };
       if (fIl.value) spec.province_id = Number(fIl.value);
@@ -468,15 +483,15 @@
       if (kategori === 'oto') {
         if (secMarka.size) spec.brand_ids = [...secMarka];
         if (secModel.size) spec.model_ids = [...secModel];
-        const ymin = parseInt($('fYmin').value, 10), ymax = parseInt($('fYmax').value, 10);
-        const km = parseInt($('fKm').value, 10);
+        const ymin = sayi($('fYmin').value), ymax = sayi($('fYmax').value);
+        const km = sayi($('fKm').value);
         if (ymin) spec.year_min = ymin;
         if (ymax) spec.year_max = ymax;
         if (km) spec.km_max = km;
         if ($('fYakit').value) spec.fuel = $('fYakit').value;
         if ($('fVites').value) spec.gear = $('fVites').value;
       }
-      const pmin = parseInt($('fPmin').value, 10), pmax = parseInt($('fPmax').value, 10);
+      const pmin = sayi($('fPmin').value), pmax = sayi($('fPmax').value);
       if (pmin) spec.price_min = pmin;
       if (pmax) spec.price_max = pmax;
       return spec;
@@ -498,6 +513,32 @@
         }
       }, 450);
     }
+    function hataKutusu(kutu, mesaj, tekrar) {
+      kutu.replaceChildren();
+      const s = document.createElement('span'); s.className = 'hint'; s.textContent = mesaj; kutu.appendChild(s);
+      const b = document.createElement('button'); b.type = 'button'; b.textContent = '↻ Tekrar dene';
+      b.addEventListener('click', tekrar); kutu.appendChild(b);
+    }
+    async function illeriYukle() {
+      try {
+        selectDoldur(fIl, await katalogGetir('il'), 'İl — tümü');
+      } catch (e) {
+        fIl.replaceChildren(new Option('İl listesi alınamadı — tekrar açınca yüklenir', ''));
+        fIl.disabled = false;
+        setTimeout(illeriYukle, 2500);          // sessiz otomatik tekrar
+      }
+    }
+    async function markalariYukle() {
+      try {
+        const markalar = await katalogGetir('marka');
+        chipListe(fMarka, markalar, secMarka, async (it, on) => {
+          on ? secMarka.add(it.id) : secMarka.delete(it.id);
+          await modelleriYenile(); sayacYenile();
+        });
+      } catch (e) {
+        hataKutusu(fMarka, 'Marka listesi alınamadı.', markalariYukle);
+      }
+    }
     async function formAc() {
       const acik = !dBody.hidden;
       dBody.hidden = acik;
@@ -505,15 +546,8 @@
       $('detailHint').textContent = acik ? 'yazmadan filtrele ▾' : 'kapat ▴';
       if (acik || katalogYuklendi || !initData) return;
       katalogYuklendi = true;
-      try {
-        const [iller, markalar] = await Promise.all([katalogGetir('il'), katalogGetir('marka')]);
-        selectDoldur(fIl, iller, 'İl — tümü');
-        chipListe(fMarka, markalar, secMarka, async (it, on) => {
-          on ? secMarka.add(it.id) : secMarka.delete(it.id);
-          await modelleriYenile(); sayacYenile();
-        });
-        sayacYenile();
-      } catch (err) { katalogYuklendi = false; text(fCount, 'Liste yüklenemedi — paneli kapatıp aç'); }
+      illeriYukle(); markalariYukle();          // AYRI AYRI: biri düşerse öbürü yaşar
+      sayacYenile();
     }
     dToggle.addEventListener('click', formAc);
     $('fKat').querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
@@ -542,7 +576,7 @@
       $(id).addEventListener('change', sayacYenile); $(id).addEventListener('input', sayacYenile);
     });
     $('fHizli').querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
-      $('fPmax').value = b.dataset.max; sayacYenile();
+      $('fPmax').value = Number(b.dataset.max).toLocaleString('tr-TR'); sayacYenile();
     }));
     async function searchSpec() {
       if (!initData) { authGate.classList.add('show'); return; }
