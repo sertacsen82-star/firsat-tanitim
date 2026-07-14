@@ -345,7 +345,10 @@
       card.style.animationDelay = Math.min(index * 45, 260) + 'ms';
       const visual = card.querySelector('.visual');
       const image = card.querySelector('img');
-      const imageUrl = safeImageUrl(item.image);
+      // Resim PROXY'den: sahibinden CDN WebView'de hotlink vermiyor + 'no-image' ikonu resim sayilmaz
+      const hamImg = safeImageUrl(item.image);
+      const imageUrl = (hamImg && !hamImg.includes('no-image') && item.id)
+        ? API.replace('/search', '/img') + '?id=' + encodeURIComponent(item.id) : '';
       if (imageUrl) {
         image.src = imageUrl; image.alt = String(item.title || 'İlan görseli');
         image.addEventListener('load', () => visual.classList.remove('no-image'), {once:true});
