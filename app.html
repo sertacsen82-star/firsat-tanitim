@@ -216,6 +216,8 @@
         </details>
         <div class="fbar">
           <b id="fCount">Filtre seç<small id="fCountNote">sayı burada canlı görünür</small></b>
+          <button id="fSifirla" type="button" title="Her şeyi sıfırla"
+                  style="flex:none;border:1px solid rgba(255,255,255,.22);border-radius:12px;padding:13px;background:transparent;color:#cad9d5;font-weight:800;cursor:pointer">↺</button>
           <button id="fGetir" type="button" disabled>Fırsatları getir</button>
         </div>
       </div>
@@ -640,6 +642,25 @@
       }
     }
     fGetir.addEventListener('click', searchSpec);
+    function formSifirla() {                   // ↺ donma/karisma panik dugmesi: 0'dan basla
+      ++searchVersion;                          // aktif arama/poll varsa DUSER (uzerine yazma biter)
+      secMarka.clear(); secModel.clear(); modellerTum = [];
+      ['fMarkaAra','fModelAra','fPmin','fPmax','fYmin','fYmax','fKm'].forEach(id => { $(id).value = ''; });
+      $('fYakit').value = ''; $('fVites').value = '';
+      fIl.value = '';
+      fIlce.replaceChildren(new Option('İlçe — tümü', '')); fIlce.disabled = true;
+      fMahalle.replaceChildren(new Option('Mahalle — tümü', '')); fMahalle.disabled = true; fMahalleWrap.hidden = true;
+      aracTipi = 'otomobil';
+      $('fTip').querySelectorAll('button').forEach(x => x.classList.toggle('on', x.dataset.tip === 'otomobil'));
+      kategori = 'oto';
+      $('fKat').querySelectorAll('button').forEach(x => x.classList.toggle('on', x.dataset.cat === 'oto'));
+      fOto.hidden = false; fEmlakNot.hidden = true; $('fMore').hidden = false;
+      results.replaceChildren(); empty.classList.add('show'); text(count, 'Arama bekleniyor');
+      clearInterval(progressTimer); setStatus(false); button.disabled = false; fGetir.disabled = true;
+      markaCiz(); modelCiz(); sayacYenile();
+      try { tg && tg.HapticFeedback && tg.HapticFeedback.impactOccurred('light'); } catch (_) {}
+    }
+    $('fSifirla').addEventListener('click', formSifirla);
   })();
   </script>
 </body>
