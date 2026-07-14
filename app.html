@@ -76,6 +76,9 @@
     .meta{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}.meta span{padding:6px 8px;border-radius:8px;background:#e9e4d8;color:#50635e;font-size:11px;font-weight:700}
     .signal{margin-top:12px;padding:10px 11px;border-left:3px solid var(--gold);border-radius:0 9px 9px 0;background:#eee7d7;color:#52615d;font-size:11px;line-height:1.45}
     .actions{display:flex;gap:8px;margin-top:14px}.open{width:100%;border:0;border-radius:12px;padding:12px;background:#153c37;color:#fff;font-weight:850;cursor:pointer}.open:active{transform:translateY(1px)}
+    .analiz{margin-top:12px;border:1px solid rgba(20,38,34,.14);border-radius:10px;background:#f1ecdf}
+    .analiz summary{cursor:pointer;padding:10px 11px;font-size:12px;font-weight:800;color:#3f5650}
+    .analiz pre{margin:0;padding:0 11px 11px;font:12px/1.55 inherit;white-space:pre-wrap;word-break:break-word;color:#43554f}
     .footnote{text-align:center;color:#617d77;font-size:11px;line-height:1.45;margin:24px auto 0;max-width:580px}
     /* ---- Detaylı arama (form) ---- */
     .detail{margin-top:16px;border:1px solid rgba(228,170,60,.17);border-radius:22px;background:linear-gradient(145deg,rgba(18,54,51,.92),rgba(10,38,36,.94));overflow:hidden}
@@ -159,9 +162,20 @@
           <select id="fMahalle" aria-label="Mahalle" disabled style="width:100%;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.06);color:#fff;padding:12px;font-size:14px;outline:0"><option value="">Mahalle — tümü</option></select>
         </div>
         <div id="fOto">
-          <div class="f-label">Marka <small>birden çok seçebilirsin</small></div>
+          <div class="f-label">Araç türü</div>
+          <div class="seg" id="fTip">
+            <button type="button" class="on" data-tip="otomobil">🚗 Otomobil</button>
+            <button type="button" data-tip="motosiklet">🏍 Motosiklet</button>
+          </div>
+          <div class="f-label">Marka <small>birden çok seçebilirsin · yazarak da bulabilirsin</small></div>
+          <div class="frow" style="grid-template-columns:1fr;margin-bottom:7px">
+            <input id="fMarkaAra" type="text" autocomplete="off" placeholder="Marka yaz — liste süzülür (ör. Ren…)">
+          </div>
           <div class="chips2" id="fMarka"><span class="hint">Yükleniyor…</span></div>
-          <div class="f-label">Model <small>seçili markaların modelleri</small></div>
+          <div class="f-label">Model <small>seçili markaların modelleri · yazarak süz</small></div>
+          <div class="frow" style="grid-template-columns:1fr;margin-bottom:7px">
+            <input id="fModelAra" type="text" autocomplete="off" placeholder="Model yaz — liste süzülür (ör. Cli…)">
+          </div>
           <div class="chips2" id="fModel"><span class="hint">Önce marka seç</span></div>
         </div>
         <div id="fEmlakNot" hidden class="f-label"><small>Oda sayısı ve m² filtresi yakında — şimdilik konum + bütçe ile ara.</small></div>
@@ -223,6 +237,7 @@
         <div class="place"></div><div class="title"></div>
         <div class="price-row"><div class="price"></div><div class="fair"></div></div>
         <div class="meta"></div><div class="signal" hidden></div>
+        <details class="analiz" hidden><summary>📊 Analiz — emsal · risk · sinyaller</summary><pre></pre></details>
         <div class="actions"><button class="open" type="button">İlanı aç →</button></div>
       </div>
     </article>
@@ -356,6 +371,10 @@
       if (Number(item.discount) > 0) addMeta(meta, '%' + Number(item.discount).toFixed(0) + ' emsal altı');
       const flags = Array.isArray(item.flags) ? item.flags.filter(Boolean).slice(0, 2) : [];
       if (flags.length) { const signal = card.querySelector('.signal'); signal.hidden = false; text(signal, flags.join(' · ')); }
+      if (item.detay) {                             // Telegram kartindaki AYNI analiz
+        const analiz = card.querySelector('.analiz'); analiz.hidden = false;
+        text(analiz.querySelector('pre'), item.detay);
+      }
       const url = safeListingUrl(item.url);
       const open = card.querySelector('.open');
       if (!url) open.disabled = true;
@@ -424,9 +443,12 @@
     const fMarka = $('fMarka'), fModel = $('fModel'), fOto = $('fOto'), fEmlakNot = $('fEmlakNot');
     const fCount = $('fCount'), fCountNote = $('fCountNote'), fGetir = $('fGetir');
     let kategori = 'oto';
+    let aracTipi = 'otomobil';
     const secMarka = new Set(), secModel = new Set();
     const modelAdlari = new Map();
+    let markalarTum = [], modellerTum = [];
     let katalogYuklendi = false, countTimer = 0, sonSayi = 0;
+    const trkucuk = s => String(s || '').toLocaleLowerCase('tr-TR');
 
     async function katalogGetir(tur, parent) {
       const url = API_KATALOG + '?tur=' + tur + (parent ? '&parent=' + parent : '');
@@ -454,17 +476,35 @@
         kutu.appendChild(b);
       });
     }
-    async function modelleriYenile() {
-      if (!secMarka.size) {
+    function markaCiz() {
+      const ara = trkucuk($('fMarkaAra').value);
+      const izin = t => aracTipi === 'otomobil' ? (t !== 'motosiklet') : (t !== 'otomobil');
+      const liste = markalarTum.filter(m => izin(m.tip || 'otomobil') || secMarka.has(m.id))
+                               .filter(m => !ara || trkucuk(m.ad).includes(ara));
+      chipListe(fMarka, liste, secMarka, async (it, on) => {
+        on ? secMarka.add(it.id) : secMarka.delete(it.id);
+        await modelleriYenile(); sayacYenile();
+      });
+    }
+    function modelCiz() {
+      const ara = trkucuk($('fModelAra').value);
+      const liste = modellerTum.filter(m => !ara || trkucuk(m.ad).includes(ara));
+      if (!modellerTum.length) {
         fModel.replaceChildren(); const s = document.createElement('span');
         s.className = 'hint'; s.textContent = 'Önce marka seç'; fModel.appendChild(s);
-        secModel.clear(); return;
+        return;
+      }
+      chipListe(fModel, liste, secModel, (it, on) => { on ? secModel.add(it.id) : secModel.delete(it.id); sayacYenile(); });
+    }
+    async function modelleriYenile() {
+      if (!secMarka.size) {
+        modellerTum = []; secModel.clear(); modelCiz(); return;
       }
       const listeler = await Promise.all([...secMarka].map(id => katalogGetir('model', id)));
-      const hepsi = listeler.flat();
-      hepsi.forEach(m => modelAdlari.set(m.id, m.ad));
-      [...secModel].forEach(id => { if (!hepsi.some(m => m.id === id)) secModel.delete(id); });
-      chipListe(fModel, hepsi, secModel, (it, on) => { on ? secModel.add(it.id) : secModel.delete(it.id); sayacYenile(); });
+      modellerTum = listeler.flat();
+      modellerTum.forEach(m => modelAdlari.set(m.id, m.ad));
+      [...secModel].forEach(id => { if (!modellerTum.some(m => m.id === id)) secModel.delete(id); });
+      modelCiz();
     }
     const sayi = v => { const d = String(v || '').replace(/\D/g, ''); return d ? parseInt(d, 10) : 0; };
     function binlik(el) {                              // 2500000 -> 2.500.000 (yazarken)
@@ -530,15 +570,18 @@
     }
     async function markalariYukle() {
       try {
-        const markalar = await katalogGetir('marka');
-        chipListe(fMarka, markalar, secMarka, async (it, on) => {
-          on ? secMarka.add(it.id) : secMarka.delete(it.id);
-          await modelleriYenile(); sayacYenile();
-        });
+        markalarTum = await katalogGetir('marka');
+        markaCiz();
       } catch (e) {
         hataKutusu(fMarka, 'Marka listesi alınamadı.', markalariYukle);
       }
     }
+    $('fTip').querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+      $('fTip').querySelectorAll('button').forEach(x => x.classList.remove('on'));
+      b.classList.add('on'); aracTipi = b.dataset.tip; markaCiz();
+    }));
+    $('fMarkaAra').addEventListener('input', markaCiz);
+    $('fModelAra').addEventListener('input', modelCiz);
     async function formAc() {
       const acik = !dBody.hidden;
       dBody.hidden = acik;
