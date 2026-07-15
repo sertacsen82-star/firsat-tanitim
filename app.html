@@ -306,7 +306,7 @@
     }
     async function request(url, options = {}) {
       const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), 15000);
+      const timer = setTimeout(() => controller.abort(), 30000);   // 15->30sn: yogun harvest yukunde spurious 'sonuc alinamadi' onlenir
       try {
         const response = await fetch(url, {...options, signal:controller.signal, headers:{...(options.headers || {}),'X-Telegram-Init-Data':initData}});
         let body = {};
