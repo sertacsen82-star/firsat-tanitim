@@ -178,7 +178,22 @@
           </div>
           <div class="chips2" id="fModel"><span class="hint">Önce marka seç</span></div>
         </div>
-        <div id="fEmlakNot" hidden class="f-label"><small>Oda sayısı ve m² filtresi yakında — şimdilik konum + bütçe ile ara.</small></div>
+        <div id="fEmlak" hidden>
+          <div class="f-label">Oda sayısı <small>birden çok seçebilirsin</small></div>
+          <div class="chips2" id="fOda">
+            <button type="button" data-oda="1+0">1+0 (Stüdyo)</button>
+            <button type="button" data-oda="1+1">1+1</button>
+            <button type="button" data-oda="2+1">2+1</button>
+            <button type="button" data-oda="3+1">3+1</button>
+            <button type="button" data-oda="4+1">4+1</button>
+            <button type="button" data-oda="5+1">5+1</button>
+          </div>
+          <div class="f-label">m² (brüt)</div>
+          <div class="frow">
+            <input id="fM2min" type="text" inputmode="numeric" placeholder="En az (ör. 100)">
+            <input id="fM2max" type="text" inputmode="numeric" placeholder="En çok">
+          </div>
+        </div>
         <div class="f-label">Bütçe (₺)</div>
         <div class="frow">
           <input id="fPmin" type="text" inputmode="numeric" placeholder="En az — boş bırakılabilir">
@@ -445,7 +460,8 @@
     const $ = id => document.getElementById(id);
     const dToggle = $('detailToggle'), dBody = $('detailBody');
     const fIl = $('fIl'), fIlce = $('fIlce'), fMahalle = $('fMahalle'), fMahalleWrap = $('fMahalleWrap');
-    const fMarka = $('fMarka'), fModel = $('fModel'), fOto = $('fOto'), fEmlakNot = $('fEmlakNot');
+    const fMarka = $('fMarka'), fModel = $('fModel'), fOto = $('fOto'), fEmlak = $('fEmlak');
+    const secOda = new Set();
     const fCount = $('fCount'), fCountNote = $('fCountNote'), fGetir = $('fGetir');
     let kategori = 'oto';
     let aracTipi = 'otomobil';
@@ -536,6 +552,12 @@
         if ($('fYakit').value) spec.fuel = $('fYakit').value;
         if ($('fVites').value) spec.gear = $('fVites').value;
       }
+      if (kategori === 'emlak') {
+        if (secOda.size) spec.room_counts = [...secOda];
+        const m2min = sayi($('fM2min').value), m2max = sayi($('fM2max').value);
+        if (m2min) spec.m2_min = m2min;
+        if (m2max) spec.m2_max = m2max;
+      }
       const pmin = sayi($('fPmin').value), pmax = sayi($('fPmax').value);
       if (pmin) spec.price_min = pmin;
       if (pmax) spec.price_max = pmax;
@@ -602,9 +624,14 @@
       $('fKat').querySelectorAll('button').forEach(x => x.classList.remove('on'));
       b.classList.add('on'); kategori = b.dataset.cat;
       fOto.hidden = kategori !== 'oto';
-      fEmlakNot.hidden = kategori !== 'emlak';
+      fEmlak.hidden = kategori !== 'emlak';
       fMahalleWrap.hidden = kategori !== 'emlak' || !fIlce.value;
       $('fMore').hidden = kategori !== 'oto';
+      sayacYenile();
+    }));
+    $('fOda').querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+      b.classList.toggle('on');
+      b.classList.contains('on') ? secOda.add(b.dataset.oda) : secOda.delete(b.dataset.oda);
       sayacYenile();
     }));
     fIl.addEventListener('change', async () => {
@@ -620,7 +647,7 @@
       if (goster) selectDoldur(fMahalle, await katalogGetir('mahalle', fIlce.value), 'Mahalle — tümü');
       sayacYenile();
     });
-    ['fMahalle','fPmin','fPmax','fYmin','fYmax','fKm','fYakit','fVites'].forEach(id => {
+    ['fMahalle','fPmin','fPmax','fYmin','fYmax','fKm','fYakit','fVites','fM2min','fM2max'].forEach(id => {
       $(id).addEventListener('change', sayacYenile); $(id).addEventListener('input', sayacYenile);
     });
     $('fHizli').querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
@@ -647,9 +674,10 @@
     fGetir.addEventListener('click', searchSpec);
     function formSifirla() {                   // ↺ donma/karisma panik dugmesi: 0'dan basla
       ++searchVersion;                          // aktif arama/poll varsa DUSER (uzerine yazma biter)
-      secMarka.clear(); secModel.clear(); modellerTum = [];
-      ['fMarkaAra','fModelAra','fPmin','fPmax','fYmin','fYmax','fKm'].forEach(id => { $(id).value = ''; });
+      secMarka.clear(); secModel.clear(); secOda.clear(); modellerTum = [];
+      ['fMarkaAra','fModelAra','fPmin','fPmax','fYmin','fYmax','fKm','fM2min','fM2max'].forEach(id => { $(id).value = ''; });
       $('fYakit').value = ''; $('fVites').value = '';
+      $('fOda').querySelectorAll('button').forEach(x => x.classList.remove('on'));
       fIl.value = '';
       fIlce.replaceChildren(new Option('İlçe — tümü', '')); fIlce.disabled = true;
       fMahalle.replaceChildren(new Option('Mahalle — tümü', '')); fMahalle.disabled = true; fMahalleWrap.hidden = true;
@@ -657,7 +685,7 @@
       $('fTip').querySelectorAll('button').forEach(x => x.classList.toggle('on', x.dataset.tip === 'otomobil'));
       kategori = 'oto';
       $('fKat').querySelectorAll('button').forEach(x => x.classList.toggle('on', x.dataset.cat === 'oto'));
-      fOto.hidden = false; fEmlakNot.hidden = true; $('fMore').hidden = false;
+      fOto.hidden = false; fEmlak.hidden = true; $('fMore').hidden = false;
       results.replaceChildren(); empty.classList.add('show'); text(count, 'Arama bekleniyor');
       clearInterval(progressTimer); setStatus(false); button.disabled = false; fGetir.disabled = true;
       markaCiz(); modelCiz(); sayacYenile();
