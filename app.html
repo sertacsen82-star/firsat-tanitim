@@ -108,6 +108,16 @@
     .fbar button{margin-left:auto;flex:none;border:0;border-radius:12px;padding:13px 17px;background:var(--gold);color:#172720;font-weight:850;cursor:pointer}
     .fbar button:disabled{opacity:.55;cursor:not-allowed}
     @media(min-width:680px){.app{padding-left:24px;padding-right:24px}.hero{padding:34px}.results{grid-template-columns:repeat(2,minmax(0,1fr))}.visual{height:170px}.card{display:flex;flex-direction:column}.body{display:flex;flex:1;flex-direction:column}.actions{margin-top:auto;padding-top:4px}}
+    /* #2 vitrin: tam envanter listesi (kompakt satirlar) */
+    .liste-ac{width:100%;margin:10px 0;border:1px solid rgba(244,213,139,.42);border-radius:14px;padding:14px;
+      background:rgba(228,170,60,.10);color:var(--gold2);font-weight:800;font-size:15px;cursor:pointer}
+    .lrow{display:flex;gap:11px;align-items:center;padding:10px;border:1px solid rgba(255,255,255,.10);
+      border-radius:13px;margin-bottom:8px;background:rgba(255,255,255,.03);cursor:pointer;text-decoration:none;color:inherit}
+    .lrow img{width:64px;height:48px;object-fit:cover;border-radius:9px;flex:none;background:rgba(255,255,255,.06)}
+    .lrow .li{min-width:0;flex:1}
+    .lrow .lt{font-size:13.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .lrow .lm{font-size:12px;color:rgba(255,255,255,.6);margin-top:2px}
+    .lrow .lp{flex:none;font-weight:900;color:var(--gold2);font-size:14px}
     @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}.spinner{animation-duration:1.6s}.card{animation:none}}
   </style>
 </head>
@@ -240,6 +250,12 @@
 
     <div class="section-head"><h2>Sonuçlar</h2><span id="resultCount">Arama bekleniyor</span></div>
     <section class="results" id="results" aria-live="polite"></section>
+    <!-- #2 VITRIN (17-07): skorlu 24 kart = firsat vitrini; emlakci ENVANTERI gezmek ister -->
+    <section id="listePanel" hidden>
+      <button id="listeAcBtn" type="button" class="liste-ac" hidden></button>
+      <div id="listeRows"></div>
+      <button id="listeDevamBtn" type="button" class="liste-ac" hidden></button>
+    </section>
     <div class="empty show" id="empty"><b>Aramak istediğini yaz</b><p>Şehir + model veya bütçe eklersen daha net fırsatlar buluruz.</p></div>
     <p class="footnote">Skorlar karar desteğidir; satın almadan önce ekspertiz, tramer, tapu ve satıcı bilgilerini mutlaka doğrula.</p>
   </main>
@@ -421,6 +437,12 @@
       results.appendChild(fragment);
       const toplam = Number(payload.total_candidates || 0);
       text(count, items.length + ' fırsat' + (toplam > items.length ? ' · ' + toplam + ' aday içinden' : ''));
+      // #2 vitrin: form aramasiysa ve aday > gosterilen kart -> tam envanter listesi teklif et
+      if (sonSpec && toplam > items.length) {
+        listeRows.replaceChildren(); listeOffset = 0; listeDevamBtn.hidden = true;
+        listeAcBtn.disabled = false; listeAcBtn.hidden = false; listePanel.hidden = false;
+        text(listeAcBtn, '📋 Tümünü listele (' + toplam.toLocaleString('tr-TR') + ' ilan, en yeni önce)');
+      }
       try { tg && tg.HapticFeedback && tg.HapticFeedback.notificationOccurred('success'); } catch (_) {}
     }
     function friendlyError(error) {
@@ -434,6 +456,7 @@
       if (!initData) { authGate.classList.add('show'); return; }
       const q = String(query || '').trim().replace(/\s+/g, ' ');
       if (q.length < 2) { input.focus(); return; }
+      listeKapat();                               // #2: metin aramasi liste modunu kapatir (spec yok)
       input.value = q; input.blur();
       const version = ++searchVersion;
       button.disabled = true; results.replaceChildren(); empty.classList.remove('show'); text(count, 'Hazırlanıyor');
@@ -456,6 +479,68 @@
     /* ================= DETAYLI ARAMA (FilterSpec formu) =================
        Secimler CUMLEYE CEVRILMEZ: dogrudan ID'li FilterSpec olarak gider. */
     const API_COUNT = API.replace('/search', '/count');
+    const API_LISTE = API.replace('/search', '/liste');
+    // #2 vitrin: skorlu arama 24 kartla sinirli -> son SPEC'i tut, 'Tumunu listele' puansiz sayfalar
+    let sonSpec = null, listeOffset = 0, listeToplam = 0;
+    const _g = id => document.getElementById(id);   // ($ helper'i asagida tanimli — TDZ tuzagi)
+    const listePanel = _g('listePanel'), listeAcBtn = _g('listeAcBtn'),
+          listeRows = _g('listeRows'), listeDevamBtn = _g('listeDevamBtn');
+    function listeKapat() {
+      sonSpec = null; listeOffset = 0; listeToplam = 0;
+      listePanel.hidden = true; listeAcBtn.hidden = true; listeDevamBtn.hidden = true;
+      listeRows.replaceChildren();
+    }
+    function listeSatir(it) {
+      const a = document.createElement('a');
+      a.className = 'lrow';
+      const img = document.createElement('img');
+      img.loading = 'lazy'; img.alt = '';
+      if (it.id && it.image && !String(it.image).includes('no-image'))
+        img.src = API.replace('/search', '/img') + '?id=' + encodeURIComponent(it.id);
+      const li = document.createElement('div'); li.className = 'li';
+      const lt = document.createElement('div'); lt.className = 'lt'; text(lt, it.title || 'İlan');
+      const lm = document.createElement('div'); lm.className = 'lm';
+      const meta = [ [it.city, it.district].filter(Boolean).join(' · ') ];
+      if (it.rooms) meta.push(it.rooms);
+      if (it.m2) meta.push(it.m2 + ' m²');
+      if (it.year) meta.push(it.year);
+      if (it.km) meta.push(new Intl.NumberFormat('tr-TR').format(it.km) + ' km');
+      text(lm, meta.filter(Boolean).join(' · '));
+      li.append(lt, lm);
+      const lp = document.createElement('div'); lp.className = 'lp'; text(lp, money(it.price));
+      a.append(img, li, lp);
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (!it.url) return;
+        if (tg && tg.openLink) tg.openLink(it.url); else window.open(it.url, '_blank', 'noopener,noreferrer');
+      });
+      return a;
+    }
+    async function listeYukle() {
+      if (!sonSpec) return;
+      listeDevamBtn.hidden = true; listeAcBtn.disabled = true; text(listeAcBtn, 'Yükleniyor…');
+      try {
+        const out = await request(API_LISTE, {method:'POST', headers:{'Content-Type':'application/json'},
+                                              body: JSON.stringify({spec: sonSpec, offset: listeOffset})});
+        listeAcBtn.hidden = true;
+        listeToplam = Number(out.total || 0);
+        const items = Array.isArray(out.items) ? out.items : [];
+        const frag = document.createDocumentFragment();
+        items.forEach(it => frag.appendChild(listeSatir(it)));
+        listeRows.appendChild(frag);
+        listeOffset += items.length;
+        const kalan = Math.max(0, listeToplam - listeOffset);
+        if (kalan > 0 && items.length) {
+          text(listeDevamBtn, 'Devamını yükle (' + kalan.toLocaleString('tr-TR') + ' ilan kaldı)');
+          listeDevamBtn.hidden = false;
+        }
+      } catch (e) {
+        listeAcBtn.hidden = false; listeAcBtn.disabled = false;
+        text(listeAcBtn, '📋 Tümünü listele — tekrar dene');
+      }
+    }
+    listeAcBtn.addEventListener('click', listeYukle);
+    listeDevamBtn.addEventListener('click', listeYukle);
     const API_KATALOG = API.replace('/search', '/katalog');
     const $ = id => document.getElementById(id);
     const dToggle = $('detailToggle'), dBody = $('detailBody');
@@ -657,6 +742,7 @@
       if (!initData) { authGate.classList.add('show'); return; }
       const version = ++searchVersion;
       fGetir.disabled = true; button.disabled = true;
+      listeKapat(); sonSpec = specKur();          // #2 vitrin: bu spec 'Tumunu listele' icin saklanir
       results.replaceChildren(); empty.classList.remove('show'); text(count, 'Hazırlanıyor');
       setStatus(true, 'Filtren alındı', sonSayi + ' aday puanlanıyor…'); startProgress(version);
       try {
@@ -674,6 +760,7 @@
     fGetir.addEventListener('click', searchSpec);
     function formSifirla() {                   // ↺ donma/karisma panik dugmesi: 0'dan basla
       ++searchVersion;                          // aktif arama/poll varsa DUSER (uzerine yazma biter)
+      listeKapat();                             // #2: envanter listesi de sifirlanir
       secMarka.clear(); secModel.clear(); secOda.clear(); modellerTum = [];
       ['fMarkaAra','fModelAra','fPmin','fPmax','fYmin','fYmax','fKm','fM2min','fM2max'].forEach(id => { $(id).value = ''; });
       $('fYakit').value = ''; $('fVites').value = '';
