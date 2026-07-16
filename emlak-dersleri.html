@@ -3,72 +3,56 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Pazarlık İstihbaratı — Emlakçı İçin 5 Kısa Ders</title>
-<meta name="description" content="Fırsat Motoru Emlak — satıcının küçük oyunlarını yakalayan asistan. 5 kısa ders.">
+<title>Pazarlık İstihbaratı — Emlakçının Görünmez Çırağı</title>
+<meta name="description" content="Satıcının oyunlarını yakalayan emlak asistanı — 60 saniyede anla.">
 <style>
-  :root{
-    --bg:#0a0a0c; --panel:#121216; --panel2:#17171d;
-    --gold:#d4af37; --gold-soft:#e6c96a; --ink:#e8e4da; --dim:#9a948a;
-    --line:#26262e;
-  }
+  :root{--bg:#0a0a0c;--panel:#121216;--gold:#d4af37;--gsoft:#e6c96a;--ink:#e8e4da;--dim:#9a948a;--line:#26262e}
   *{margin:0;padding:0;box-sizing:border-box}
-  body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;line-height:1.6}
-  .wrap{max-width:680px;margin:0 auto;padding:40px 20px 60px}
-  .kicker{color:var(--gold);letter-spacing:.35em;font-size:12px;font-weight:600;text-transform:uppercase;text-align:center}
-  h1{font-size:clamp(26px,5vw,38px);text-align:center;margin:14px 0 6px;font-weight:800;letter-spacing:.02em}
-  .sub{text-align:center;color:var(--dim);font-size:15px;margin-bottom:36px}
+  body{background:var(--bg);color:var(--ink);font-family:'Segoe UI',system-ui,sans-serif;line-height:1.55}
+  .wrap{max-width:620px;margin:0 auto;padding:36px 18px 50px}
+  .kicker{color:var(--gold);letter-spacing:.35em;font-size:11px;font-weight:600;text-align:center;text-transform:uppercase}
+  h1{font-size:clamp(24px,5vw,34px);text-align:center;margin:12px 0 4px;font-weight:800}
+  .sub{text-align:center;color:var(--dim);font-size:14px;margin-bottom:30px}
   .gold{color:var(--gold)}
 
-  /* kanca: konuşma */
-  .chat{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:14px}
-  .bub{max-width:85%;padding:12px 16px;border-radius:14px;margin:10px 0;font-size:15px}
+  .chat{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:12px}
+  .bub{max-width:88%;padding:11px 15px;border-radius:14px;margin:8px 0;font-size:15px}
   .satici{background:#1e1e26;border:1px solid var(--line);border-bottom-left-radius:4px}
   .motor{background:linear-gradient(135deg,#2a2410,#1c1a0e);border:1px solid #4a3d15;border-bottom-right-radius:4px;margin-left:auto}
-  .kim{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);margin-bottom:4px}
+  .kim{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);margin-bottom:3px}
   .motor .kim{color:var(--gold)}
-  .punch{text-align:center;color:var(--dim);font-size:14px;margin:18px 0 40px}
-  .punch b{color:var(--ink)}
+  .punch{text-align:center;color:var(--dim);font-size:14px;margin:16px 0 34px}
+  .punch b{color:var(--gold)}
 
-  .ders{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:24px;margin-bottom:16px;position:relative}
-  .no{position:absolute;top:-14px;left:20px;background:var(--gold);color:#0a0a0c;font-weight:800;font-size:13px;
-      letter-spacing:.2em;padding:4px 14px;border-radius:99px}
-  .ders h2{display:flex;align-items:center;gap:10px;font-size:18px;margin:8px 0 10px;letter-spacing:.06em}
-  .ders h2 svg{flex:none;width:22px;height:22px;stroke:var(--gold)}
-  .ders p{font-size:15px;color:#cfc9bd;margin-bottom:10px}
-  .ders p b{color:var(--ink)}
-  .ornek{background:var(--panel2);border-left:3px solid var(--gold);border-radius:0 10px 10px 0;
-         padding:10px 14px;font-size:13.5px;color:var(--dim);font-style:italic;margin-bottom:12px}
-  .koz{display:flex;gap:8px;align-items:flex-start;font-size:14px;color:var(--gold-soft)}
-  .koz svg{flex:none;width:16px;height:16px;stroke:var(--gold);margin-top:3px}
+  .ders{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:10px;
+        display:flex;gap:14px;align-items:flex-start}
+  .no{flex:none;background:var(--gold);color:#0a0a0c;font-weight:800;font-size:15px;width:34px;height:34px;
+      border-radius:10px;display:flex;align-items:center;justify-content:center;margin-top:2px}
+  .ders h2{font-size:15px;letter-spacing:.06em;margin-bottom:3px}
+  .ders p{font-size:14px;color:#cfc9bd}
+  .ders p b{color:var(--gsoft)}
+
+  .bolum{letter-spacing:.3em;font-size:11px;color:var(--gold);text-transform:uppercase;text-align:center;
+         margin:36px 0 16px;font-weight:600}
+  .alet{display:flex;gap:10px;align-items:baseline;padding:9px 4px;border-bottom:1px solid var(--line);font-size:14px}
+  .alet:last-child{border-bottom:none}
+  .alet b{color:var(--ink);flex:none;letter-spacing:.03em}
+  .alet span{color:var(--dim)}
+  .alet span i{color:#c9bd96}
 
   .ozet{background:linear-gradient(135deg,#1c1808,#121216);border:1px solid #4a3d15;border-radius:16px;
-        padding:26px;text-align:center;margin:34px 0}
-  .ozet p{font-size:17px}
-  .ozet .buyuk{font-size:20px;font-weight:700;color:var(--gold);margin-top:6px}
+        padding:22px;text-align:center;margin:34px 0 26px}
+  .ozet .buyuk{font-size:19px;font-weight:700;color:var(--gold)}
+  .ozet .alt{color:var(--dim);font-size:13.5px;margin-top:6px}
 
-  .dene{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:26px;text-align:center}
-  .dene h3{letter-spacing:.25em;font-size:13px;color:var(--gold);text-transform:uppercase;margin-bottom:14px}
+  .dene{text-align:center}
   .btn{display:inline-block;background:var(--gold);color:#0a0a0c;font-weight:800;font-size:16px;
-       padding:14px 30px;border-radius:12px;text-decoration:none;letter-spacing:.03em}
-  .btn:active{transform:scale(.98)}
-  .adim{color:var(--dim);font-size:13.5px;margin-top:12px}
-  .uyari{margin-top:18px;background:#141410;border:1px dashed #5a4a18;border-radius:12px;padding:14px 16px;
-         font-size:13.5px;color:#c9bd96;text-align:left;display:flex;gap:10px}
-  .uyari svg{flex:none;width:18px;height:18px;stroke:var(--gold);margin-top:2px}
-
-  footer{text-align:center;color:#6a655c;font-size:12px;margin-top:36px;line-height:1.8}
-
-  /* çantadaki aletler */
-  .bolum{letter-spacing:.3em;font-size:12px;color:var(--gold);text-transform:uppercase;text-align:center;
-         margin:44px 0 6px;font-weight:600}
-  .bolum-alt{text-align:center;color:var(--dim);font-size:14px;margin-bottom:22px}
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  @media(max-width:560px){.grid{grid-template-columns:1fr}}
-  .alet{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
-  .alet h4{display:flex;align-items:center;gap:8px;font-size:14.5px;margin-bottom:6px;letter-spacing:.04em}
-  .alet h4 svg{flex:none;width:17px;height:17px;stroke:var(--gold)}
-  .alet p{font-size:13px;color:var(--dim);line-height:1.5}
-  .alet p i{color:#c9bd96}
+       padding:14px 28px;border-radius:12px;text-decoration:none}
+  .adim{color:var(--dim);font-size:13px;margin-top:10px}
+  .uyari{margin-top:16px;background:#141410;border:1px dashed #5a4a18;border-radius:12px;padding:12px 14px;
+         font-size:13px;color:#c9bd96;text-align:left}
+  .uyari b{color:var(--gsoft)}
+  footer{text-align:center;color:#6a655c;font-size:11.5px;margin-top:30px;line-height:1.7}
 </style>
 </head>
 <body>
@@ -76,169 +60,71 @@
 
   <div class="kicker">F I R S A T &nbsp; M O T O R U &nbsp;·&nbsp; E M L A K</div>
   <h1>Pazarlık İstihbaratı</h1>
-  <div class="sub">Emlakçı için 5 kısa ders + alet çantası — <span class="gold">satıcının küçük oyunlarını yakalayan asistan</span></div>
+  <div class="sub">Emlakçının <span class="gold">görünmez çırağı</span> — 60 saniyede anla</div>
 
   <div class="chat">
     <div class="bub satici">
       <div class="kim">Satıcı</div>
-      "Abi ilanı daha dün girdim, fiyat net. Çok soran var."
+      "Abi ilanı dün girdim, fiyat net. Çok soran var."
     </div>
     <div class="bub motor">
       <div class="kim">Fırsat Motoru</div>
-      "Bu ilan <b>24 gündür</b> yayında — tarihi tazelenmiş. Fiyat emsalin <b>%26 üstünde</b> ve bu sürede bir kez bile inmemiş. Rahat otur."
+      "İlan <b>24 gündür</b> yayında, tarihi tazelenmiş. Emsalin <b>%26 üstü</b>, bir kuruş inmemiş. Rahat otur."
     </div>
   </div>
-  <div class="punch">İşte sattığın şey bu: <b>masaya herkesten fazlasını bilerek oturmak.</b></div>
+  <div class="punch">Sattığın şey bu: <b>masaya herkesten fazlasını bilerek oturmak.</b></div>
 
-  <!-- DERS 1 -->
-  <div class="ders">
-    <div class="no">DERS 1</div>
-    <h2><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M12 14v3l2 1"/></svg>
-    TARİH MAKYAJINI YAKALA</h2>
-    <p>Satıcı ilanı kapatıp yeniden açar, ilan "dün girilmiş" görünür. Sahibinden buna ses etmez.
-       <b>Biz ederiz</b> — sistem her ilanı ilk gördüğü günü asla unutmaz.</p>
-    <div class="ornek">Gerçek vaka: Sahibinden "ilan 9 günlük" diyor. Bizim kayıt: 22 Haziran'dan beri yayında. Yani 24 gündür satılamıyor.</div>
-    <div class="koz"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/></svg>
-    Eline geçen: "Bu daire 24 gündür bekliyor" cümlesi. Pazarlık o an başlar.</div>
-  </div>
+  <div class="ders"><div class="no">1</div><div>
+    <h2>TARİH MAKYAJINI YAKALAR</h2>
+    <p>Sahibinden "9 günlük ilan" diyor. Biz: <b>"24 gündür satamıyor."</b> Satıcı yeniler, sistem unutmaz.</p>
+  </div></div>
 
-  <!-- DERS 2 -->
-  <div class="ders">
-    <div class="no">DERS 2</div>
-    <h2><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/><polyline points="16 17 22 17 22 11"/></svg>
-    İNDİRİM İZİNİ OKU</h2>
-    <p>Satıcı kaç kez indirdi, yüzde kaç, ne zaman? Sistem hepsini kaydeder ve bir
-       <b>pazarlık radarı</b> çıkarır: iki kez indiren satıcı dibe yaklaşmıştır — bir daha iner.</p>
-    <div class="ornek">Gerçek kart: "Satıcı 1 kez indirdi (%7) → pazarlık payı yüksek. Hedef teklif ~3.808.000 TL (%4,8 dene)." Üstüne hazır pazarlık mesajı bile yazar.</div>
-    <div class="koz"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/></svg>
-    Eline geçen: rakamla konuşan teklif. "İnsaf abi" değil, "hedef 3.808.000" dersin.</div>
-  </div>
+  <div class="ders"><div class="no">2</div><div>
+    <h2>İNDİRİM İZİNİ OKUR</h2>
+    <p>"1 kez indirdi (%7) → pazarlığa açık. <b>Hedef teklif: 3.808.000 TL.</b>" Pazarlık mesajını bile hazır yazar.</p>
+  </div></div>
 
-  <!-- DERS 3 -->
-  <div class="ders">
-    <div class="no">DERS 3</div>
-    <h2><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M5 7l7-4 7 4"/><path d="M2 13l3-6 3 6a3.5 3.5 0 0 1-6 0z"/><path d="M16 13l3-6 3 6a3.5 3.5 0 0 1-6 0z"/></svg>
-    EMSAL TERAZİSİ</h2>
-    <p>Mahalledeki bütün benzer dairelerin m² fiyatını dizer, ilanın <b>nerede durduğunu</b> söyler.
-       His değil, sıralama: kaç emsal var, medyan ne, bu ilan kaçıncı sırada.</p>
-    <div class="ornek">Gerçek kart: "54 emsal 2+1 içinde 43. sırada — medyanın %26 üstünde." Aynı sistem prim bölgeyi de bilir: "Bu mahalle şehir ortalamasının %22 üstü — konum değerli."</div>
-    <div class="koz"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/></svg>
-    Eline geçen: alıcıya tek bakışta "neden bu fiyat" raporu. Güven satarsın.</div>
-  </div>
+  <div class="ders"><div class="no">3</div><div>
+    <h2>EMSAL TERAZİSİ</h2>
+    <p><b>"54 emsal içinde 43. sıra — %26 pahalı."</b> His değil, sıra numarası. Alıcıya tek bakışta "neden bu fiyat" raporu.</p>
+  </div></div>
 
-  <!-- DERS 4 -->
-  <div class="ders">
-    <div class="no">DERS 4</div>
-    <h2><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-    ÇİFT İLAN OYUNU</h2>
-    <p>Aynı daire iki ayrı ilanda mı dönüyor? Sistem kopyayı yakalar ve nedenini söyler:
-       <b>"taze göstermek için yeniden açılmış olabilir"</b> — en ucuz hangisi, onu da gösterir.</p>
-    <div class="ornek">Gerçek kart: "Şüphe: aynı mal 2 ilanda (metrekare/fiyat birebir) → satıcı 'taze' göstermek için yeniden açmış olabilir."</div>
-    <div class="koz"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/></svg>
-    Eline geçen: karşı tarafın elini görmek. Kim acele ediyor, kim rol yapıyor.</div>
-  </div>
+  <div class="ders"><div class="no">4</div><div>
+    <h2>ÇİFT İLANI YAKALAR</h2>
+    <p>Aynı daire 2 ilanda dönüyorsa söyler: <b>"taze göstermek için yeniden açılmış."</b> Karşının elini görürsün.</p>
+  </div></div>
 
-  <!-- DERS 5 -->
-  <div class="ders">
-    <div class="no">DERS 5</div>
-    <h2><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-    UCUZUN NEDENİ VAR</h2>
-    <p>Emsalinin %20 altındaki her daire fırsat değildir — bazısı <b>kot katıdır.</b>
-       Bu sistem bunu bilir: ucuzluğun sebebini bulamazsa "fırsat" diye yutturmaz,
-       <b>"kat bilgisi yok, kot/bodrum olabilir — ilana bak"</b> der.</p>
-    <div class="ornek">Gerçek vaka: %21 emsal altı görünen 2+1'in detayına inildi — "Bulunduğu Kat: Giriş Altı Kot" çıktı. Sistem artık bunu keleş diye satmıyor.</div>
-    <div class="koz"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/></svg>
-    Eline geçen: müşterine bodrum kelepiri yutturmayan asistan. Güven = tekrar iş.</div>
-  </div>
+  <div class="ders"><div class="no">5</div><div>
+    <h2>KELEPİR YALANINI SÖKER</h2>
+    <p>%21 ucuz daire mi? Sistem detaya indi: <b>"Giriş Altı Kot."</b> Kelepir değil, bodrum. Sana yutturmaz — sen de müşterine yutturmazsın.</p>
+  </div></div>
 
-  <div class="bolum">Ç A N T A D A K İ &nbsp; D İ Ğ E R &nbsp; A L E T L E R</div>
-  <div class="bolum-alt">Dersler işin kurnazlık tarafıydı — bir de gündelik iş görenler var:</div>
+  <div class="bolum">Ç A N T A D A &nbsp; B A Ş K A &nbsp; N E &nbsp; V A R</div>
 
-  <div class="grid">
-    <div class="alet">
-      <h4><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-      KONUŞARAK ARA</h4>
-      <p>"Tokat'ta 3+1, 5 milyona kadar" yaz — anlar. Belirsizse uydurmaz, sorar:
-         <i>"Hangi Güneşli? 27 tane var."</i></p>
-    </div>
-    <div class="alet">
-      <h4><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
-      TIKLA-SEÇ FORM</h4>
-      <p>İl → ilçe → mahalle, oda çipleri (1+0'dan 5+1'e), m², bütçe.
-         Seçtikçe canlı sayaç: <i>"476 ilan bulundu."</i></p>
-    </div>
-    <div class="alet">
-      <h4><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><line x1="12" y1="6" x2="12" y2="8"/><line x1="12" y1="16" x2="12" y2="18"/></svg>
-      ADİL DEĞER BİÇER</h4>
-      <p>Her ilana emsallerinden adil değer hesaplar:
-         <i>"adil değer 5.110.000 TL — istenen %21,7 altında."</i></p>
-    </div>
-    <div class="alet">
-      <h4><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-      FİYAT DÜŞTÜ ALARMI</h4>
-      <p>Takipteki ilan inince anında haber:
-         <i>"Fiyat düştü: 4.100.000 → 3.895.000."</i> Kriter alarmı da var — uyan yeni ilan düşünce Telegram'a gelir.</p>
-    </div>
-    <div class="alet">
-      <h4><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-      PRİM BÖLGE HARİTASI</h4>
-      <p>Mahalleyi şehir ortalamasıyla kıyaslar:
-         <i>"Karşıyaka Mh. m² ortalamasının %22 üstü — konum değerli."</i></p>
-    </div>
-    <div class="alet">
-      <h4><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
-      DÜRÜSTLÜK AYARI</h4>
-      <p>Emsal azsa skoru şişirmez, söyler:
-         <i>"Az emsal — tahmin kaba, veri güveni düşük; ekspertiz şart."</i> Güven yüzdesiyle birlikte.</p>
-    </div>
-    <div class="alet">
-      <h4><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-      HUKUKİ RİSK FİLTRESİ</h4>
-      <p>İcralık, hisseli, şerhli ilanı daha sen açmadan işaretler —
-         müşteriyi mayına bastırmazsın.</p>
-    </div>
-    <div class="alet">
-      <h4><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
-      KİRALIK TARAFI DA VAR</h4>
-      <p>Aynı motor kirada da çalışır:
-         <i>"aylık emsal kira 18.500 TL — bu ilan %12 altında."</i></p>
-    </div>
-    <div class="alet">
-      <h4><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-      SATICI MODU</h4>
-      <p>Mal sahibi "kaça koyayım?" diye sorunca:
-         piyasadaki benzerlere bakıp <i>gerçekçi liste fiyatı</i> önerir.</p>
-    </div>
-    <div class="alet">
-      <h4><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-      7/24 ÇALIŞIR</h4>
-      <p>Sen uyurken de sahibinden'i okur; sabah kahvede
-         gece düşen fırsatların kartları seni bekler.</p>
-    </div>
-  </div>
+  <div class="alet"><b>KONUŞARAK ARA</b><span>"Tokat'ta 3+1, 5 milyona kadar" yaz — bulur. Bilmediğini uydurmaz, <i>sorar.</i></span></div>
+  <div class="alet"><b>TIKLA-SEÇ FORM</b><span>il → ilçe → mahalle, oda, m², bütçe. Canlı sayaç: <i>"476 ilan."</i></span></div>
+  <div class="alet"><b>ADİL DEĞER</b><span>her ilana emsalden fiyat biçer: <i>"%21,7 ucuz."</i></span></div>
+  <div class="alet"><b>FİYAT ALARMI</b><span><i>"4.100.000 → 3.895.000"</i> — indiği an cebinde.</span></div>
+  <div class="alet"><b>PRİM BÖLGE</b><span><i>"Bu mahalle şehrin %22 üstü — konum değerli."</i></span></div>
+  <div class="alet"><b>DÜRÜSTLÜK AYARI</b><span>veri azsa şişirmez: <i>"emin değilim, ekspertiz şart."</i></span></div>
+  <div class="alet"><b>HUKUKİ FİLTRE</b><span>icralık / hisseli / şerhli — sen açmadan işaretli.</span></div>
+  <div class="alet"><b>KİRALIK TARAFI</b><span>kira emsali aynı motor: <i>"emsal kira 18.500, bu %12 altı."</i></span></div>
+  <div class="alet"><b>SATICI MODU</b><span>mal sahibine "kaça koyayım?" cevabı — emsale göre.</span></div>
+  <div class="alet"><b>7/24</b><span>sen uyurken o okur; sabah fırsat kartların hazır.</span></div>
 
   <div class="ozet">
-    <p>Kısacası sattığın şey:</p>
-    <p class="buyuk">30 yıllık emlakçı sezgisi + hiç uyumayan bir çırak.</p>
-    <p style="color:var(--dim);font-size:14px;margin-top:10px">Sahibinden'i 7/24 okur, hiçbir şeyi unutmaz, satıcının oyununu sana fısıldar.</p>
+    <div class="buyuk">30 yıllık emlakçı sezgisi + hiç uyumayan bir çırak.</div>
+    <div class="alt">Sahibinden'i 7/24 okur, hiçbir şeyi unutmaz, satıcının oyununu sana fısıldar.</div>
   </div>
 
   <div class="dene">
-    <h3>K E N D İ N &nbsp; K U R C A L A</h3>
     <a class="btn" href="https://t.me/akilli_firsat_bot">Telegram'da Aç → @akilli_firsat_bot</a>
-    <div class="adim">Bot açılınca <b>EMLAK</b> bölümüne gir · menüleri, kartları, "Analiz" bölümünü gez.</div>
-    <div class="uyari">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-      <div><b>Dürüst not:</b> Sistem şu an Tokat pilotunda ve veri tazeleme bakımı sürüyor — gördüğün rakamları
-      bugünün piyasası sanma. Amaç <b>çalışma mantığını ve menüleri görmen.</b> Doğru ve güncel veri geliyor;
-      bize biraz zaman ver.</div>
-    </div>
+    <div class="adim">Bot açılınca <b>EMLAK</b> bölümüne gir, menüleri gez.</div>
+    <div class="uyari"><b>Dürüst not:</b> Sistem Tokat pilotunda, veri tazeleme sürüyor — rakamları bugünün
+    piyasası sanma. Amaç <b>mantığı ve menüleri görmen.</b> Güncel veri geliyor, bize biraz zaman ver.</div>
   </div>
 
-  <footer>
-    FIRSAT MOTORU · Oto-Emlak Sinyalci<br>
-    Bu sunum Sertaç'ın dijital asistanı tarafından hazırlanmıştır.
-  </footer>
+  <footer>FIRSAT MOTORU · Oto-Emlak Sinyalci<br>Bu sunum Sertaç'ın dijital asistanı tarafından hazırlanmıştır.</footer>
 
 </div>
 </body>
