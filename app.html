@@ -3,6 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+  <!-- Aşama-2 (Codex): TEK KAYNAK = repo web/app.html; deploy'da BotFather URL ?v= BU sürümle artırılır -->
+  <meta name="af-app-version" content="20260720-a2">
   <meta name="theme-color" content="#0c2726">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://telegram.org; style-src 'self' 'unsafe-inline'; connect-src https://srv1756048.hstgr.cloud; img-src 'self' data: https:; object-src 'none'; base-uri 'none'; form-action 'self'">
   <title>Akıllı Fırsat · Ara</title>
@@ -132,16 +134,12 @@
     <section class="hero" aria-labelledby="headline">
       <div class="eyebrow">38 bin+ ilanlık havuz</div>
       <h1 id="headline">Fırsatı ara, <span>skorunu gör.</span></h1>
-      <p class="lead">Marka, model, şehir, bütçe veya oda sayısını yaz. Sistem ilanları karşılaştırıp adil değeri, fırsat payını ve riski çıkarsın.</p>
-      <form class="search" id="searchForm">
-        <input id="query" name="q" type="search" maxlength="180" autocomplete="off" enterkeyhint="search" aria-label="Araç veya emlak ara" placeholder="Ör. Tokat otomatik Clio 1.2 milyon altı">
-        <button id="searchButton" type="submit">Ara</button>
-      </form>
-      <div class="examples" aria-label="Örnek aramalar">
-        <button class="chip" type="button" data-query="tokat clio">Tokat Clio</button>
-        <button class="chip" type="button" data-query="1.5 milyon altı otomatik araba">1.5M altı otomatik</button>
-        <button class="chip" type="button" data-query="tokatta 3+1 satılık daire">Tokat 3+1</button>
-        <button class="chip" type="button" data-query="istanbul yatırım daire">İstanbul yatırım</button>
+      <p class="lead">Aşağıdaki filtrelerden seç — sistem ilanları karşılaştırıp adil değeri, fırsat payını ve riski çıkarsın. Serbest cümleyle aramak istersen bot sohbetine yazman yeterli.</p>
+      <!-- Aşama-2 G9 (Codex): üst SERBEST arama kutusu KALDIRILDI — sunucu q kabul etmiyor (spec_required),
+           kutu her aramada genel hata üretiyordu. Mini App SPEC-ONLY; serbest cümle Telegram sohbetinde.
+           Gizli stub: paylaşılan JS referansları (searchButton.disabled vb.) kırılmasın diye DOM'da kalır. -->
+      <div hidden aria-hidden="true">
+        <form class="search" id="searchForm"><input id="query" type="search"><button id="searchButton" type="button">Ara</button></form>
       </div>
       <div class="status" id="status" role="status" aria-live="polite">
         <div class="spinner" aria-hidden="true"></div>
@@ -155,10 +153,11 @@
     </section>
 
     <section class="detail" aria-label="Detaylı arama">
-      <button class="detail-toggle" id="detailToggle" type="button" aria-expanded="false">
-        <span>🎛 Detaylı arama — tıkla, seç</span><small id="detailHint">yazmadan filtrele ▾</small>
+      <!-- Aşama-2 G9: yapılandırılmış form VARSAYILAN AÇIK ana ekran (Codex: 'detaylı formu varsayılan açık yap') -->
+      <button class="detail-toggle" id="detailToggle" type="button" aria-expanded="true">
+        <span>🎛 Detaylı arama — seç, say, getir</span><small id="detailHint">kapat ▴</small>
       </button>
-      <div class="detail-body" id="detailBody" hidden>
+      <div class="detail-body" id="detailBody">
         <div class="seg" id="fKat">
           <button type="button" class="on" data-cat="oto">🚗 Oto</button>
           <button type="button" data-cat="emlak">🏠 Emlak</button>
@@ -202,6 +201,16 @@
           <div class="frow">
             <input id="fM2min" type="text" inputmode="numeric" placeholder="En az (ör. 100)">
             <input id="fM2max" type="text" inputmode="numeric" placeholder="En çok">
+          </div>
+          <!-- Aşama-2 G6 (Codex): satıcı kapsamı — varsayılan 'sadece şahıstan' (owner); bilinmeyen satıcı
+               owner sonucuna GİRMEZ (dürüst daralma). -->
+          <div class="f-label">Satıcı</div>
+          <div class="frow">
+            <select id="fSatici" aria-label="Satıcı kapsamı">
+              <option value="owner" selected>Sadece şahıstan (doğrulanmış)</option>
+              <option value="agency">Sadece emlakçıdan</option>
+              <option value="any">Hepsi</option>
+            </select>
           </div>
         </div>
         <div class="f-label">Bütçe (₺)</div>
@@ -256,7 +265,7 @@
       <div id="listeRows"></div>
       <button id="listeDevamBtn" type="button" class="liste-ac" hidden></button>
     </section>
-    <div class="empty show" id="empty"><b>Aramak istediğini yaz</b><p>Şehir + model veya bütçe eklersen daha net fırsatlar buluruz.</p></div>
+    <div class="empty show" id="empty"><b>Filtreleri seç, "Getir"e bas</b><p>Şehir + model veya bütçe seçersen daha net fırsatlar buluruz.</p></div>
     <p class="footnote">Skorlar karar desteğidir; satın almadan önce ekspertiz, tramer, tapu ve satıcı bilgilerini mutlaka doğrula.</p>
   </main>
 
@@ -447,34 +456,16 @@
     }
     function friendlyError(error) {
       if (error && error.status === 401) return ['Oturum yenilenmeli', 'Uygulamayı kapatıp bot menüsünden yeniden aç.'];
+      // Aşama-2 G9 (Codex): hata AYRIMI — 'bağlantını kontrol et' genellemesi yerine gerçek sebep.
+      if (error && error.status === 400) return ['Filtre geçersiz', 'Seçtiğin filtre birleşimi doğrulanamadı — bir alanı değiştirip tekrar dene.'];
       if (error && error.status === 429) return ['Çok hızlı arama yaptın', 'Bir dakika bekleyip tekrar dene.'];
-      if (error && error.status === 503) return ['Arama sırası dolu', 'Kısa bir süre sonra tekrar dene; mevcut aramalar korunuyor.'];
+      if (error && error.status === 503) return ['Arama motoru geçici olarak hazır değil', 'Kısa bir süre sonra tekrar dene; mevcut aramalar korunuyor.'];
+      if (error && error.message === 'queue_full') return ['Arama sırası dolu', 'Birkaç dakika sonra tekrar dene.'];
       if (error && error.message === 'search_timeout') return ['Arama uzun sürdü', 'Sistem çalışıyor; sorguyu biraz daraltıp tekrar deneyebilirsin.'];
       return ['Şu an sonuç alınamadı', 'Bağlantını kontrol edip tekrar dene.'];
     }
-    async function search(query) {
-      if (!initData) { authGate.classList.add('show'); return; }
-      const q = String(query || '').trim().replace(/\s+/g, ' ');
-      if (q.length < 2) { input.focus(); return; }
-      listeKapat();                               // #2: metin aramasi liste modunu kapatir (spec yok)
-      input.value = q; input.blur();
-      const version = ++searchVersion;
-      button.disabled = true; results.replaceChildren(); empty.classList.remove('show'); text(count, 'Hazırlanıyor');
-      setStatus(true, 'Araman alındı', 'İlan havuzu taranıyor…'); startProgress(version);
-      try {
-        const job = await request(API, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({q})});
-        if (version !== searchVersion) return;
-        await poll(job.job_id, version);
-      } catch (error) {
-        if (version !== searchVersion) return;
-        clearInterval(progressTimer); button.disabled = false;
-        const message = friendlyError(error); setStatus(true, message[0], message[1]); text(count, 'Tekrar denenebilir');
-        try { tg && tg.HapticFeedback && tg.HapticFeedback.notificationOccurred('error'); } catch (_) {}
-      }
-    }
-    form.addEventListener('submit', event => { event.preventDefault(); search(input.value); });
-    document.querySelectorAll('[data-query]').forEach(chip => chip.addEventListener('click', () => search(chip.dataset.query)));
-    input.addEventListener('input', () => { if (input.value.length) authGate.classList.remove('show'); });
+    /* Aşama-2 G9 (Codex): serbest-metin {q} yolu TAMAMEN KALDIRILDI — sunucu spec-only (P0-D
+       spec_required). Mini App'te arama YALNIZ FilterSpec formundan çıkar; serbest cümle Telegram'da. */
 
     /* ================= DETAYLI ARAMA (FilterSpec formu) =================
        Secimler CUMLEYE CEVRILMEZ: dogrudan ID'li FilterSpec olarak gider. */
@@ -511,8 +502,9 @@
       a.append(img, li, lp);
       a.addEventListener('click', (e) => {
         e.preventDefault();
-        if (!it.url) return;
-        if (tg && tg.openLink) tg.openLink(it.url); else window.open(it.url, '_blank', 'noopener,noreferrer');
+        const guv = safeListingUrl(it.url);       // denetim: liste satırı da kart yolundaki URL süzgecinden geçer
+        if (!guv) return;
+        if (tg && tg.openLink) tg.openLink(guv); else window.open(guv, '_blank', 'noopener,noreferrer');
       });
       return a;
     }
@@ -642,6 +634,7 @@
         const m2min = sayi($('fM2min').value), m2max = sayi($('fM2max').value);
         if (m2min) spec.m2_min = m2min;
         if (m2max) spec.m2_max = m2max;
+        spec.seller_scope = ($('fSatici') && $('fSatici').value) || 'owner';   // Aşama-2 G6: varsayılan owner
       }
       const pmin = sayi($('fPmin').value), pmax = sayi($('fPmax').value);
       if (pmin) spec.price_min = pmin;
@@ -705,6 +698,8 @@
       sayacYenile();
     }
     dToggle.addEventListener('click', formAc);
+    // Aşama-2 G9: form VARSAYILAN AÇIK başladığı için katalog+sayaç İLK yüklemede dolar (tıklama beklenmez)
+    if (initData) { katalogYuklendi = true; illeriYukle(); markalariYukle(); sayacYenile(); }
     $('fKat').querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
       $('fKat').querySelectorAll('button').forEach(x => x.classList.remove('on'));
       b.classList.add('on'); kategori = b.dataset.cat;
@@ -732,7 +727,7 @@
       if (goster) selectDoldur(fMahalle, await katalogGetir('mahalle', fIlce.value), 'Mahalle — tümü');
       sayacYenile();
     });
-    ['fMahalle','fPmin','fPmax','fYmin','fYmax','fKm','fYakit','fVites','fM2min','fM2max'].forEach(id => {
+    ['fMahalle','fPmin','fPmax','fYmin','fYmax','fKm','fYakit','fVites','fM2min','fM2max','fSatici'].forEach(id => {
       $(id).addEventListener('change', sayacYenile); $(id).addEventListener('input', sayacYenile);
     });
     $('fHizli').querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
@@ -754,7 +749,9 @@
         clearInterval(progressTimer); button.disabled = false;
         const message = friendlyError(error); setStatus(true, message[0], message[1]); text(count, 'Tekrar denenebilir');
       } finally {
-        if (version === searchVersion) fGetir.disabled = !sonSayi;
+        // denetim: arama bitince düğme HEP yeniden kullanılabilir — sayaç ucu düşükken sonSayi=0
+        // kalıp 'Getir'i kalıcı kilitliyordu (tek kaçış formu sıfırlamaktı).
+        if (version === searchVersion) fGetir.disabled = false;
       }
     }
     fGetir.addEventListener('click', searchSpec);
@@ -764,6 +761,7 @@
       secMarka.clear(); secModel.clear(); secOda.clear(); modellerTum = [];
       ['fMarkaAra','fModelAra','fPmin','fPmax','fYmin','fYmax','fKm','fM2min','fM2max'].forEach(id => { $(id).value = ''; });
       $('fYakit').value = ''; $('fVites').value = '';
+      if ($('fSatici')) $('fSatici').value = 'owner';   // denetim: sıfırla → satıcı kapsamı da varsayılana döner
       $('fOda').querySelectorAll('button').forEach(x => x.classList.remove('on'));
       fIl.value = '';
       fIlce.replaceChildren(new Option('İlçe — tümü', '')); fIlce.disabled = true;
