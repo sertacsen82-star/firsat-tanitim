@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
   <!-- Aşama-2 (Codex): TEK KAYNAK = repo web/app.html; deploy'da BotFather URL ?v= BU sürümle artırılır -->
-  <meta name="af-app-version" content="20260720-a2">
+  <meta name="af-app-version" content="20260728-firsat-motoru">
   <meta name="theme-color" content="#0c2726">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://telegram.org; style-src 'self' 'unsafe-inline'; connect-src https://srv1756048.hstgr.cloud; img-src 'self' data: https:; object-src 'none'; base-uri 'none'; form-action 'self'">
-  <title>Akıllı Fırsat · Ara</title>
-  <meta name="description" content="Oto ve emlak ilanlarını ara, fırsat skorunu ve adil değerini gör.">
+  <title>Akıllı Fırsat · Oto ve Emlak Fırsat Motoru</title>
+  <meta name="description" content="Oto ve emlak ilanlarını emsal, fırsat skoru, risk ve fiyat geçmişiyle karşılaştır; beğendiğin filtreyi Telegram'da takip et.">
   <script src="https://telegram.org/js/telegram-web-app.js?59"></script>
   <style>
     :root{
@@ -33,6 +33,10 @@
     .brand{min-width:0}.brand b{display:block;font-size:16px;letter-spacing:-.01em}.brand span{display:block;color:var(--muted);font-size:12px;margin-top:2px}
     .live{margin-left:auto;display:flex;align-items:center;gap:7px;color:#b7ccc7;font-size:12px;border:1px solid var(--line);padding:8px 10px;border-radius:999px;background:rgba(255,255,255,.04)}
     .live i{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(73,200,138,.13)}
+    .product-tabs{display:grid;grid-template-columns:1.15fr 1fr;gap:7px;margin:0 0 14px;padding:5px;border:1px solid var(--line);border-radius:17px;background:rgba(7,28,27,.58)}
+    .product-tabs button{min-height:46px;border:0;border-radius:12px;background:transparent;color:#9fb7b1;font-weight:800;font-size:12px;cursor:pointer}
+    .product-tabs button[aria-selected="true"]{background:var(--gold);color:#172720;box-shadow:0 8px 20px rgba(228,170,60,.2)}
+    .product-tabs button:focus-visible,.follow-card button:focus-visible,.notice button:focus-visible{outline:3px solid rgba(244,213,139,.45);outline-offset:2px}
     .hero{position:relative;overflow:hidden;padding:25px 20px 20px;border:1px solid rgba(228,170,60,.17);border-radius:28px;background:linear-gradient(145deg,rgba(24,68,63,.93),rgba(10,38,36,.95));box-shadow:var(--shadow)}
     .hero:after{content:"";position:absolute;width:180px;height:180px;border:1px solid rgba(228,170,60,.12);border-radius:50%;right:-92px;top:-88px;box-shadow:0 0 0 35px rgba(228,170,60,.035),0 0 0 70px rgba(228,170,60,.02);pointer-events:none}
     .eyebrow{display:flex;align-items:center;gap:8px;color:var(--gold2);font-size:11px;font-weight:800;letter-spacing:.11em;text-transform:uppercase}
@@ -40,6 +44,12 @@
     h1{font-size:clamp(30px,8vw,48px);line-height:1.02;letter-spacing:-.045em;margin:15px 0 12px;max-width:650px}
     h1 span{color:var(--gold2)}
     .lead{color:#b7cbc6;line-height:1.55;font-size:14px;margin:0 0 20px;max-width:620px}
+    .promise{display:flex;align-items:flex-start;gap:9px;margin-top:14px;padding:12px 13px;border:1px solid rgba(73,200,138,.2);border-radius:14px;background:rgba(73,200,138,.07);color:#c9ddd8;font-size:12px;line-height:1.45}
+    .promise b{color:#fff}
+    .value-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:14px 0 0}
+    .value-card{padding:13px;border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.035)}
+    .value-card b{display:block;color:#f1f7f5;font-size:12px}
+    .value-card span{display:block;margin-top:4px;color:var(--muted);font-size:11px;line-height:1.4}.value-card strong{color:var(--gold2);font-weight:900}
     .search{position:relative;display:flex;align-items:center;gap:8px;padding:7px 7px 7px 16px;border:1px solid rgba(255,255,255,.16);border-radius:17px;background:#fff;box-shadow:0 12px 28px rgba(0,0,0,.19)}
     .search:focus-within{outline:3px solid rgba(228,170,60,.22);border-color:var(--gold)}
     .search input{width:100%;min-width:0;border:0;outline:0;background:transparent;color:var(--ink);font-size:16px;line-height:1.3;padding:10px 0}
@@ -56,6 +66,9 @@
     @keyframes spin{to{transform:rotate(360deg)}}
     .auth{display:none;margin-top:18px;padding:18px;border-radius:18px;background:#fff4d8;color:#2d2b22}
     .auth.show{display:block}.auth b{display:block;margin-bottom:6px}.auth p{font-size:13px;line-height:1.5;margin:0 0 13px;color:#665f4e}.auth a{display:inline-block;text-decoration:none;background:#172f2c;color:#fff;padding:10px 13px;border-radius:11px;font-weight:800;font-size:13px}
+    .notice{display:none;margin:14px 0 0;padding:14px 15px;border:1px solid rgba(73,200,138,.24);border-radius:16px;background:rgba(73,200,138,.08);color:#dcebe7;line-height:1.45}
+    .notice.show{display:block}.notice[data-kind="error"]{border-color:rgba(239,118,95,.35);background:rgba(239,118,95,.1)}
+    .notice b{display:block;font-size:13px}.notice span{display:block;margin-top:3px;color:#afc4bf;font-size:12px}
     .section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:26px 3px 12px}
     .section-head h2{font-size:20px;letter-spacing:-.025em;margin:0}.section-head span{font-size:12px;color:var(--muted)}
     .results{display:grid;gap:13px}
@@ -109,7 +122,37 @@
     .fbar small{display:block;color:var(--muted);font-weight:600;font-size:11px;margin-top:2px}
     .fbar button{margin-left:auto;flex:none;border:0;border-radius:12px;padding:13px 17px;background:var(--gold);color:#172720;font-weight:850;cursor:pointer}
     .fbar button:disabled{opacity:.55;cursor:not-allowed}
-    @media(min-width:680px){.app{padding-left:24px;padding-right:24px}.hero{padding:34px}.results{grid-template-columns:repeat(2,minmax(0,1fr))}.visual{height:170px}.card{display:flex;flex-direction:column}.body{display:flex;flex:1;flex-direction:column}.actions{margin-top:auto;padding-top:4px}}
+    .fbar .secondary{margin-left:0;border:1px solid rgba(255,255,255,.22);background:transparent;color:#cad9d5}
+    .fbar .primary{margin-left:0;min-width:116px}
+    .follows-panel{margin-top:16px}
+    .follow-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:22px 3px 12px}
+    .follow-head h2{margin:0;font-size:22px;letter-spacing:-.03em}.follow-head p{margin:4px 0 0;color:var(--muted);font-size:12px}
+    .usage{flex:none;padding:9px 11px;border:1px solid rgba(244,213,139,.25);border-radius:12px;background:rgba(228,170,60,.08);color:var(--gold2);font-size:12px;font-weight:850}
+    .follow-list{display:grid;gap:11px}
+    .follow-card{padding:16px;border:1px solid rgba(255,255,255,.12);border-radius:19px;background:linear-gradient(145deg,rgba(24,65,61,.94),rgba(11,39,37,.96));box-shadow:0 14px 34px rgba(0,0,0,.18)}
+    .follow-card-top{display:flex;gap:12px;align-items:flex-start}.follow-copy{min-width:0;flex:1}.follow-copy b{display:block;font-size:15px;line-height:1.35}.follow-copy small{display:block;margin-top:5px;color:var(--muted);font-size:11px;line-height:1.45}
+    .follow-state{flex:none;padding:6px 8px;border-radius:999px;background:rgba(73,200,138,.13);color:#a9e5c9;font-size:10px;font-weight:850}
+    .follow-state.off{background:rgba(255,255,255,.08);color:#a8b8b4}
+    .follow-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-top:14px}
+    .follow-actions button{min-height:43px;border:1px solid var(--line);border-radius:11px;background:rgba(255,255,255,.055);color:#d6e2df;font-size:11px;font-weight:800;cursor:pointer}
+    .follow-actions .follow-delete{color:#ffb7aa}.follow-actions button:disabled{opacity:.55;cursor:wait}
+    .follow-events-list{margin-top:11px;padding:11px;border-radius:12px;background:rgba(0,0,0,.16);color:#b8cbc6;font-size:11px;line-height:1.55}
+    .event-row{display:grid;grid-template-columns:54px minmax(0,1fr);gap:10px;align-items:center}
+    .event-row.no-image{grid-template-columns:1fr}.event-row+.event-row{margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+    .event-image{width:54px;height:45px;object-fit:cover;border-radius:9px;background:rgba(255,255,255,.06)}
+    .event-copy{min-width:0}.event-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+    .event-title{min-width:0;padding:0;border:0;background:transparent;color:#eff6f4;font-size:12px;font-weight:850;line-height:1.35;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    button.event-title{cursor:pointer;text-decoration:underline;text-decoration-color:rgba(244,213,139,.45);text-underline-offset:3px}
+    .event-status{flex:none;padding:4px 6px;border-radius:999px;background:rgba(73,200,138,.13);color:#a9e5c9;font-size:9px;font-weight:850}
+    .event-status.aggregated{background:rgba(228,170,60,.13);color:var(--gold2)}
+    .event-status.failed{background:rgba(239,118,95,.14);color:#ffb7aa}
+    .event-status.claimed{background:rgba(255,255,255,.09);color:#c7d6d2}
+    .event-meta{margin-top:4px;color:#90aaa4;white-space:normal}
+    .event-more{width:100%;margin-top:11px;min-height:40px;border:1px solid rgba(244,213,139,.28);border-radius:11px;background:rgba(228,170,60,.08);color:var(--gold2);font-size:11px;font-weight:850;cursor:pointer}
+    .event-more:disabled{opacity:.55;cursor:wait}
+    .loading-box,.follow-empty{padding:28px 18px;border:1px dashed rgba(255,255,255,.16);border-radius:18px;text-align:center;color:var(--muted);font-size:13px;line-height:1.55;background:rgba(255,255,255,.025)}
+    .follow-empty b{display:block;color:#e4eeeb;margin-bottom:5px}
+    @media(min-width:680px){.app{padding-left:24px;padding-right:24px}.hero{padding:34px}.results{grid-template-columns:repeat(2,minmax(0,1fr))}.visual{height:170px}.card{display:flex;flex-direction:column}.body{display:flex;flex:1;flex-direction:column}.actions{margin-top:auto;padding-top:4px}.follow-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
     /* #2 vitrin: tam envanter listesi (kompakt satirlar) */
     .liste-ac{width:100%;margin:10px 0;border:1px solid rgba(244,213,139,.42);border-radius:14px;padding:14px;
       background:rgba(228,170,60,.10);color:var(--gold2);font-weight:800;font-size:15px;cursor:pointer}
@@ -127,14 +170,20 @@
   <main class="app">
     <header class="top">
       <div class="mark" aria-hidden="true">◎</div>
-      <div class="brand"><b>Akıllı Fırsat</b><span>Oto &amp; Emlak analiz motoru</span></div>
+      <div class="brand"><b>Akıllı Fırsat</b><span>Oto · Emlak · Fırsat analizi</span></div>
       <div class="live"><i></i><span id="liveText">Motor hazır</span></div>
     </header>
 
+    <nav class="product-tabs" aria-label="Ürün bölümleri">
+      <button id="tabSearch" type="button" aria-selected="true">Fırsat bul</button>
+      <button id="tabFollows" type="button" aria-selected="false">Takiplerim</button>
+    </nav>
+
     <section class="hero" aria-labelledby="headline">
-      <div class="eyebrow">38 bin+ ilanlık havuz</div>
-      <h1 id="headline">Fırsatı ara, <span>skorunu gör.</span></h1>
-      <p class="lead">Aşağıdaki filtrelerden seç — sistem ilanları karşılaştırıp adil değeri, fırsat payını ve riski çıkarsın. Serbest cümleyle aramak istersen bot sohbetine yazman yeterli.</p>
+      <div class="eyebrow" id="heroEyebrow">Fırsat Motoru</div>
+      <h1 id="headline">İlanı değil, <span>gerçek fırsatı bul.</span></h1>
+      <p class="lead" id="heroLead">Oto ve emlak ilanlarını emsal farkı, fırsat skoru ve risk sinyalleriyle karşılaştır. Beğendiğin filtreyi tek dokunuşla Telegram takibine al.</p>
+      <div class="promise" id="followPromise"><span aria-hidden="true">✓</span><span><b>Aynı filtre, iki iş</b><br>Önce mevcut fırsatları puanla; istersen yeni ilan ve fiyat düşüşü için takibe al.</span></div>
       <!-- Aşama-2 G9 (Codex): üst SERBEST arama kutusu KALDIRILDI — sunucu q kabul etmiyor (spec_required),
            kutu her aramada genel hata üretiyordu. Mini App SPEC-ONLY; serbest cümle Telegram sohbetinde.
            Gizli stub: paylaşılan JS referansları (searchButton.disabled vb.) kırılmasın diye DOM'da kalır. -->
@@ -152,10 +201,19 @@
       </div>
     </section>
 
-    <section class="detail" aria-label="Detaylı arama">
+    <section class="value-grid" id="valueGrid" aria-label="Fırsat Motoru özellikleri">
+      <div class="value-card"><b><strong>01</strong> Adil değer</b><span>İlan fiyatını benzerleriyle karşılaştırır.</span></div>
+      <div class="value-card"><b><strong>02</strong> Neden ucuz?</b><span>Riskleri ve açıklamadaki kritik sinyalleri gösterir.</span></div>
+      <div class="value-card"><b><strong>03</strong> Fiyat geçmişi</b><span>Gerçek düşüşü ilan türüyle birlikte izler.</span></div>
+      <div class="value-card"><b><strong>04</strong> Akıllı takip</b><span>Seçtiğin fırsatı Telegram'da takip eder.</span></div>
+    </section>
+
+    <div class="notice" id="followNotice" role="status" aria-live="polite" data-kind="info"><b></b><span></span></div>
+
+    <section class="detail" id="filterPanel" aria-label="Ortak oto ve emlak filtresi">
       <!-- Aşama-2 G9: yapılandırılmış form VARSAYILAN AÇIK ana ekran (Codex: 'detaylı formu varsayılan açık yap') -->
       <button class="detail-toggle" id="detailToggle" type="button" aria-expanded="true">
-        <span>🎛 Detaylı arama — seç, say, getir</span><small id="detailHint">kapat ▴</small>
+        <span id="detailTitle">🎛 Fırsat filtresi — seç, karşılaştır, takip et</span><small id="detailHint">kapat ▴</small>
       </button>
       <div class="detail-body" id="detailBody">
         <div class="seg" id="fKat">
@@ -168,14 +226,13 @@
           <select id="fIlce" aria-label="İlçe" disabled><option value="">İlçe — tümü</option></select>
         </div>
         <div id="fMahalleWrap" hidden style="margin-top:8px">
-          <select id="fMahalle" aria-label="Mahalle" disabled style="width:100%;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.06);color:#fff;padding:12px;font-size:14px;outline:0"><option value="">Mahalle — tümü</option></select>
+          <div class="f-label">Mahalle <small>opsiyonel · birden çok seçebilirsin</small></div>
+          <div class="frow" style="grid-template-columns:1fr;margin-bottom:7px">
+            <input id="fMahalleAra" type="search" autocomplete="off" aria-label="Mahalle ara" placeholder="Mahalle yaz — liste süzülür">
+          </div>
+          <div class="chips2" id="fMahalle" aria-label="Mahalle seçenekleri"><span class="hint">Önce ilçe seç</span></div>
         </div>
         <div id="fOto">
-          <div class="f-label">Araç türü</div>
-          <div class="seg" id="fTip">
-            <button type="button" class="on" data-tip="otomobil">🚗 Otomobil</button>
-            <button type="button" data-tip="motosiklet">🏍 Motosiklet</button>
-          </div>
           <div class="f-label">Marka <small>birden çok seçebilirsin · yazarak da bulabilirsin</small></div>
           <div class="frow" style="grid-template-columns:1fr;margin-bottom:7px">
             <input id="fMarkaAra" type="text" autocomplete="off" placeholder="Marka yaz — liste süzülür (ör. Ren…)">
@@ -188,30 +245,47 @@
           <div class="chips2" id="fModel"><span class="hint">Önce marka seç</span></div>
         </div>
         <div id="fEmlak" hidden>
+          <div class="f-label">İlan türü <small>birden çok seçebilirsin</small></div>
+          <div class="chips2" id="fIlanTipi">
+            <button type="button" data-listing-type="satilik">Satılık</button>
+            <button type="button" data-listing-type="kiralik">Kiralık</button>
+          </div>
+          <div class="f-label">Emlak türü <small>birden çok seçebilirsin</small></div>
+          <div class="chips2" id="fEmlakTuru">
+            <button type="button" data-property-type="daire">Daire</button>
+            <button type="button" data-property-type="residence">Residence</button>
+            <button type="button" data-property-type="villa">Villa</button>
+            <button type="button" data-property-type="arsa">Arsa</button>
+            <button type="button" data-property-type="isyeri">İşyeri</button>
+          </div>
           <div class="f-label">Oda sayısı <small>birden çok seçebilirsin</small></div>
           <div class="chips2" id="fOda">
             <button type="button" data-oda="1+0">1+0 (Stüdyo)</button>
             <button type="button" data-oda="1+1">1+1</button>
+            <button type="button" data-oda="2+0">2+0</button>
             <button type="button" data-oda="2+1">2+1</button>
+            <button type="button" data-oda="2+2">2+2</button>
             <button type="button" data-oda="3+1">3+1</button>
+            <button type="button" data-oda="3+2">3+2</button>
             <button type="button" data-oda="4+1">4+1</button>
+            <button type="button" data-oda="4+2">4+2</button>
             <button type="button" data-oda="5+1">5+1</button>
+            <button type="button" data-oda="5+2">5+2</button>
           </div>
           <div class="f-label">m² (brüt)</div>
           <div class="frow">
             <input id="fM2min" type="text" inputmode="numeric" placeholder="En az (ör. 100)">
             <input id="fM2max" type="text" inputmode="numeric" placeholder="En çok">
           </div>
-          <!-- Aşama-2 G6 (Codex): satıcı kapsamı — varsayılan 'sadece şahıstan' (owner); bilinmeyen satıcı
-               owner sonucuna GİRMEZ (dürüst daralma). -->
-          <div class="f-label">Satıcı</div>
-          <div class="frow">
-            <select id="fSatici" aria-label="Satıcı kapsamı">
-              <option value="owner" selected>Sadece şahıstan (doğrulanmış)</option>
-              <option value="agency">Sadece emlakçıdan</option>
-              <option value="any">Hepsi</option>
-            </select>
-          </div>
+        </div>
+        <!-- owner/agency yalnız yapılandırılmış seller_type kanıtıyla eşleşir; bilinmeyen satıcı dar seçimlere girmez. -->
+        <div class="f-label">Satıcı</div>
+        <div class="frow" style="grid-template-columns:1fr">
+          <select id="fSatici" aria-label="Satıcı kapsamı">
+            <option value="any" selected>Hepsi</option>
+            <option value="owner">Sadece şahıstan (doğrulanmış)</option>
+            <option value="agency" id="fAgencyOption">Sadece galeriden</option>
+          </select>
         </div>
         <div class="f-label">Bütçe (₺)</div>
         <div class="frow">
@@ -232,41 +306,116 @@
             <input id="fYmax" type="number" inputmode="numeric" min="1980" max="2026" placeholder="Yıl — en yeni">
           </div>
           <div class="frow">
-            <input id="fKm" type="text" inputmode="numeric" placeholder="Km — en fazla (ör. 150.000)">
+            <input id="fKmMin" type="text" inputmode="numeric" placeholder="Km — en az">
+            <input id="fKmMax" type="text" inputmode="numeric" placeholder="Km — en fazla (ör. 150.000)">
+          </div>
+          <div class="frow" style="margin-top:8px">
             <select id="fYakit" aria-label="Yakıt">
               <option value="">Yakıt — fark etmez</option>
               <option value="dizel">Dizel</option><option value="benzin">Benzin</option>
               <option value="lpg">LPG</option><option value="hibrit">Hibrit</option>
               <option value="elektrik">Elektrik</option>
             </select>
-          </div>
-          <div class="frow" style="margin-top:8px">
             <select id="fVites" aria-label="Vites">
               <option value="">Vites — fark etmez</option>
               <option value="otomatik">Otomatik</option><option value="manuel">Manuel</option>
             </select>
-            <span></span>
+          </div>
+          <div class="f-label">Dış renk <small>ilanın yapılandırılmış araç rengi</small></div>
+          <div class="chips2" id="fRenk">
+            <button type="button" data-color="kirmizi">Kırmızı</button>
+            <button type="button" data-color="beyaz">Beyaz</button>
+            <button type="button" data-color="siyah">Siyah</button>
+            <button type="button" data-color="gri">Gri</button>
+            <button type="button" data-color="mavi">Mavi</button>
+            <button type="button" data-color="lacivert">Lacivert</button>
+            <button type="button" data-color="yesil">Yeşil</button>
+            <button type="button" data-color="sari">Sarı</button>
+            <button type="button" data-color="bordo">Bordo</button>
+            <button type="button" data-color="kahverengi">Kahverengi</button>
+            <button type="button" data-color="fume">Füme</button>
+            <button type="button" data-color="bej">Bej</button>
+            <button type="button" data-color="turuncu">Turuncu</button>
+            <button type="button" data-color="gumus">Gümüş</button>
+            <button type="button" data-color="mor">Mor</button>
+            <button type="button" data-color="pembe">Pembe</button>
+            <button type="button" data-color="sampanya">Şampanya</button>
+            <button type="button" data-color="altin">Altın</button>
+            <button type="button" data-color="bronz">Bronz</button>
+            <button type="button" data-color="turkuaz">Turkuaz</button>
+            <button type="button" data-color="krem">Krem</button>
+            <button type="button" data-color="antrasit">Antrasit</button>
+          </div>
+          <!-- Codex RED#3 (RED-8A): üç durumlu kriterler — sohbetle AYNI kanonik değerler.
+               'İstiyorum' = yalnız ilan beyanı olan; 'Hariç' = beyanlı olanlar dışarı;
+               'Fark etmez' = filtre kurulmaz. Süzme İLAN BEYANINA göredir (ekspertiz değil). -->
+          <div class="f-label">Durum (ilan beyanına göre)</div>
+          <div class="frow">
+            <select id="fK_hatasiz" aria-label="Hatasız">
+              <option value="farketmez" selected>Hatasız — fark etmez</option>
+              <option value="istiyorum">Hatasız istiyorum</option>
+              <option value="haric">Hatasız olanlar hariç</option>
+            </select>
+            <select id="fK_boyasiz" aria-label="Boyasız">
+              <option value="farketmez" selected>Boyasız — fark etmez</option>
+              <option value="istiyorum">Boyasız istiyorum</option>
+              <option value="haric">Boyasız olanlar hariç</option>
+            </select>
+          </div>
+          <div class="frow">
+            <select id="fK_tramersiz" aria-label="Tramersiz">
+              <option value="farketmez" selected>Tramersiz — fark etmez</option>
+              <option value="istiyorum">Tramersiz istiyorum</option>
+              <option value="haric">Tramersiz olanlar hariç</option>
+            </select>
+            <select id="fK_degisensiz" aria-label="Değişensiz">
+              <option value="farketmez" selected>Değişensiz — fark etmez</option>
+              <option value="istiyorum">Değişensiz istiyorum</option>
+              <option value="haric">Değişensiz olanlar hariç</option>
+            </select>
+          </div>
+          <div class="frow">
+            <select id="fK_orijinal" aria-label="Orijinal">
+              <option value="farketmez" selected>Orijinal — fark etmez</option>
+              <option value="istiyorum">Orijinal istiyorum</option>
+              <option value="haric">Orijinal olanlar hariç</option>
+            </select>
+            <select id="fK_sifir_km" aria-label="Sıfır km">
+              <option value="farketmez" selected>Sıfır km — fark etmez</option>
+              <option value="istiyorum">Sıfır km istiyorum</option>
+              <option value="haric">Sıfır km olanlar hariç</option>
+            </select>
           </div>
         </details>
         <div class="fbar">
           <b id="fCount">Filtre seç<small id="fCountNote">sayı burada canlı görünür</small></b>
-          <button id="fSifirla" type="button" title="Her şeyi sıfırla"
-                  style="flex:none;border:1px solid rgba(255,255,255,.22);border-radius:12px;padding:13px;background:transparent;color:#cad9d5;font-weight:800;cursor:pointer">↺</button>
-          <button id="fGetir" type="button" disabled>Fırsatları getir</button>
+          <button id="fSifirla" class="secondary" type="button" title="Her şeyi sıfırla" aria-label="Filtreyi sıfırla">↺</button>
+          <button id="followCreateButton" class="secondary" type="button">Takibe al</button>
+          <button id="fGetir" class="primary" type="button" disabled>Fırsatları getir</button>
         </div>
       </div>
     </section>
 
-    <div class="section-head"><h2>Sonuçlar</h2><span id="resultCount">Arama bekleniyor</span></div>
-    <section class="results" id="results" aria-live="polite"></section>
-    <!-- #2 VITRIN (17-07): skorlu 24 kart = firsat vitrini; emlakci ENVANTERI gezmek ister -->
-    <section id="listePanel" hidden>
-      <button id="listeAcBtn" type="button" class="liste-ac" hidden></button>
-      <div id="listeRows"></div>
-      <button id="listeDevamBtn" type="button" class="liste-ac" hidden></button>
+    <section class="follows-panel" id="followsPanel" hidden aria-labelledby="followsTitle">
+      <div class="follow-head">
+        <div><h2 id="followsTitle">Takiplerim</h2><p>Takiplerini yönet; tüm eşleşmeleri ve Telegram teslim durumunu gör.</p></div>
+        <div class="usage" id="followUsage">— / —</div>
+      </div>
+      <div class="follow-list" id="followList" aria-live="polite"><div class="loading-box">Takiplerin yükleniyor…</div></div>
     </section>
-    <div class="empty show" id="empty"><b>Filtreleri seç, "Getir"e bas</b><p>Şehir + model veya bütçe seçersen daha net fırsatlar buluruz.</p></div>
-    <p class="footnote">Skorlar karar desteğidir; satın almadan önce ekspertiz, tramer, tapu ve satıcı bilgilerini mutlaka doğrula.</p>
+
+    <section id="searchPanel" hidden aria-labelledby="searchResultsTitle">
+      <div class="section-head"><h2 id="searchResultsTitle">Fırsat analizi</h2><span id="resultCount">Arama bekleniyor</span></div>
+      <section class="results" id="results" aria-live="polite"></section>
+      <!-- #2 VITRIN (17-07): skorlu 24 kart = firsat vitrini; emlakci ENVANTERI gezmek ister -->
+      <section id="listePanel" hidden>
+        <button id="listeAcBtn" type="button" class="liste-ac" hidden></button>
+        <div id="listeRows"></div>
+        <button id="listeDevamBtn" type="button" class="liste-ac" hidden></button>
+      </section>
+      <div class="empty show" id="empty"><b>Filtreleri seç, “Fırsatları getir”e bas</b><p>Şehir + model veya bütçe seçersen daha net fırsatlar buluruz.</p></div>
+      <p class="footnote">Skorlar karar desteğidir; satın almadan önce ekspertiz, tramer, tapu ve satıcı bilgilerini mutlaka doğrula.</p>
+    </section>
   </main>
 
   <template id="cardTemplate">
@@ -289,6 +438,7 @@
   (() => {
     'use strict';
     const API = 'https://srv1756048.hstgr.cloud/api/app/search';
+    const API_FOLLOWS = API.replace('/search', '/follows');
     const tg = window.Telegram && window.Telegram.WebApp;
     const initData = tg && tg.initData ? tg.initData : '';
     const form = document.getElementById('searchForm');
@@ -354,6 +504,7 @@
         if (!response.ok) {
           const error = new Error(body.error || 'request_failed');
           error.status = response.status;
+          error.body = body;
           throw error;
         }
         return body;
@@ -535,17 +686,25 @@
     listeDevamBtn.addEventListener('click', listeYukle);
     const API_KATALOG = API.replace('/search', '/katalog');
     const $ = id => document.getElementById(id);
+    const tabFollows = $('tabFollows'), tabSearch = $('tabSearch');
+    const filterPanel = $('filterPanel'), followsPanel = $('followsPanel'), searchPanel = $('searchPanel');
+    const followCreateButton = $('followCreateButton'), followList = $('followList');
+    const followNotice = $('followNotice'), followUsage = $('followUsage');
+    const heroEyebrow = $('heroEyebrow'), headline = $('headline'), heroLead = $('heroLead');
+    const followPromise = $('followPromise'), valueGrid = $('valueGrid'), detailTitle = $('detailTitle');
     const dToggle = $('detailToggle'), dBody = $('detailBody');
     const fIl = $('fIl'), fIlce = $('fIlce'), fMahalle = $('fMahalle'), fMahalleWrap = $('fMahalleWrap');
+    const fMahalleAra = $('fMahalleAra');
     const fMarka = $('fMarka'), fModel = $('fModel'), fOto = $('fOto'), fEmlak = $('fEmlak');
-    const secOda = new Set();
+    const secMahalle = new Set(), secOda = new Set(), secRenk = new Set();
+    const secIlanTipi = new Set(), secEmlakTuru = new Set();
     const fCount = $('fCount'), fCountNote = $('fCountNote'), fGetir = $('fGetir');
     let kategori = 'oto';
-    let aracTipi = 'otomobil';
+    let activeView = 'search';
     const secMarka = new Set(), secModel = new Set();
     const modelAdlari = new Map();
-    let markalarTum = [], modellerTum = [];
-    let katalogYuklendi = false, countTimer = 0, sonSayi = 0;
+    let markalarTum = [], modellerTum = [], mahallelerTum = [];
+    let katalogYuklendi = false, countTimer = 0, sonSayi = 0, mahalleIstekNo = 0;
     const trkucuk = s => String(s || '').toLocaleLowerCase('tr-TR');
 
     async function katalogGetir(tur, parent) {
@@ -574,10 +733,42 @@
         kutu.appendChild(b);
       });
     }
+    function mahalleCiz() {
+      const ara = trkucuk(fMahalleAra.value);
+      const liste = mahallelerTum.filter(it =>
+        secMahalle.has(it.id) || !ara || trkucuk(it.ad).includes(ara)
+      );
+      if (!mahallelerTum.length) {
+        fMahalle.replaceChildren();
+        const s = document.createElement('span'); s.className = 'hint';
+        s.textContent = fIlce.value ? 'Bu ilçede mahalle kaydı yok' : 'Önce ilçe seç';
+        fMahalle.appendChild(s);
+        return;
+      }
+      chipListe(fMahalle, liste, secMahalle, (it, on) => {
+        on ? secMahalle.add(it.id) : secMahalle.delete(it.id);
+        mahalleCiz(); sayacYenile();
+      });
+    }
+    function mahalleleriTemizle() {
+      ++mahalleIstekNo;
+      secMahalle.clear(); mahallelerTum = []; fMahalleAra.value = '';
+      mahalleCiz();
+    }
+    async function mahalleleriYenile() {
+      const districtId = fIlce.value;
+      const istekNo = ++mahalleIstekNo;
+      secMahalle.clear(); mahallelerTum = []; fMahalleAra.value = '';
+      mahalleCiz();
+      if (!districtId) return;
+      const items = await katalogGetir('mahalle', districtId);
+      if (istekNo !== mahalleIstekNo || fIlce.value !== districtId) return;
+      mahallelerTum = items;
+      mahalleCiz();
+    }
     function markaCiz() {
       const ara = trkucuk($('fMarkaAra').value);
-      const izin = t => aracTipi === 'otomobil' ? (t !== 'motosiklet') : (t !== 'otomobil');
-      const liste = markalarTum.filter(m => izin(m.tip || 'otomobil') || secMarka.has(m.id))
+      const liste = markalarTum.filter(m => m.tip !== 'motosiklet')
                                .filter(m => !ara || trkucuk(m.ad).includes(ara));
       chipListe(fMarka, liste, secMarka, async (it, on) => {
         on ? secMarka.add(it.id) : secMarka.delete(it.id);
@@ -612,30 +803,45 @@
         if (el.value !== yeni) el.value = yeni;
       });
     }
-    binlik($('fPmin')); binlik($('fPmax')); binlik($('fKm'));
+    binlik($('fPmin')); binlik($('fPmax')); binlik($('fKmMin')); binlik($('fKmMax'));
     function specKur() {
       const spec = { version: 2, category: kategori };
       if (fIl.value) spec.province_id = Number(fIl.value);
       if (fIlce.value) spec.district_id = Number(fIlce.value);
-      if (kategori === 'emlak' && fMahalle.value) spec.neighborhood_id = Number(fMahalle.value);
+      if (kategori === 'emlak' && secMahalle.size) spec.neighborhood_ids = [...secMahalle];
       if (kategori === 'oto') {
         if (secMarka.size) spec.brand_ids = [...secMarka];
         if (secModel.size) spec.model_ids = [...secModel];
         const ymin = sayi($('fYmin').value), ymax = sayi($('fYmax').value);
-        const km = sayi($('fKm').value);
+        const kmMin = sayi($('fKmMin').value), kmMax = sayi($('fKmMax').value);
         if (ymin) spec.year_min = ymin;
         if (ymax) spec.year_max = ymax;
-        if (km) spec.km_max = km;
+        if (kmMin) spec.km_min = kmMin;
+        if (kmMax) spec.km_max = kmMax;
         if ($('fYakit').value) spec.fuel = $('fYakit').value;
         if ($('fVites').value) spec.gear = $('fVites').value;
+        if (secRenk.size) spec.colors = [...secRenk];
+        /* Codex RED#3 (RED-8A): ÜÇ DURUMLU KRİTER SÖZLEŞMESİ — Mini App de KANONİK değerleri
+           ('istiyorum' / 'farketmez' / 'haric') ortak spec'e gönderir. Sohbet ve Mini App AYNI
+           conditions yapısını üretir → aynı FilterSpec, aynı motor, aynı sonuç kümesi.
+           'farketmez' spec'e YAZILMAZ (filtre kurmaz) — sunucu tarafı fail-closed doğrular. */
+        const kosullar = {};
+        ['hatasiz', 'boyasiz', 'tramersiz', 'degisensiz', 'orijinal', 'sifir_km'].forEach(function (alan) {
+          const el = $('fK_' + alan);
+          if (el && el.value && el.value !== 'farketmez') { kosullar[alan] = el.value; }
+        });
+        if (Object.keys(kosullar).length) { spec.conditions = kosullar; }
       }
       if (kategori === 'emlak') {
+        if (secIlanTipi.size) spec.listing_types = [...secIlanTipi];
+        if (secEmlakTuru.size) spec.property_types = [...secEmlakTuru];
         if (secOda.size) spec.room_counts = [...secOda];
         const m2min = sayi($('fM2min').value), m2max = sayi($('fM2max').value);
         if (m2min) spec.m2_min = m2min;
         if (m2max) spec.m2_max = m2max;
-        spec.seller_scope = ($('fSatici') && $('fSatici').value) || 'owner';   // Aşama-2 G6: varsayılan owner
       }
+      const satici = $('fSatici') && $('fSatici').value;
+      if (satici && satici !== 'any') spec.seller_scope = satici;
       const pmin = sayi($('fPmin').value), pmax = sayi($('fPmax').value);
       if (pmin) spec.price_min = pmin;
       if (pmax) spec.price_max = pmax;
@@ -681,12 +887,25 @@
         hataKutusu(fMarka, 'Marka listesi alınamadı.', markalariYukle);
       }
     }
-    $('fTip').querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
-      $('fTip').querySelectorAll('button').forEach(x => x.classList.remove('on'));
-      b.classList.add('on'); aracTipi = b.dataset.tip; markaCiz();
-    }));
     $('fMarkaAra').addEventListener('input', markaCiz);
     $('fModelAra').addEventListener('input', modelCiz);
+    function otoSecimleriniTemizle() {
+      secMarka.clear(); secModel.clear(); secRenk.clear(); modellerTum = [];
+      ['fMarkaAra','fModelAra','fYmin','fYmax','fKmMin','fKmMax'].forEach(id => { $(id).value = ''; });
+      $('fYakit').value = ''; $('fVites').value = '';
+      $('fRenk').querySelectorAll('button').forEach(x => x.classList.remove('on'));
+      ['hatasiz', 'boyasiz', 'tramersiz', 'degisensiz', 'orijinal', 'sifir_km'].forEach(alan => {
+        $('fK_' + alan).value = 'farketmez';
+      });
+      markaCiz(); modelCiz();
+    }
+    function emlakSecimleriniTemizle() {
+      mahalleleriTemizle(); secOda.clear(); secIlanTipi.clear(); secEmlakTuru.clear();
+      ['fM2min','fM2max'].forEach(id => { $(id).value = ''; });
+      ['fOda','fIlanTipi','fEmlakTuru'].forEach(id => {
+        $(id).querySelectorAll('button').forEach(x => x.classList.remove('on'));
+      });
+    }
     async function formAc() {
       const acik = !dBody.hidden;
       dBody.hidden = acik;
@@ -701,12 +920,32 @@
     // Aşama-2 G9: form VARSAYILAN AÇIK başladığı için katalog+sayaç İLK yüklemede dolar (tıklama beklenmez)
     if (initData) { katalogYuklendi = true; illeriYukle(); markalariYukle(); sayacYenile(); }
     $('fKat').querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+      const yeniKategori = b.dataset.cat;
+      if (yeniKategori === kategori) return;
+      if (yeniKategori === 'emlak') otoSecimleriniTemizle();
+      else emlakSecimleriniTemizle();
+      $('fPmin').value = ''; $('fPmax').value = '';
       $('fKat').querySelectorAll('button').forEach(x => x.classList.remove('on'));
-      b.classList.add('on'); kategori = b.dataset.cat;
+      b.classList.add('on'); kategori = yeniKategori;
       fOto.hidden = kategori !== 'oto';
       fEmlak.hidden = kategori !== 'emlak';
       fMahalleWrap.hidden = kategori !== 'emlak' || !fIlce.value;
       $('fMore').hidden = kategori !== 'oto';
+      $('fSatici').value = 'any';
+      text($('fAgencyOption'), kategori === 'emlak' ? 'Sadece emlakçıdan' : 'Sadece galeriden');
+      if (kategori === 'emlak' && fIlce.value) {
+        mahalleleriYenile().catch(() => { mahallelerTum = []; mahalleCiz(); });
+      }
+      sayacYenile();
+    }));
+    $('fIlanTipi').querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+      b.classList.toggle('on');
+      b.classList.contains('on') ? secIlanTipi.add(b.dataset.listingType) : secIlanTipi.delete(b.dataset.listingType);
+      sayacYenile();
+    }));
+    $('fEmlakTuru').querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+      b.classList.toggle('on');
+      b.classList.contains('on') ? secEmlakTuru.add(b.dataset.propertyType) : secEmlakTuru.delete(b.dataset.propertyType);
       sayacYenile();
     }));
     $('fOda').querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
@@ -714,34 +953,349 @@
       b.classList.contains('on') ? secOda.add(b.dataset.oda) : secOda.delete(b.dataset.oda);
       sayacYenile();
     }));
+    $('fRenk').querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+      b.classList.toggle('on');
+      b.classList.contains('on') ? secRenk.add(b.dataset.color) : secRenk.delete(b.dataset.color);
+      sayacYenile();
+    }));
     fIl.addEventListener('change', async () => {
       fIlce.replaceChildren(new Option('İlçe — tümü', '')); fIlce.disabled = true;
-      fMahalle.replaceChildren(new Option('Mahalle — tümü', '')); fMahalle.disabled = true; fMahalleWrap.hidden = true;
+      mahalleleriTemizle(); fMahalleWrap.hidden = true;
       if (fIl.value) selectDoldur(fIlce, await katalogGetir('ilce', fIl.value), 'İlçe — tümü');
       sayacYenile();
     });
     fIlce.addEventListener('change', async () => {
-      fMahalle.replaceChildren(new Option('Mahalle — tümü', '')); fMahalle.disabled = true;
+      mahalleleriTemizle();
       const goster = kategori === 'emlak' && fIlce.value;
       fMahalleWrap.hidden = !goster;
-      if (goster) selectDoldur(fMahalle, await katalogGetir('mahalle', fIlce.value), 'Mahalle — tümü');
+      if (goster) {
+        try { await mahalleleriYenile(); }
+        catch (_) { mahallelerTum = []; mahalleCiz(); }
+      }
       sayacYenile();
     });
-    ['fMahalle','fPmin','fPmax','fYmin','fYmax','fKm','fYakit','fVites','fM2min','fM2max','fSatici'].forEach(id => {
+    fMahalleAra.addEventListener('input', mahalleCiz);
+    ['fPmin','fPmax','fYmin','fYmax','fKmMin','fKmMax','fYakit','fVites','fM2min','fM2max','fSatici'].forEach(id => {
       $(id).addEventListener('change', sayacYenile); $(id).addEventListener('input', sayacYenile);
     });
     $('fHizli').querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
       $('fPmax').value = Number(b.dataset.max).toLocaleString('tr-TR'); sayacYenile();
     }));
+
+    function showFollowNotice(kind, titleValue, detailValue) {
+      if (!titleValue) {
+        followNotice.classList.remove('show');
+        return;
+      }
+      followNotice.dataset.kind = kind || 'info';
+      text(followNotice.querySelector('b'), titleValue);
+      text(followNotice.querySelector('span'), detailValue || '');
+      followNotice.classList.add('show');
+    }
+    function followFriendlyError(error) {
+      const body = error && error.body || {};
+      const code = body.error || (error && error.message);
+      if (code === 'clarification_required') {
+        return ['Bir ayrıntı gerekli', body.question || 'Kriteri biraz daha net seçip yeniden dene.'];
+      }
+      if (code === 'bad_spec') {
+        return ['Filtreyi kontrol et', 'Seçimlerden biri birlikte kullanılamıyor. Alanları gözden geçirip yeniden dene.'];
+      }
+      if (code === 'source_plan_unavailable') {
+        return ['Güvenli kaynak kurulamadı', 'Bu filtre için eksiksiz tarama kaynağı doğrulanamadı; kriteri biraz daralt.'];
+      }
+      if (code === 'follow_limit') {
+        return ['Takip limitin dolu', 'Kullanım: ' + Number(body.used || 0) + ' / ' + Number(body.limit || 0) + '. Bir takibi silip yeniden dene.'];
+      }
+      if (code === 'rate_limit') {
+        return ['Biraz yavaşlayalım', Number(body.retry_after_seconds || 60) + ' saniye sonra yeniden deneyebilirsin.'];
+      }
+      if (code === 'telegram_auth' || (error && error.status === 401)) {
+        return ['Telegram oturumu gerekli', 'Uygulamayı kapatıp bot menüsündeki düğmeden yeniden aç.'];
+      }
+      if (error && error.status === 503) {
+        return ['Takip servisi geçici olarak hazır değil', 'Kısa bir süre sonra yeniden dene; mevcut takiplerin korunuyor.'];
+      }
+      return ['Takip işlemi tamamlanamadı', 'Bağlantını kontrol edip yeniden dene.'];
+    }
+    const tarih = value => {
+      if (!value) return '';
+      const d = new Date(value);
+      return Number.isNaN(d.getTime()) ? '' : new Intl.DateTimeFormat('tr-TR', {
+        day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'
+      }).format(d);
+    };
+    const scanLabel = value => ({
+      ready:'Taramaya hazır', queued:'Tarama sırasına alındı', backoff:'Kaynak bekleniyor',
+      circuit_open:'Kaynak bekleniyor', stalled:'Tarama gecikiyor'
+    })[value] || 'Durum bekleniyor';
+    const deliveryLabel = value => ({
+      sent:'gönderildi', failed:'yeniden denenecek', claimed:'gönderiliyor'
+    })[value] || '';
+
+    function renderFollows(items) {
+      followList.replaceChildren();
+      if (!items.length) {
+        const box = document.createElement('div'); box.className = 'follow-empty';
+        const b = document.createElement('b'); text(b, 'Henüz takip yok');
+        const p = document.createElement('span'); text(p, '“Fırsat bul” bölümünde filtreni seçip “Takibe al”a dokunabilirsin.');
+        box.append(b, p); followList.appendChild(box); return;
+      }
+      const fragment = document.createDocumentFragment();
+      items.forEach(item => {
+        const card = document.createElement('article');
+        card.className = 'follow-card'; card.dataset.followId = String(item.id);
+        const top = document.createElement('div'); top.className = 'follow-card-top';
+        const copy = document.createElement('div'); copy.className = 'follow-copy';
+        const titleNode = document.createElement('b'); text(titleNode, item.label || 'Yapılandırılmış takip');
+        const meta = document.createElement('small');
+        const metaParts = [scanLabel(item.scan_status)];
+        if (item.last_scan_at) metaParts.push('Son tarama ' + tarih(item.last_scan_at));
+        if (item.last_delivery_status) metaParts.push('Son teslim ' + deliveryLabel(item.last_delivery_status));
+        text(meta, metaParts.filter(Boolean).join(' · '));
+        copy.append(titleNode, meta);
+        const state = document.createElement('span'); state.className = 'follow-state' + (item.active ? '' : ' off');
+        text(state, item.active ? 'AKTİF' : 'DURAKLATILDI');
+        top.append(copy, state);
+
+        const actions = document.createElement('div'); actions.className = 'follow-actions';
+        const toggle = document.createElement('button'); toggle.type = 'button'; toggle.className = 'follow-toggle';
+        text(toggle, item.active ? 'Duraklat' : 'Devam ettir');
+        toggle.addEventListener('click', () => toggleFollow(item, toggle));
+        const events = document.createElement('button'); events.type = 'button'; events.className = 'follow-events';
+        text(events, 'Tüm eşleşmeler');
+        const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'follow-delete';
+        text(remove, 'Sil');
+        remove.addEventListener('click', () => deleteFollow(item.id, remove));
+        actions.append(toggle, events, remove);
+        const eventList = document.createElement('div'); eventList.className = 'follow-events-list'; eventList.hidden = true;
+        events.addEventListener('click', () => loadFollowEvents(item.id, events, eventList));
+        card.append(top, actions, eventList); fragment.appendChild(card);
+      });
+      followList.appendChild(fragment);
+    }
+
+    async function loadFollows(showLoading = true) {
+      if (!initData) { authGate.classList.add('show'); return; }
+      if (showLoading) {
+        followList.replaceChildren();
+        const box = document.createElement('div'); box.className = 'loading-box'; text(box, 'Takiplerin yükleniyor…');
+        followList.appendChild(box);
+      }
+      try {
+        const data = await request(API_FOLLOWS);
+        const usage = data.usage || {};
+        text(followUsage, Number(usage.used || 0) + ' / ' + Number(usage.limit || 0));
+        renderFollows(Array.isArray(data.items) ? data.items : []);
+      } catch (error) {
+        const message = followFriendlyError(error);
+        showFollowNotice('error', message[0], message[1]);
+        followList.replaceChildren();
+        const box = document.createElement('div'); box.className = 'loading-box'; text(box, 'Takipler şu an alınamadı. Yeniden deneyebilirsin.');
+        followList.appendChild(box);
+      }
+    }
+
+    async function createFollow() {
+      if (!initData) { authGate.classList.add('show'); return; }
+      followCreateButton.disabled = true; text(followCreateButton, 'Kuruluyor…');
+      showFollowNotice('info', 'Takip kontrol ediliyor', 'Kriterlerin ve güvenli kaynak planı doğrulanıyor…');
+      try {
+        const spec = specKur();
+        const data = await request(API_FOLLOWS, {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({input:{type:'spec',spec:spec}})
+        });
+        showFollowNotice(
+          'success',
+          data.created
+            ? 'Takibin kuruldu'
+            : (data.reactivated ? 'Takibin yeniden açıldı' : 'Bu takip zaten var'),
+          data.created
+            ? 'Takip çalışıyor. Günlük Telegram sınırını aşan eşleşmeler kaybolmaz; Takiplerim → Tüm eşleşmeler’de Özette saklanır.'
+            : (data.reactivated
+                ? 'Aynı kriterdeki duraklatılmış takibin yeniden çalışıyor.'
+                : 'Aynı filtre için ikinci kart açılmadı; mevcut takibin gösteriliyor.')
+        );
+        await loadFollows(false);
+        setView('follows', false);
+        try { tg && tg.HapticFeedback && tg.HapticFeedback.notificationOccurred('success'); } catch (_) {}
+      } catch (error) {
+        const message = followFriendlyError(error);
+        showFollowNotice('error', message[0], message[1]);
+      } finally {
+        followCreateButton.disabled = false; text(followCreateButton, 'Takibe al');
+      }
+    }
+
+    async function toggleFollow(item, control) {
+      control.disabled = true;
+      try {
+        await request(API_FOLLOWS + '/' + encodeURIComponent(item.id), {
+          method:'PATCH', headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({active:!item.active})
+        });
+        await loadFollows(false);
+      } catch (error) {
+        const message = followFriendlyError(error); showFollowNotice('error', message[0], message[1]);
+      } finally { control.disabled = false; }
+    }
+
+    const EVENT_PAGE_SIZE = 20;
+    const eventStatusLabel = status => ({
+      sent:'Gönderildi', aggregated:'Özette', failed:'Yeniden denenecek', claimed:'Gönderiliyor'
+    })[status] || 'Kaydedildi';
+
+    function openSafeListing(value) {
+      const url = safeListingUrl(value);
+      if (!url) return;
+      if (tg && tg.openLink) tg.openLink(url);
+      else window.open(url, '_blank', 'noopener,noreferrer');
+    }
+
+    function renderFollowEvent(item) {
+      const imageUrl = safeImageUrl(item.image_url);
+      const row = document.createElement('article');
+      row.className = 'event-row' + (imageUrl ? '' : ' no-image');
+      if (imageUrl) {
+        const image = document.createElement('img');
+        image.className = 'event-image'; image.loading = 'lazy'; image.alt = '';
+        image.referrerPolicy = 'no-referrer'; image.src = imageUrl;
+        row.appendChild(image);
+      }
+      const copy = document.createElement('div'); copy.className = 'event-copy';
+      const head = document.createElement('div'); head.className = 'event-head';
+      const url = safeListingUrl(item.url);
+      const titleValue = String(item.title || 'İlan ayrıntısı');
+      const titleNode = document.createElement(url ? 'button' : 'div');
+      titleNode.className = 'event-title';
+      if (url) {
+        titleNode.type = 'button';
+        titleNode.addEventListener('click', () => openSafeListing(url));
+      }
+      text(titleNode, titleValue);
+      const status = document.createElement('span');
+      status.className = 'event-status ' + String(item.status || '');
+      text(status, eventStatusLabel(item.status));
+      head.append(titleNode, status);
+
+      const meta = document.createElement('div'); meta.className = 'event-meta';
+      const typeLabel = item.event_type === 'price_drop' ? 'Fiyat düştü' : 'Yeni ilan';
+      const place = [item.city, item.district].filter(Boolean).join(' / ');
+      const when = tarih(item.sent_at || item.matched_at);
+      const parts = [typeLabel, Number(item.price) > 0 ? money(item.price) : '', place, when].filter(Boolean);
+      text(meta, parts.join(' · '));
+      copy.append(head, meta); row.appendChild(copy);
+      return row;
+    }
+
+    async function fetchFollowEventPage(id, control, container, cursor) {
+      control.disabled = true;
+      const oldMore = container.querySelector('.event-more');
+      if (oldMore) { oldMore.disabled = true; text(oldMore, 'Yükleniyor…'); }
+      try {
+        const cursorQuery = cursor ? '&cursor=' + encodeURIComponent(cursor) : '';
+        const data = await request(
+          API_FOLLOWS + '/' + encodeURIComponent(id) +
+          '/events?limit=' + EVENT_PAGE_SIZE + cursorQuery
+        );
+        const items = Array.isArray(data.items) ? data.items : [];
+        if (!cursor) container.replaceChildren();
+        else if (oldMore) oldMore.remove();
+        if (!items.length && !cursor) {
+          text(container, 'Henüz teslim olayı yok.');
+          return;
+        }
+        items.forEach(item => container.appendChild(renderFollowEvent(item)));
+        if (data.has_more && typeof data.next_cursor === 'string' && data.next_cursor) {
+          const more = document.createElement('button');
+          more.type = 'button'; more.className = 'event-more';
+          const remaining = Math.max(0, Number(data.remaining || 0));
+          text(more, remaining ? 'Daha fazla (' + remaining + ')' : 'Daha fazla');
+          more.addEventListener('click', () =>
+            fetchFollowEventPage(id, control, container, data.next_cursor)
+          );
+          container.appendChild(more);
+        }
+      } catch (error) {
+        if (!cursor) text(container, 'Teslim geçmişi şu an alınamadı.');
+        else {
+          if (oldMore) { oldMore.disabled = false; text(oldMore, 'Daha fazla'); }
+          showFollowNotice('error', 'Geçmiş tamamlanamadı', 'Sonraki sayfa alınamadı; yeniden deneyebilirsin.');
+        }
+      } finally { control.disabled = false; }
+    }
+
+    async function loadFollowEvents(id, control, container) {
+      if (!container.hidden) {
+        container.hidden = true;
+        container.replaceChildren();
+        return;
+      }
+      container.hidden = false;
+      text(container, 'Teslim geçmişi yükleniyor…');
+      await fetchFollowEventPage(id, control, container, null);
+    }
+
+    async function deleteFollow(id, control) {
+      if (control.dataset.armed !== 'true') {
+        control.dataset.armed = 'true'; text(control, 'Emin misin?');
+        setTimeout(() => {
+          if (control.isConnected && control.dataset.armed === 'true') {
+            control.dataset.armed = 'false'; text(control, 'Sil');
+          }
+        }, 5000);
+        return;
+      }
+      control.disabled = true;
+      try {
+        await request(API_FOLLOWS + '/' + encodeURIComponent(id), {method:'DELETE'});
+        showFollowNotice('success', 'Takip silindi', 'Bu kriter için yeni bildirim gönderilmeyecek.');
+        await loadFollows(false);
+      } catch (error) {
+        const message = followFriendlyError(error); showFollowNotice('error', message[0], message[1]);
+      } finally { control.disabled = false; }
+    }
+
+    function headlineYaz(prefix, accent) {
+      const span = document.createElement('span'); text(span, accent);
+      headline.replaceChildren(document.createTextNode(prefix), span);
+    }
+    function setView(view, shouldLoad = true) {
+      activeView = view;
+      const tabs = [[tabSearch, 'search'], [tabFollows, 'follows']];
+      tabs.forEach(([node, value]) => node.setAttribute('aria-selected', String(value === view)));
+      filterPanel.hidden = view === 'follows';
+      followsPanel.hidden = view !== 'follows';
+      searchPanel.hidden = view !== 'search';
+      followCreateButton.hidden = view !== 'search';
+      fGetir.hidden = view !== 'search';
+      followPromise.hidden = view !== 'search';
+      valueGrid.hidden = view !== 'search';
+      if (view === 'follows') {
+        text(heroEyebrow, 'Akıllı takip'); headlineYaz('Takiplerin, ', 'kontrolün sende.');
+        text(heroLead, 'Aktif takiplerini, tarama durumunu ve gerçek teslim geçmişini buradan yönet.');
+        if (shouldLoad) loadFollows();
+      } else {
+        text(heroEyebrow, 'Fırsat Motoru'); headlineYaz('İlanı değil, ', 'gerçek fırsatı bul.');
+        text(heroLead, 'Oto ve emlak ilanlarını emsal farkı, fırsat skoru ve risk sinyalleriyle karşılaştır. Beğendiğin filtreyi tek dokunuşla Telegram takibine al.');
+        text(detailTitle, '🎛 Fırsat filtresi — seç, karşılaştır, takip et');
+      }
+    }
+    tabFollows.addEventListener('click', () => setView('follows'));
+    tabSearch.addEventListener('click', () => setView('search'));
+    followCreateButton.addEventListener('click', createFollow);
+
     async function searchSpec() {
       if (!initData) { authGate.classList.add('show'); return; }
       const version = ++searchVersion;
       fGetir.disabled = true; button.disabled = true;
-      listeKapat(); sonSpec = specKur();          // #2 vitrin: bu spec 'Tumunu listele' icin saklanir
+      const spec = specKur();
+      listeKapat(); sonSpec = spec;          // #2 vitrin: bu spec 'Tumunu listele' icin saklanir
       results.replaceChildren(); empty.classList.remove('show'); text(count, 'Hazırlanıyor');
       setStatus(true, 'Filtren alındı', sonSayi + ' aday puanlanıyor…'); startProgress(version);
       try {
-        const job = await request(API, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({spec: specKur()})});
+        const job = await request(API, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({spec: spec})});
         if (version !== searchVersion) return;
         await poll(job.job_id, version);
       } catch (error) {
@@ -758,25 +1312,33 @@
     function formSifirla() {                   // ↺ donma/karisma panik dugmesi: 0'dan basla
       ++searchVersion;                          // aktif arama/poll varsa DUSER (uzerine yazma biter)
       listeKapat();                             // #2: envanter listesi de sifirlanir
-      secMarka.clear(); secModel.clear(); secOda.clear(); modellerTum = [];
-      ['fMarkaAra','fModelAra','fPmin','fPmax','fYmin','fYmax','fKm','fM2min','fM2max'].forEach(id => { $(id).value = ''; });
+      secMarka.clear(); secModel.clear(); secMahalle.clear(); secOda.clear(); secRenk.clear();
+      secIlanTipi.clear(); secEmlakTuru.clear(); modellerTum = []; mahallelerTum = [];
+      ['fMarkaAra','fModelAra','fMahalleAra','fPmin','fPmax','fYmin','fYmax','fKmMin','fKmMax','fM2min','fM2max'].forEach(id => { $(id).value = ''; });
       $('fYakit').value = ''; $('fVites').value = '';
-      if ($('fSatici')) $('fSatici').value = 'owner';   // denetim: sıfırla → satıcı kapsamı da varsayılana döner
+      if ($('fSatici')) $('fSatici').value = 'any';     // varsayılan niyet: satıcı filtresi kurma
+      // RED-8A: üç durumlu kriterler de varsayılana ('farketmez' = filtre yok) döner
+      ['hatasiz', 'boyasiz', 'tramersiz', 'degisensiz', 'orijinal', 'sifir_km'].forEach(function (alan) {
+        const el = $('fK_' + alan); if (el) { el.value = 'farketmez'; }
+      });
       $('fOda').querySelectorAll('button').forEach(x => x.classList.remove('on'));
+      $('fRenk').querySelectorAll('button').forEach(x => x.classList.remove('on'));
+      $('fIlanTipi').querySelectorAll('button').forEach(x => x.classList.remove('on'));
+      $('fEmlakTuru').querySelectorAll('button').forEach(x => x.classList.remove('on'));
       fIl.value = '';
       fIlce.replaceChildren(new Option('İlçe — tümü', '')); fIlce.disabled = true;
-      fMahalle.replaceChildren(new Option('Mahalle — tümü', '')); fMahalle.disabled = true; fMahalleWrap.hidden = true;
-      aracTipi = 'otomobil';
-      $('fTip').querySelectorAll('button').forEach(x => x.classList.toggle('on', x.dataset.tip === 'otomobil'));
+      mahalleleriTemizle(); fMahalleWrap.hidden = true;
       kategori = 'oto';
       $('fKat').querySelectorAll('button').forEach(x => x.classList.toggle('on', x.dataset.cat === 'oto'));
       fOto.hidden = false; fEmlak.hidden = true; $('fMore').hidden = false;
+      text($('fAgencyOption'), 'Sadece galeriden');
       results.replaceChildren(); empty.classList.add('show'); text(count, 'Arama bekleniyor');
       clearInterval(progressTimer); setStatus(false); button.disabled = false; fGetir.disabled = true;
       markaCiz(); modelCiz(); sayacYenile();
       try { tg && tg.HapticFeedback && tg.HapticFeedback.impactOccurred('light'); } catch (_) {}
     }
     $('fSifirla').addEventListener('click', formSifirla);
+    setView('search', false);
   })();
   </script>
 </body>
