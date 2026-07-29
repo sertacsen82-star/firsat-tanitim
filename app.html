@@ -128,6 +128,11 @@
     .follow-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:22px 3px 12px}
     .follow-head h2{margin:0;font-size:22px;letter-spacing:-.03em}.follow-head p{margin:4px 0 0;color:var(--muted);font-size:12px}
     .usage{flex:none;padding:9px 11px;border:1px solid rgba(244,213,139,.25);border-radius:12px;background:rgba(228,170,60,.08);color:var(--gold2);font-size:12px;font-weight:850}
+    .dna-panel{display:flex;align-items:center;gap:13px;margin:0 0 12px;padding:15px;border:1px solid rgba(135,104,255,.28);border-radius:17px;background:linear-gradient(135deg,rgba(67,45,120,.27),rgba(12,48,45,.92))}
+    .dna-copy{min-width:0;flex:1}.dna-copy b{display:block;color:#eee7ff;font-size:14px}.dna-copy span{display:block;margin-top:4px;color:#bcb3d5;font-size:10px;line-height:1.45}
+    .dna-toggle{flex:none;min-width:68px;min-height:40px;border:1px solid rgba(121,231,181,.35);border-radius:999px;background:rgba(73,200,138,.16);color:#b5efd4;font-size:11px;font-weight:900;cursor:pointer}
+    .dna-toggle.off{border-color:rgba(255,255,255,.14);background:rgba(255,255,255,.07);color:#a8b8b4}
+    .dna-toggle:disabled{opacity:.55;cursor:wait}
     .follow-list{display:grid;gap:11px}
     .follow-card{padding:16px;border:1px solid rgba(255,255,255,.12);border-radius:19px;background:linear-gradient(145deg,rgba(24,65,61,.94),rgba(11,39,37,.96));box-shadow:0 14px 34px rgba(0,0,0,.18)}
     .follow-card-top{display:flex;gap:12px;align-items:flex-start}.follow-copy{min-width:0;flex:1}.follow-copy b{display:block;font-size:15px;line-height:1.35}.follow-copy small{display:block;margin-top:5px;color:var(--muted);font-size:11px;line-height:1.45}
@@ -440,6 +445,14 @@
         <div><h2 id="followsTitle">Takiplerim</h2><p>Takiplerini yönet; tüm eşleşmeleri ve Telegram teslim durumunu gör.</p></div>
         <div class="usage" id="followUsage">— / —</div>
       </div>
+      <article class="dna-panel" id="dnaPanel">
+        <div aria-hidden="true">🧬</div>
+        <div class="dna-copy">
+          <b>Fırsat DNA</b>
+          <span id="dnaMeta">Tercihlerinle açıklanabilir yakın fırsatları bulur.</span>
+        </div>
+        <button class="dna-toggle" id="dnaToggle" type="button" aria-pressed="true">AÇIK</button>
+      </article>
       <div class="follow-list" id="followList" aria-live="polite"><div class="loading-box">Takiplerin yükleniyor…</div></div>
     </section>
     <section class="desk-panel" id="deskPanel" hidden aria-labelledby="deskTitle">
@@ -496,6 +509,7 @@
     'use strict';
     const API = 'https://srv1756048.hstgr.cloud/api/app/search';
     const API_FOLLOWS = API.replace('/search', '/follows');
+    const API_DNA = API.replace('/search', '/dna');
     const API_DESK = API.replace('/search', '/desk');
     const tg = window.Telegram && window.Telegram.WebApp;
     const initData = tg && tg.initData ? tg.initData : '';
@@ -768,6 +782,7 @@
     const deskFresh = $('deskFresh'), deskDisclosure = $('deskDisclosure'), deskLead = $('deskLead');
     const followCreateButton = $('followCreateButton'), followList = $('followList');
     const followNotice = $('followNotice'), followUsage = $('followUsage');
+    const dnaToggle = $('dnaToggle'), dnaMeta = $('dnaMeta');
     const heroEyebrow = $('heroEyebrow'), headline = $('headline'), heroLead = $('heroLead');
     const followPromise = $('followPromise'), valueGrid = $('valueGrid'), detailTitle = $('detailTitle');
     const dToggle = $('detailToggle'), dBody = $('detailBody');
@@ -1160,6 +1175,51 @@
       sent:'gönderildi', failed:'yeniden denenecek', claimed:'gönderiliyor'
     })[value] || '';
 
+    let dnaEnabled = true;
+    function renderDna(value) {
+      const data = value || {};
+      dnaEnabled = Boolean(data.enabled);
+      dnaToggle.classList.toggle('off', !dnaEnabled);
+      dnaToggle.setAttribute('aria-pressed', String(dnaEnabled));
+      text(dnaToggle, dnaEnabled ? 'AÇIK' : 'KAPALI');
+      const daily = Number(data.daily_limit || 3);
+      const quietStart = Number(data.quiet_start ?? 23);
+      const quietEnd = Number(data.quiet_end ?? 8);
+      text(dnaMeta, dnaEnabled
+        ? 'Açık takiplerin önce gelir · günde en fazla ' + daily
+          + ' yakın fırsat · sessiz saat ' + quietStart + ':00–' + quietEnd + ':00'
+        : 'Akıllı yakın fırsatlar kapalı; açık takiplerin çalışmaya devam ediyor.');
+    }
+    async function loadDna() {
+      if (!initData) return;
+      dnaToggle.disabled = true;
+      try {
+        const data = await request(API_DNA);
+        renderDna(data.dna);
+      } catch (_) {
+        text(dnaMeta, 'Fırsat DNA ayarı şu an alınamadı; takiplerin etkilenmez.');
+      } finally {
+        dnaToggle.disabled = false;
+      }
+    }
+    async function toggleDna() {
+      if (!initData) { authGate.classList.add('show'); return; }
+      dnaToggle.disabled = true;
+      try {
+        const data = await request(API_DNA, {
+          method:'PATCH', headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({enabled:!dnaEnabled})
+        });
+        renderDna(data.dna);
+        try { tg && tg.HapticFeedback && tg.HapticFeedback.notificationOccurred('success'); } catch (_) {}
+      } catch (error) {
+        const message = followFriendlyError(error);
+        showFollowNotice('error', message[0], message[1]);
+      } finally {
+        dnaToggle.disabled = false;
+      }
+    }
+
     function renderFollows(items) {
       followList.replaceChildren();
       if (!items.length) {
@@ -1538,7 +1598,10 @@
       if (activeView === 'follows') {
         text(heroEyebrow, 'Akıllı takip'); headlineYaz('Takiplerin, ', 'kontrolün sende.');
         text(heroLead, 'Aktif takiplerini, tarama durumunu ve gerçek teslim geçmişini buradan yönet.');
-        if (shouldLoad) loadFollows();
+        if (shouldLoad) {
+          loadFollows();
+          loadDna();
+        }
       } else if (activeView === 'desk') {
         text(heroEyebrow, 'Profesyonel radar'); headlineYaz('Bugünün işini, ', 'öne taşı.');
         text(heroLead, 'Galerici ve emlakçı için canlı fırsat, portföy ve hareket ekranı.');
@@ -1556,6 +1619,7 @@
     deskRealtor.addEventListener('click', () => loadDesk('realtor'));
     deskRetry.addEventListener('click', () => loadDesk(deskRole));
     followCreateButton.addEventListener('click', createFollow);
+    dnaToggle.addEventListener('click', toggleDna);
 
     async function searchSpec() {
       if (!initData) { authGate.classList.add('show'); return; }
