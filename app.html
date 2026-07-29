@@ -458,6 +458,7 @@
     if (tg) {
       tg.ready();
       tg.expand();
+      try { tg.disableVerticalSwipes && tg.disableVerticalSwipes(); } catch (_) {}
       try { tg.setHeaderColor('#0c2726'); tg.setBackgroundColor('#071c1b'); } catch (_) {}
     }
     if (!initData) authGate.classList.add('show');
@@ -495,10 +496,11 @@
       }, 1500);
     }
     async function request(url, options = {}) {
+      const {timeoutMs = 30000, ...fetchOptions} = options;
       const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), 30000);   // 15->30sn: yogun harvest yukunde spurious 'sonuc alinamadi' onlenir
+      const timer = setTimeout(() => controller.abort(), timeoutMs);
       try {
-        const response = await fetch(url, {...options, signal:controller.signal, headers:{...(options.headers || {}),'X-Telegram-Init-Data':initData}});
+        const response = await fetch(url, {...fetchOptions, signal:controller.signal, headers:{...(fetchOptions.headers || {}),'X-Telegram-Init-Data':initData}});
         let body = {};
         try { body = await response.json(); } catch (_) {}
         if (!response.ok) {
@@ -704,17 +706,19 @@
     const secMarka = new Set(), secModel = new Set();
     const modelAdlari = new Map();
     let markalarTum = [], modellerTum = [], mahallelerTum = [];
-    let katalogYuklendi = false, countTimer = 0, sonSayi = 0, mahalleIstekNo = 0;
+    let katalogYuklendi = false, countTimer = 0, sonSayi = 0, mahalleIstekNo = 0, ilceIstekNo = 0;
     const trkucuk = s => String(s || '').toLocaleLowerCase('tr-TR');
 
     async function katalogGetir(tur, parent) {
       const url = API_KATALOG + '?tur=' + tur + (parent ? '&parent=' + parent : '');
+      const getir = () => request(url, {timeoutMs: 8000});
       try {
-        const data = await request(url);
+        const data = await getir();
         return Array.isArray(data.items) ? data.items : [];
       } catch (ilkHata) {
-        await delay(700);                       // tek otomatik tekrar (WebView gecici ag hatasi)
-        const data = await request(url);
+        if ([401, 403, 429].includes(Number(ilkHata.status))) throw ilkHata;
+        await delay(500);
+        const data = await getir();
         return Array.isArray(data.items) ? data.items : [];
       }
     }
@@ -958,13 +962,47 @@
       b.classList.contains('on') ? secRenk.add(b.dataset.color) : secRenk.delete(b.dataset.color);
       sayacYenile();
     }));
-    fIl.addEventListener('change', async () => {
-      fIlce.replaceChildren(new Option('İlçe — tümü', '')); fIlce.disabled = true;
+    async function ilceleriYenile() {
+      const provinceId = fIl.value;
+      const istekNo = ++ilceIstekNo;
       mahalleleriTemizle(); fMahalleWrap.hidden = true;
-      if (fIl.value) selectDoldur(fIlce, await katalogGetir('ilce', fIl.value), 'İlçe — tümü');
-      sayacYenile();
+      fIlce.removeAttribute('data-load-error');
+      if (!provinceId) {
+        fIlce.replaceChildren(new Option('İlçe — tümü', ''));
+        fIlce.disabled = true;
+        fIlce.removeAttribute('aria-busy');
+        sayacYenile();
+        return;
+      }
+      fIlce.replaceChildren(new Option('İlçeler yükleniyor…', ''));
+      fIlce.disabled = true;
+      fIlce.setAttribute('aria-busy', 'true');
+      try {
+        const items = await katalogGetir('ilce', provinceId);
+        if (istekNo !== ilceIstekNo || fIl.value !== provinceId) return;
+        selectDoldur(fIlce, items, items.length ? 'İlçe — tümü' : 'Bu ilde ilçe kaydı yok');
+        fIlce.disabled = !items.length;
+      } catch (_) {
+        if (istekNo !== ilceIstekNo || fIl.value !== provinceId) return;
+        fIlce.replaceChildren(
+          new Option('İlçe listesi yüklenemedi', ''),
+          new Option('İlçeler alınamadı — tekrar dene', '__retry__')
+        );
+        fIlce.disabled = false;
+        fIlce.setAttribute('data-load-error', 'true');
+      } finally {
+        if (istekNo === ilceIstekNo) fIlce.removeAttribute('aria-busy');
+      }
+      if (istekNo === ilceIstekNo) sayacYenile();
+    }
+    fIl.addEventListener('change', () => {
+      ilceleriYenile();
     });
     fIlce.addEventListener('change', async () => {
+      if (fIlce.value === '__retry__') {
+        await ilceleriYenile();
+        return;
+      }
       mahalleleriTemizle();
       const goster = kategori === 'emlak' && fIlce.value;
       fMahalleWrap.hidden = !goster;
