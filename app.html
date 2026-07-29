@@ -450,9 +450,9 @@
         <div aria-hidden="true">🧬</div>
         <div class="dna-copy">
           <b>Fırsat DNA</b>
-          <span id="dnaMeta">Tercihlerinle açıklanabilir yakın fırsatları bulur.</span>
+          <span id="dnaMeta">Kapalı. Açarsan aynı kategorideki aktif takiplerinin şehri ve seçimlerinle yakın fırsat önerir.</span>
         </div>
-        <button class="dna-toggle" id="dnaToggle" type="button" aria-pressed="true">AÇIK</button>
+        <button class="dna-toggle off" id="dnaToggle" type="button" aria-pressed="false">KAPALI</button>
       </article>
       <div class="follow-list" id="followList" aria-live="polite"><div class="loading-box">Takiplerin yükleniyor…</div></div>
     </section>
@@ -1176,7 +1176,7 @@
       sent:'gönderildi', failed:'yeniden denenecek', claimed:'gönderiliyor'
     })[value] || '';
 
-    let dnaEnabled = true;
+    let dnaEnabled = false;
     function renderDna(value) {
       const data = value || {};
       dnaEnabled = Boolean(data.enabled);
@@ -1187,9 +1187,9 @@
       const quietStart = Number(data.quiet_start ?? 23);
       const quietEnd = Number(data.quiet_end ?? 8);
       text(dnaMeta, dnaEnabled
-        ? 'Açık takiplerin önce gelir · günde en fazla ' + daily
+        ? 'Aynı kategori + aktif takip şehirlerin · günde en fazla ' + daily
           + ' yakın fırsat · sessiz saat ' + quietStart + ':00–' + quietEnd + ':00'
-        : 'Akıllı yakın fırsatlar kapalı; açık takiplerin çalışmaya devam ediyor.');
+        : 'Kapalı. Açarsan aynı kategorideki aktif takiplerinin şehri ve seçimlerinle yakın fırsat önerir; takiplerin etkilenmez.');
     }
     async function loadDna() {
       if (!initData) return;
