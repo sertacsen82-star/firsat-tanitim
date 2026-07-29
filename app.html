@@ -643,19 +643,28 @@
     function showResults(payload) {
       clearInterval(progressTimer); setStatus(false); button.disabled = false;
       const items = Array.isArray(payload.results) ? payload.results : [];
+      const toplam = Number(payload.total_candidates || 0);
       results.replaceChildren();
       if (!items.length) {
         empty.classList.add('show');
-        empty.querySelector('b').textContent = 'Bu aramada net sonuç çıkmadı';
-        empty.querySelector('p').textContent = 'Şehir, model veya bütçeyi değiştirip tekrar dene.';
-        text(count, '0 sonuç');
+        empty.querySelector('b').textContent = toplam
+          ? 'Puanlı kart çıkmadı; envanter hazır'
+          : 'Bu aramada net sonuç çıkmadı';
+        empty.querySelector('p').textContent = toplam
+          ? 'Aşağıdan eşleşen ilanların tamamını listeleyebilirsin.'
+          : 'Şehir, model veya bütçeyi değiştirip tekrar dene.';
+        text(count, toplam ? toplam.toLocaleString('tr-TR') + ' aday' : '0 sonuç');
+        if (sonSpec && toplam > 0) {
+          listeRows.replaceChildren(); listeOffset = 0; listeDevamBtn.hidden = true;
+          listeAcBtn.disabled = false; listeAcBtn.hidden = false; listePanel.hidden = false;
+          text(listeAcBtn, '📋 Tümünü listele (' + toplam.toLocaleString('tr-TR') + ' ilan, en yeni önce)');
+        }
         return;
       }
       empty.classList.remove('show');
       const fragment = document.createDocumentFragment();
       items.forEach((item, index) => fragment.appendChild(renderCard(item, index)));
       results.appendChild(fragment);
-      const toplam = Number(payload.total_candidates || 0);
       text(count, items.length + ' fırsat' + (toplam > items.length ? ' · ' + toplam + ' aday içinden' : ''));
       // #2 vitrin: form aramasiysa ve aday > gosterilen kart -> tam envanter listesi teklif et
       if (sonSpec && toplam > items.length) {
@@ -683,11 +692,12 @@
     const API_COUNT = API.replace('/search', '/count');
     const API_LISTE = API.replace('/search', '/liste');
     // #2 vitrin: skorlu arama 24 kartla sinirli -> son SPEC'i tut, 'Tumunu listele' puansiz sayfalar
-    let sonSpec = null, listeOffset = 0, listeToplam = 0;
+    let sonSpec = null, listeOffset = 0, listeToplam = 0, listeRequestVersion = 0;
     const _g = id => document.getElementById(id);   // ($ helper'i asagida tanimli — TDZ tuzagi)
     const listePanel = _g('listePanel'), listeAcBtn = _g('listeAcBtn'),
           listeRows = _g('listeRows'), listeDevamBtn = _g('listeDevamBtn');
     function listeKapat() {
+      ++listeRequestVersion;
       sonSpec = null; listeOffset = 0; listeToplam = 0;
       listePanel.hidden = true; listeAcBtn.hidden = true; listeDevamBtn.hidden = true;
       listeRows.replaceChildren();
@@ -721,10 +731,14 @@
     }
     async function listeYukle() {
       if (!sonSpec) return;
+      const requestVersion = ++listeRequestVersion;
+      const requestSpec = JSON.parse(JSON.stringify(sonSpec));
+      const requestOffset = listeOffset;
       listeDevamBtn.hidden = true; listeAcBtn.disabled = true; text(listeAcBtn, 'Yükleniyor…');
       try {
         const out = await request(API_LISTE, {method:'POST', headers:{'Content-Type':'application/json'},
-                                              body: JSON.stringify({spec: sonSpec, offset: listeOffset})});
+                                              body: JSON.stringify({spec: requestSpec, offset: requestOffset})});
+        if (requestVersion !== listeRequestVersion || !sonSpec) return;
         listeAcBtn.hidden = true;
         listeToplam = Number(out.total || 0);
         const items = Array.isArray(out.items) ? out.items : [];
@@ -738,6 +752,7 @@
           listeDevamBtn.hidden = false;
         }
       } catch (e) {
+        if (requestVersion !== listeRequestVersion) return;
         listeAcBtn.hidden = false; listeAcBtn.disabled = false;
         text(listeAcBtn, '📋 Tümünü listele — tekrar dene');
       }
@@ -769,6 +784,7 @@
     const modelAdlari = new Map();
     let markalarTum = [], modellerTum = [], mahallelerTum = [];
     let katalogYuklendi = false, countTimer = 0, sonSayi = 0, mahalleIstekNo = 0, ilceIstekNo = 0;
+    let countIstekNo = 0, modelIstekNo = 0, followIstekNo = 0;
     const trkucuk = s => String(s || '').toLocaleLowerCase('tr-TR');
 
     async function katalogGetir(tur, parent) {
@@ -793,7 +809,7 @@
       kutu.replaceChildren();
       if (!items.length) { const s = document.createElement('span'); s.className = 'hint'; s.textContent = 'Kayıt yok'; kutu.appendChild(s); return; }
       items.forEach(it => {
-        const b = document.createElement('button'); b.type = 'button'; b.textContent = it.ad;
+        const b = document.createElement('button'); b.type = 'button'; b.textContent = it.display_name || it.ad;
         if (secim.has(it.id)) b.classList.add('on');
         b.addEventListener('click', () => { b.classList.toggle('on'); tik(it, b.classList.contains('on')); });
         kutu.appendChild(b);
@@ -801,9 +817,10 @@
     }
     function mahalleCiz() {
       const ara = trkucuk(fMahalleAra.value);
-      const liste = mahallelerTum.filter(it =>
-        secMahalle.has(it.id) || !ara || trkucuk(it.ad).includes(ara)
-      );
+      const liste = mahallelerTum.filter(it => {
+        const aliasMetni = Array.isArray(it.aliases) ? it.aliases.join(' ') : '';
+        return secMahalle.has(it.id) || !ara || trkucuk((it.display_name || it.ad) + ' ' + it.ad + ' ' + aliasMetni).includes(ara);
+      });
       if (!mahallelerTum.length) {
         fMahalle.replaceChildren();
         const s = document.createElement('span'); s.className = 'hint';
@@ -835,7 +852,7 @@
     function markaCiz() {
       const ara = trkucuk($('fMarkaAra').value);
       const liste = markalarTum.filter(m => m.tip !== 'motosiklet')
-                               .filter(m => !ara || trkucuk(m.ad).includes(ara));
+                               .filter(m => secMarka.has(m.id) || !ara || trkucuk(m.ad).includes(ara));
       chipListe(fMarka, liste, secMarka, async (it, on) => {
         on ? secMarka.add(it.id) : secMarka.delete(it.id);
         await modelleriYenile(); sayacYenile();
@@ -843,7 +860,7 @@
     }
     function modelCiz() {
       const ara = trkucuk($('fModelAra').value);
-      const liste = modellerTum.filter(m => !ara || trkucuk(m.ad).includes(ara));
+      const liste = modellerTum.filter(m => secModel.has(m.id) || !ara || trkucuk(m.ad).includes(ara));
       if (!modellerTum.length) {
         fModel.replaceChildren(); const s = document.createElement('span');
         s.className = 'hint'; s.textContent = 'Önce marka seç'; fModel.appendChild(s);
@@ -852,10 +869,14 @@
       chipListe(fModel, liste, secModel, (it, on) => { on ? secModel.add(it.id) : secModel.delete(it.id); sayacYenile(); });
     }
     async function modelleriYenile() {
-      if (!secMarka.size) {
+      const istekNo = ++modelIstekNo;
+      const markaIds = [...secMarka].sort((a, b) => a - b);
+      const markaAnahtari = markaIds.join(',');
+      if (!markaIds.length) {
         modellerTum = []; secModel.clear(); modelCiz(); return;
       }
-      const listeler = await Promise.all([...secMarka].map(id => katalogGetir('model', id)));
+      const listeler = await Promise.all(markaIds.map(id => katalogGetir('model', id)));
+      if (istekNo !== modelIstekNo || [...secMarka].sort((a, b) => a - b).join(',') !== markaAnahtari) return;
       modellerTum = listeler.flat();
       modellerTum.forEach(m => modelAdlari.set(m.id, m.ad));
       [...secModel].forEach(id => { if (!modellerTum.some(m => m.id === id)) secModel.delete(id); });
@@ -914,17 +935,20 @@
       return spec;
     }
     function sayacYenile() {
+      const istekNo = ++countIstekNo;
       clearTimeout(countTimer);
       countTimer = setTimeout(async () => {
-        if (!initData) return;
+        if (!initData || istekNo !== countIstekNo) return;
         try {
           text(fCount, 'Sayılıyor…'); text(fCountNote, '');
           const out = await request(API_COUNT, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(specKur())});
+          if (istekNo !== countIstekNo) return;
           sonSayi = Number(out.count || 0);
           text(fCount, sonSayi ? sonSayi.toLocaleString('tr-TR') + ' ilan bulundu' : 'Bu filtrede ilan yok');
           text(fCountNote, out.kapsam_notu || (sonSayi ? 'Getir\'e bas — en iyileri puanlayıp getireyim' : 'filtreyi gevşetmeyi dene'));
           fGetir.disabled = !sonSayi;
         } catch (err) {
+          if (istekNo !== countIstekNo) return;
           text(fCount, 'Sayaç şu an yanıt vermedi'); text(fCountNote, 'seçimlerin geçerli, tekrar denenecek');
           fGetir.disabled = false;
         }
@@ -1078,6 +1102,9 @@
     ['fPmin','fPmax','fYmin','fYmax','fKmMin','fKmMax','fYakit','fVites','fM2min','fM2max','fSatici'].forEach(id => {
       $(id).addEventListener('change', sayacYenile); $(id).addEventListener('input', sayacYenile);
     });
+    ['hatasiz','boyasiz','tramersiz','degisensiz','orijinal','sifir_km'].forEach(alan => {
+      $('fK_' + alan).addEventListener('change', sayacYenile);
+    });
     $('fHizli').querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
       $('fPmax').value = Number(b.dataset.max).toLocaleString('tr-TR'); sayacYenile();
     }));
@@ -1177,6 +1204,7 @@
 
     async function loadFollows(showLoading = true) {
       if (!initData) { authGate.classList.add('show'); return; }
+      const istekNo = ++followIstekNo;
       if (showLoading) {
         followList.replaceChildren();
         const box = document.createElement('div'); box.className = 'loading-box'; text(box, 'Takiplerin yükleniyor…');
@@ -1184,15 +1212,21 @@
       }
       try {
         const data = await request(API_FOLLOWS);
+        if (istekNo !== followIstekNo) return;
         const usage = data.usage || {};
         text(followUsage, Number(usage.used || 0) + ' / ' + Number(usage.limit || 0));
         renderFollows(Array.isArray(data.items) ? data.items : []);
       } catch (error) {
+        if (istekNo !== followIstekNo) return;
         const message = followFriendlyError(error);
         showFollowNotice('error', message[0], message[1]);
         followList.replaceChildren();
-        const box = document.createElement('div'); box.className = 'loading-box'; text(box, 'Takipler şu an alınamadı. Yeniden deneyebilirsin.');
-        followList.appendChild(box);
+        const box = document.createElement('div'); box.className = 'loading-box';
+        const detail = document.createElement('div'); text(detail, 'Takipler şu an alınamadı.');
+        const retry = document.createElement('button'); retry.type = 'button';
+        text(retry, 'Takipleri tekrar yükle');
+        retry.addEventListener('click', () => loadFollows(true));
+        box.append(detail, retry); followList.appendChild(box);
       }
     }
 
@@ -1318,8 +1352,14 @@
           container.appendChild(more);
         }
       } catch (error) {
-        if (!cursor) text(container, 'Teslim geçmişi şu an alınamadı.');
-        else {
+        if (!cursor) {
+          container.replaceChildren();
+          const detail = document.createElement('div'); text(detail, 'Teslim geçmişi şu an alınamadı.');
+          const retry = document.createElement('button'); retry.type = 'button'; retry.className = 'event-more';
+          text(retry, 'Geçmişi tekrar yükle');
+          retry.addEventListener('click', () => fetchFollowEventPage(id, control, container, null));
+          container.append(detail, retry);
+        } else {
           if (oldMore) { oldMore.disabled = false; text(oldMore, 'Daha fazla'); }
           showFollowNotice('error', 'Geçmiş tamamlanamadı', 'Sonraki sayfa alınamadı; yeniden deneyebilirsin.');
         }
@@ -1432,7 +1472,9 @@
       const subtitle = document.createElement('p'); text(subtitle, deskPublicText(section.subtitle, 'Canlı havuzdan seçildi.'));
       copy.append(title, subtitle);
       const items = Array.isArray(section.items) ? section.items : [];
-      const countNode = document.createElement('span'); countNode.className = 'desk-section-count'; text(countNode, items.length + ' kayıt');
+      const totalItems = Math.max(items.length, Number(section.total || 0));
+      const countLabel = totalItems > items.length ? items.length + ' / ' + totalItems + ' kayıt' : totalItems + ' kayıt';
+      const countNode = document.createElement('span'); countNode.className = 'desk-section-count'; text(countNode, countLabel);
       head.append(copy, countNode); block.appendChild(head);
       const list = document.createElement('div'); list.className = 'desk-items';
       if (items.length) items.forEach(item => list.appendChild(renderDeskItem(item || {})));
@@ -1492,6 +1534,7 @@
       followPromise.hidden = activeView !== 'search';
       valueGrid.hidden = activeView !== 'search';
       if (activeView !== 'desk') ++deskRequestVersion;
+      if (activeView !== 'follows') ++followIstekNo;
       if (activeView === 'follows') {
         text(heroEyebrow, 'Akıllı takip'); headlineYaz('Takiplerin, ', 'kontrolün sende.');
         text(heroLead, 'Aktif takiplerini, tarama durumunu ve gerçek teslim geçmişini buradan yönet.');
