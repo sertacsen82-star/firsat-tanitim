@@ -272,7 +272,7 @@
         <div id="fMahalleWrap" hidden style="margin-top:8px">
           <div class="f-label">Mahalle <small>opsiyonel · birden çok seçebilirsin</small></div>
           <div class="frow" style="grid-template-columns:1fr;margin-bottom:7px">
-            <input id="fMahalleAra" type="search" autocomplete="off" aria-label="Mahalle ara" placeholder="Mahalle yaz — liste süzülür">
+            <input id="fMahalleAra" type="search" autocomplete="off" aria-label="Mahalle ara" placeholder="Önce ilçe seç" disabled>
           </div>
           <div class="chips2" id="fMahalle" aria-label="Mahalle seçenekleri"><span class="hint">Önce ilçe seç</span></div>
         </div>
@@ -799,6 +799,7 @@
     const secMarka = new Set(), secModel = new Set();
     const modelAdlari = new Map();
     let markalarTum = [], modellerTum = [], mahallelerTum = [];
+    const MAHALLE_ILK_LIMIT = 36, MAHALLE_ARAMA_LIMIT = 80;
     let katalogYuklendi = false, countTimer = 0, sonSayi = 0, mahalleIstekNo = 0, ilceIstekNo = 0;
     let countIstekNo = 0, modelIstekNo = 0, followIstekNo = 0;
     const trkucuk = s => String(s || '').toLocaleLowerCase('tr-TR');
@@ -833,7 +834,7 @@
     }
     function mahalleCiz() {
       const ara = trkucuk(fMahalleAra.value);
-      const liste = mahallelerTum.filter(it => {
+      const eslesenler = mahallelerTum.filter(it => {
         const aliasMetni = Array.isArray(it.aliases) ? it.aliases.join(' ') : '';
         return secMahalle.has(it.id) || !ara || trkucuk((it.display_name || it.ad) + ' ' + it.ad + ' ' + aliasMetni).includes(ara);
       });
@@ -844,14 +845,25 @@
         fMahalle.appendChild(s);
         return;
       }
+      const secilenler = eslesenler.filter(it => secMahalle.has(it.id));
+      const digerleri = eslesenler.filter(it => !secMahalle.has(it.id));
+      const limit = ara ? MAHALLE_ARAMA_LIMIT : MAHALLE_ILK_LIMIT;
+      const liste = [...secilenler, ...digerleri].slice(0, Math.max(limit, secilenler.length));
       chipListe(fMahalle, liste, secMahalle, (it, on) => {
         on ? secMahalle.add(it.id) : secMahalle.delete(it.id);
         mahalleCiz(); sayacYenile();
       });
+      const ozet = document.createElement('span'); ozet.className = 'hint mahalle-summary';
+      ozet.textContent = ara
+        ? eslesenler.length + ' eşleşme' + (eslesenler.length > liste.length ? ' · ilk ' + liste.length + ' gösteriliyor' : '')
+        : mahallelerTum.length + ' mahalle · ilk ' + liste.length + ' gösteriliyor — yazarak ara';
+      fMahalle.prepend(ozet);
     }
     function mahalleleriTemizle() {
       ++mahalleIstekNo;
       secMahalle.clear(); mahallelerTum = []; fMahalleAra.value = '';
+      fMahalleAra.disabled = true; fMahalleAra.placeholder = 'Önce ilçe seç';
+      fMahalle.removeAttribute('aria-busy');
       mahalleCiz();
     }
     async function mahalleleriYenile() {
@@ -860,10 +872,24 @@
       secMahalle.clear(); mahallelerTum = []; fMahalleAra.value = '';
       mahalleCiz();
       if (!districtId) return;
-      const items = await katalogGetir('mahalle', districtId);
-      if (istekNo !== mahalleIstekNo || fIlce.value !== districtId) return;
-      mahallelerTum = items;
-      mahalleCiz();
+      fMahalleAra.disabled = true; fMahalleAra.placeholder = 'Mahalleler yükleniyor…';
+      fMahalle.setAttribute('aria-busy', 'true');
+      try {
+        const items = await katalogGetir('mahalle', districtId);
+        if (istekNo !== mahalleIstekNo || fIlce.value !== districtId) return;
+        mahallelerTum = items;
+        fMahalleAra.disabled = false;
+        fMahalleAra.placeholder = 'Mahalle yaz — liste süzülür';
+        fMahalle.removeAttribute('aria-busy');
+        mahalleCiz();
+      } catch (error) {
+        if (istekNo !== mahalleIstekNo || fIlce.value !== districtId) return;
+        mahallelerTum = [];
+        fMahalleAra.disabled = true;
+        fMahalleAra.placeholder = 'Mahalle listesi alınamadı';
+        fMahalle.removeAttribute('aria-busy');
+        hataKutusu(fMahalle, 'Mahalle listesi alınamadı.', mahalleleriYenile);
+      }
     }
     function markaCiz() {
       const ara = trkucuk($('fMarkaAra').value);
