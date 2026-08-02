@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
   <!-- Aşama-2 (Codex): TEK KAYNAK = repo web/app.html; deploy'da BotFather URL ?v= BU sürümle artırılır -->
-  <meta name="af-app-version" content="20260802-full-surface-parity">
+  <meta name="af-app-version" content="20260802-panel-donma-fix">
   <meta name="theme-color" content="#0c2726">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://telegram.org; style-src 'self' 'unsafe-inline'; connect-src https://srv1756048.hstgr.cloud; img-src 'self' data: https:; object-src 'none'; base-uri 'none'; form-action 'self'">
   <title>Akıllı Fırsat · Oto ve Emlak Fırsat Motoru</title>
@@ -1292,6 +1292,7 @@
     })[value] || '';
 
     let dnaEnabled = false;
+    let dnaLoaded = false;
     function renderDna(value) {
       const data = value || {};
       dnaEnabled = Boolean(data.enabled);
@@ -1312,6 +1313,7 @@
       try {
         const data = await request(API_DNA);
         renderDna(data.dna);
+        dnaLoaded = true;
       } catch (_) {
         text(dnaMeta, 'Fırsat DNA ayarı şu an alınamadı; takiplerin etkilenmez.');
       } finally {
@@ -1322,6 +1324,11 @@
       if (!initData) { authGate.classList.add('show'); return; }
       dnaToggle.disabled = true;
       try {
+        if (!dnaLoaded) {
+          const current = await request(API_DNA);
+          renderDna(current.dna);
+          dnaLoaded = true;
+        }
         const data = await request(API_DNA, {
           method:'PATCH', headers:{'Content-Type':'application/json'},
           body:JSON.stringify({enabled:!dnaEnabled})
@@ -1721,7 +1728,6 @@
         text(heroLead, 'Aktif takiplerini, tarama durumunu ve gerçek teslim geçmişini buradan yönet.');
         if (shouldLoad) {
           loadFollows();
-          loadDna();
         }
       } else if (activeView === 'desk') {
         text(heroEyebrow, 'Profesyonel radar'); headlineYaz('Bugünün işini, ', 'öne taşı.');
