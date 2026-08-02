@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
   <!-- Aşama-2 (Codex): TEK KAYNAK = repo web/app.html; deploy'da BotFather URL ?v= BU sürümle artırılır -->
-  <meta name="af-app-version" content="20260729-is-masasi">
+  <meta name="af-app-version" content="20260802-panel-donma-fix">
   <meta name="theme-color" content="#0c2726">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://telegram.org; style-src 'self' 'unsafe-inline'; connect-src https://srv1756048.hstgr.cloud; img-src 'self' data: https:; object-src 'none'; base-uri 'none'; form-action 'self'">
   <title>Akıllı Fırsat · Oto ve Emlak Fırsat Motoru</title>
@@ -63,6 +63,7 @@
     .status.show{display:flex}
     .spinner{width:24px;height:24px;flex:none;border:2px solid rgba(255,255,255,.15);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
     .status b{display:block;font-size:13px}.status span{display:block;color:var(--muted);font-size:12px;margin-top:3px}
+    .status button{flex:none;margin-left:auto;border:1px solid rgba(244,213,139,.38);border-radius:11px;padding:10px 12px;background:rgba(228,170,60,.12);color:var(--gold2);font-size:12px;font-weight:850;cursor:pointer}
     @keyframes spin{to{transform:rotate(360deg)}}
     .auth{display:none;margin-top:18px;padding:18px;border-radius:18px;background:#fff4d8;color:#2d2b22}
     .auth.show{display:block}.auth b{display:block;margin-bottom:6px}.auth p{font-size:13px;line-height:1.5;margin:0 0 13px;color:#665f4e}.auth a{display:inline-block;text-decoration:none;background:#172f2c;color:#fff;padding:10px 13px;border-radius:11px;font-weight:800;font-size:13px}
@@ -128,6 +129,11 @@
     .follow-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:22px 3px 12px}
     .follow-head h2{margin:0;font-size:22px;letter-spacing:-.03em}.follow-head p{margin:4px 0 0;color:var(--muted);font-size:12px}
     .usage{flex:none;padding:9px 11px;border:1px solid rgba(244,213,139,.25);border-radius:12px;background:rgba(228,170,60,.08);color:var(--gold2);font-size:12px;font-weight:850}
+    .dna-panel{display:flex;align-items:center;gap:13px;margin:0 0 12px;padding:15px;border:1px solid rgba(135,104,255,.28);border-radius:17px;background:linear-gradient(135deg,rgba(67,45,120,.27),rgba(12,48,45,.92))}
+    .dna-copy{min-width:0;flex:1}.dna-copy b{display:block;color:#eee7ff;font-size:14px}.dna-copy span{display:block;margin-top:4px;color:#bcb3d5;font-size:10px;line-height:1.45}
+    .dna-toggle{flex:none;min-width:68px;min-height:40px;border:1px solid rgba(121,231,181,.35);border-radius:999px;background:rgba(73,200,138,.16);color:#b5efd4;font-size:11px;font-weight:900;cursor:pointer}
+    .dna-toggle.off{border-color:rgba(255,255,255,.14);background:rgba(255,255,255,.07);color:#a8b8b4}
+    .dna-toggle:disabled{opacity:.55;cursor:wait}
     .follow-list{display:grid;gap:11px}
     .follow-card{padding:16px;border:1px solid rgba(255,255,255,.12);border-radius:19px;background:linear-gradient(145deg,rgba(24,65,61,.94),rgba(11,39,37,.96));box-shadow:0 14px 34px rgba(0,0,0,.18)}
     .follow-card-top{display:flex;gap:12px;align-items:flex-start}.follow-copy{min-width:0;flex:1}.follow-copy b{display:block;font-size:15px;line-height:1.35}.follow-copy small{display:block;margin-top:5px;color:var(--muted);font-size:11px;line-height:1.45}
@@ -157,6 +163,7 @@
     .desk-intro-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
     .desk-intro h2{margin:0;font-size:22px;letter-spacing:-.03em}.desk-intro p{margin:6px 0 0;color:#aac1bc;font-size:12px;line-height:1.5}
     .desk-fresh{flex:none;padding:7px 9px;border:1px solid rgba(73,200,138,.22);border-radius:999px;background:rgba(73,200,138,.08);color:#a9e5c9;font-size:10px;font-weight:850;white-space:nowrap}
+    .desk-fresh.stale{border-color:rgba(239,118,95,.34);background:rgba(239,118,95,.1);color:#ffc2b7}
     .desk-role{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px;padding:5px;border:1px solid var(--line);border-radius:15px;background:rgba(0,0,0,.15)}
     .desk-role button{min-height:46px;border:0;border-radius:11px;background:transparent;color:#a9bfba;font-weight:850;cursor:pointer}
     .desk-role button[aria-selected="true"]{background:var(--gold);color:#172720;box-shadow:0 7px 18px rgba(228,170,60,.2)}
@@ -201,6 +208,21 @@
     .lrow .lt{font-size:13.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .lrow .lm{font-size:12px;color:rgba(255,255,255,.6);margin-top:2px}
     .lrow .lp{flex:none;font-weight:900;color:var(--gold2);font-size:14px}
+    /* 20260802 mobil kapi: ana islem gorunur kalir; yatay tasma ve dev tanitim alani yoktur. */
+    @media(max-width:479px){
+      .app{padding:calc(10px + var(--safe-top)) 10px calc(24px + var(--safe-bottom));overflow-x:hidden}
+      .top{gap:9px;margin-bottom:12px}.mark{width:38px;height:38px}.brand span{display:none}.live{padding:7px 8px}.live span{display:none}
+      .product-tabs{margin-bottom:10px}.product-tabs button{min-height:43px;font-size:11px}
+      .hero{padding:15px 14px;border-radius:19px}.hero:after{width:120px;height:120px;right:-72px;top:-70px}
+      .eyebrow{font-size:10px}h1{font-size:25px;margin:9px 0 7px}.lead{font-size:12px;line-height:1.42;margin-bottom:9px}.promise{margin-top:8px;padding:9px 10px}
+      .value-grid{display:none!important}.detail{margin-top:10px;border-radius:18px}.detail-toggle{padding:14px}.detail-body{padding:1px 12px 22px}
+      .examples{display:grid;grid-template-columns:1fr;overflow:visible;padding:5px 0}.chip{width:100%;min-height:44px;white-space:normal;text-align:left;border-radius:12px}
+      .frow{grid-template-columns:1fr}.frow select,.frow input{min-height:46px}.chips2{max-height:176px}
+      .fbar{display:grid;grid-template-columns:44px minmax(0,1fr);gap:8px;bottom:calc(6px + var(--safe-bottom));margin:16px 0 0;padding:10px}
+      .fbar b{grid-column:1/-1}.fbar button{width:100%;min-height:45px;padding:11px 8px}.fbar .primary{grid-column:1/-1;min-width:0;min-height:50px;font-size:15px}.fbar .secondary{margin:0}
+      .follow-head{align-items:flex-start}.follow-actions{grid-template-columns:1fr}.status{align-items:flex-start;flex-wrap:wrap}.status button{width:100%;margin:2px 0 0}
+      .desk-intro-top{display:block}.desk-fresh{display:inline-flex;margin-top:10px}.desk-item{grid-template-columns:72px minmax(0,1fr)}
+    }
     @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}.spinner{animation-duration:1.6s}.card{animation:none}}
   </style>
 </head>
@@ -232,6 +254,7 @@
       <div class="status" id="status" role="status" aria-live="polite">
         <div class="spinner" aria-hidden="true"></div>
         <div><b id="statusTitle">Araman alındı</b><span id="statusText">İlan havuzu taranıyor…</span></div>
+        <button id="statusRetry" type="button" hidden>Tekrar dene</button>
       </div>
       <div class="auth" id="authGate">
         <b>Uygulamayı Telegram içinden aç</b>
@@ -255,11 +278,11 @@
         <span id="detailTitle">🎛 Fırsat filtresi — seç, karşılaştır, takip et</span><small id="detailHint">kapat ▴</small>
       </button>
       <div class="detail-body" id="detailBody">
-        <div class="f-label">Hazir rotalar <small>tek dokunusla filtreyi kur</small></div>
-        <div class="examples" id="quickRoutes" aria-label="Hazir arama rotalari">
-          <button class="chip" type="button" data-quick="tokat_merkez_kira_23">Tokat Merkez 2+1 / 3+1 kiralik</button>
-          <button class="chip" type="button" data-quick="tokat_kelepir">Tokat kelepir satilik</button>
-          <button class="chip" type="button" data-quick="tokat_oto_firsat">Tokat arac firsatlari</button>
+        <div class="f-label">Hazır rotalar <small>tek dokunuşla filtreyi kur</small></div>
+        <div class="examples" id="quickRoutes" aria-label="Hazır arama rotaları">
+          <button class="chip" type="button" data-quick="tokat_merkez_kira_23">Tokat Merkez 2+1 / 3+1 kiralık</button>
+          <button class="chip" type="button" data-quick="tokat_kelepir">Tokat kelepir satılık</button>
+          <button class="chip" type="button" data-quick="tokat_oto_firsat">Tokat araç fırsatları</button>
         </div>
         <div class="seg" id="fKat">
           <button type="button" class="on" data-cat="oto">🚗 Oto</button>
@@ -300,6 +323,7 @@
             <button type="button" data-property-type="daire">Daire</button>
             <button type="button" data-property-type="residence">Residence</button>
             <button type="button" data-property-type="villa">Villa</button>
+            <button type="button" data-property-type="mustakil">Müstakil Ev</button>
             <button type="button" data-property-type="arsa">Arsa</button>
             <button type="button" data-property-type="isyeri">İşyeri</button>
           </div>
@@ -436,7 +460,7 @@
           <b id="fCount">Filtre seç<small id="fCountNote">sayı burada canlı görünür</small></b>
           <button id="fSifirla" class="secondary" type="button" title="Her şeyi sıfırla" aria-label="Filtreyi sıfırla">↺</button>
           <button id="followCreateButton" class="secondary" type="button">Takibe al</button>
-          <button id="fGetir" class="primary" type="button" disabled>🔎 Bu filtreyle ara</button>
+          <button id="fGetir" class="primary" type="button" disabled>Fırsatları getir</button>
         </div>
       </div>
     </section>
@@ -446,6 +470,14 @@
         <div><h2 id="followsTitle">Takiplerim</h2><p>Takiplerini yönet; tüm eşleşmeleri ve Telegram teslim durumunu gör.</p></div>
         <div class="usage" id="followUsage">— / —</div>
       </div>
+      <article class="dna-panel" id="dnaPanel">
+        <div aria-hidden="true">🧬</div>
+        <div class="dna-copy">
+          <b>Fırsat DNA</b>
+          <span id="dnaMeta">Kapalı. Açarsan aynı kategorideki aktif takiplerinin şehri ve seçimlerinle yakın fırsat önerir.</span>
+        </div>
+        <button class="dna-toggle off" id="dnaToggle" type="button" aria-pressed="false">KAPALI</button>
+      </article>
       <div class="follow-list" id="followList" aria-live="polite"><div class="loading-box">Takiplerin yükleniyor…</div></div>
     </section>
     <section class="desk-panel" id="deskPanel" hidden aria-labelledby="deskTitle">
@@ -502,6 +534,7 @@
     'use strict';
     const API = 'https://srv1756048.hstgr.cloud/api/app/search';
     const API_FOLLOWS = API.replace('/search', '/follows');
+    const API_DNA = API.replace('/search', '/dna');
     const API_DESK = API.replace('/search', '/desk');
     const tg = window.Telegram && window.Telegram.WebApp;
     const initData = tg && tg.initData ? tg.initData : '';
@@ -511,6 +544,7 @@
     const statusBox = document.getElementById('status');
     const statusTitle = document.getElementById('statusTitle');
     const statusText = document.getElementById('statusText');
+    const statusRetry = document.getElementById('statusRetry');
     const results = document.getElementById('results');
     const empty = document.getElementById('empty');
     const count = document.getElementById('resultCount');
@@ -547,6 +581,7 @@
       statusBox.classList.toggle('show', show);
       if (title) text(statusTitle, title);
       if (detail) text(statusText, detail);
+      statusRetry.hidden = true;
     }
     function startProgress(version) {
       clearInterval(progressTimer);
@@ -562,6 +597,14 @@
     async function request(url, options = {}) {
       const {timeoutMs = 30000, ...fetchOptions} = options;
       const controller = new AbortController();
+      // Dış signal desteği (20260802): sayaç gibi "yenisi geldi, eskisini bırak"
+      // akışları isteği GERÇEKTEN iptal edebilsin — yoksa yavaş sunucuda istekler
+      // üst üste birikip telefonda donma hissi veriyordu.
+      if (fetchOptions.signal) {
+        const dis = fetchOptions.signal;
+        if (dis.aborted) controller.abort();
+        else dis.addEventListener('abort', () => controller.abort(), {once: true});
+      }
       const timer = setTimeout(() => controller.abort(), timeoutMs);
       try {
         const response = await fetch(url, {...fetchOptions, signal:controller.signal, headers:{...(fetchOptions.headers || {}),'X-Telegram-Init-Data':initData}});
@@ -688,7 +731,8 @@
       if (error && error.status === 503) return ['Arama motoru geçici olarak hazır değil', 'Kısa bir süre sonra tekrar dene; mevcut aramalar korunuyor.'];
       if (error && error.message === 'queue_full') return ['Arama sırası dolu', 'Birkaç dakika sonra tekrar dene.'];
       if (error && error.message === 'search_timeout') return ['Arama uzun sürdü', 'Sistem çalışıyor; sorguyu biraz daraltıp tekrar deneyebilirsin.'];
-      return ['Şu an sonuç alınamadı', 'Bağlantını kontrol edip tekrar dene.'];
+      if (error && error.name === 'AbortError') return ['Sunucu süresinde cevap vermedi', 'Filtren korunuyor; Tekrar dene düğmesine dokunabilirsin.'];
+      return ['Şu an sonuç alınamadı', 'Filtren korunuyor; kısa bir süre sonra tekrar deneyebilirsin.'];
     }
     /* Aşama-2 G9 (Codex): serbest-metin {q} yolu TAMAMEN KALDIRILDI — sunucu spec-only (P0-D
        spec_required). Mini App'te arama YALNIZ FilterSpec formundan çıkar; serbest cümle Telegram'da. */
@@ -774,6 +818,7 @@
     const deskFresh = $('deskFresh'), deskDisclosure = $('deskDisclosure'), deskLead = $('deskLead');
     const followCreateButton = $('followCreateButton'), followList = $('followList');
     const followNotice = $('followNotice'), followUsage = $('followUsage');
+    const dnaToggle = $('dnaToggle'), dnaMeta = $('dnaMeta');
     const heroEyebrow = $('heroEyebrow'), headline = $('headline'), heroLead = $('heroLead');
     const followPromise = $('followPromise'), valueGrid = $('valueGrid'), detailTitle = $('detailTitle');
     const dToggle = $('detailToggle'), dBody = $('detailBody');
@@ -792,6 +837,7 @@
     let katalogYuklendi = false, countTimer = 0, sonSayi = 0, mahalleIstekNo = 0, ilceIstekNo = 0;
     let countIstekNo = 0, modelIstekNo = 0, followIstekNo = 0;
     const trkucuk = s => String(s || '').toLocaleLowerCase('tr-TR');
+
     function selectByText(select, value) {
       const wanted = trkucuk(value);
       const option = [...select.options].find(o => trkucuk(o.textContent).startsWith(wanted));
@@ -998,22 +1044,35 @@
       if (pmax) spec.price_max = pmax;
       return spec;
     }
+    let countAbort = null;
     function sayacYenile() {
       const istekNo = ++countIstekNo;
       clearTimeout(countTimer);
+      // 20260802 DONMA DÜZELTMESİ (Patron'un telefon bulgusu): arama düğmesi
+      // SAYACA REHİN DEĞİL. Havuz DB'si soğukken /count 8+ sn sürebiliyor
+      // (VPS ölçümü); her il/ilçe/mahalle seçimi sayacı yeniden başlattığı için
+      // düğme sürekli ölü kalıyor ve panel "donmuş" görünüyordu. Kural:
+      // yalnız KESİNLEŞMİŞ "0 ilan" düğmeyi kapatır; bilinmeyen/sayılıyor/hata
+      // durumlarında arama HEP açık — sunucu zaten doğru sonucu döndürür.
+      if (initData) fGetir.disabled = false;
       countTimer = setTimeout(async () => {
         if (!initData || istekNo !== countIstekNo) return;
+        if (countAbort) countAbort.abort();      // eski sayaç isteğini GERÇEKTEN iptal et
+        const ctrl = new AbortController();
+        countAbort = ctrl;
         try {
           text(fCount, 'Sayılıyor…'); text(fCountNote, '');
-          const out = await request(API_COUNT, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(specKur())});
+          const out = await request(API_COUNT, {method:'POST', headers:{'Content-Type':'application/json'},
+                                                body: JSON.stringify(specKur()),
+                                                signal: ctrl.signal, timeoutMs: 15000});
           if (istekNo !== countIstekNo) return;
           sonSayi = Number(out.count || 0);
           text(fCount, sonSayi ? sonSayi.toLocaleString('tr-TR') + ' ilan bulundu' : 'Bu filtrede ilan yok');
           text(fCountNote, out.kapsam_notu || (sonSayi ? 'Getir\'e bas — en iyileri puanlayıp getireyim' : 'filtreyi gevşetmeyi dene'));
-          fGetir.disabled = !sonSayi;
+          fGetir.disabled = !sonSayi;            // yalnız KESİN 0 kapatır
         } catch (err) {
           if (istekNo !== countIstekNo) return;
-          text(fCount, 'Sayaç şu an yanıt vermedi'); text(fCountNote, 'seçimlerin geçerli, tekrar denenecek');
+          text(fCount, 'Sayaç şu an yanıt vermedi'); text(fCountNote, 'seçimlerin geçerli — aramayı yine de başlatabilirsin');
           fGetir.disabled = false;
         }
       }, 450);
@@ -1025,13 +1084,20 @@
       b.addEventListener('click', tekrar); kutu.appendChild(b);
     }
     async function illeriYukle() {
+      fIl.replaceChildren(new Option('Şehirler yükleniyor…', ''));
+      fIl.disabled = true;
+      fIl.setAttribute('aria-busy', 'true');
       try {
         selectDoldur(fIl, await katalogGetir('il'), 'İl — tümü');
+        fIl.removeAttribute('data-load-error');
       } catch (e) {
-        fIl.replaceChildren(new Option('İl listesi alınamadı — tekrar açınca yüklenir', ''));
+        fIl.replaceChildren(
+          new Option('Şehir listesi yüklenemedi', ''),
+          new Option('Şehirleri yeniden yükle', '__retry__')
+        );
         fIl.disabled = false;
-        setTimeout(illeriYukle, 2500);          // sessiz otomatik tekrar
-      }
+        fIl.setAttribute('data-load-error', 'true');
+      } finally { fIl.removeAttribute('aria-busy'); }
     }
     async function markalariYukle() {
       try {
@@ -1146,6 +1212,7 @@
       if (istekNo === ilceIstekNo) sayacYenile();
     }
     fIl.addEventListener('change', () => {
+      if (fIl.value === '__retry__') { illeriYukle(); return; }
       ilceleriYenile();
     });
     fIlce.addEventListener('change', async () => {
@@ -1223,6 +1290,51 @@
     const deliveryLabel = value => ({
       sent:'gönderildi', failed:'yeniden denenecek', claimed:'gönderiliyor'
     })[value] || '';
+
+    let dnaEnabled = false;
+    function renderDna(value) {
+      const data = value || {};
+      dnaEnabled = Boolean(data.enabled);
+      dnaToggle.classList.toggle('off', !dnaEnabled);
+      dnaToggle.setAttribute('aria-pressed', String(dnaEnabled));
+      text(dnaToggle, dnaEnabled ? 'AÇIK' : 'KAPALI');
+      const daily = Number(data.daily_limit || 3);
+      const quietStart = Number(data.quiet_start ?? 23);
+      const quietEnd = Number(data.quiet_end ?? 8);
+      text(dnaMeta, dnaEnabled
+        ? 'Aynı kategori + aktif takip şehirlerin · günde en fazla ' + daily
+          + ' yakın fırsat · sessiz saat ' + quietStart + ':00–' + quietEnd + ':00'
+        : 'Kapalı. Açarsan aynı kategorideki aktif takiplerinin şehri ve seçimlerinle yakın fırsat önerir; takiplerin etkilenmez.');
+    }
+    async function loadDna() {
+      if (!initData) return;
+      dnaToggle.disabled = true;
+      try {
+        const data = await request(API_DNA);
+        renderDna(data.dna);
+      } catch (_) {
+        text(dnaMeta, 'Fırsat DNA ayarı şu an alınamadı; takiplerin etkilenmez.');
+      } finally {
+        dnaToggle.disabled = false;
+      }
+    }
+    async function toggleDna() {
+      if (!initData) { authGate.classList.add('show'); return; }
+      dnaToggle.disabled = true;
+      try {
+        const data = await request(API_DNA, {
+          method:'PATCH', headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({enabled:!dnaEnabled})
+        });
+        renderDna(data.dna);
+        try { tg && tg.HapticFeedback && tg.HapticFeedback.notificationOccurred('success'); } catch (_) {}
+      } catch (error) {
+        const message = followFriendlyError(error);
+        showFollowNotice('error', message[0], message[1]);
+      } finally {
+        dnaToggle.disabled = false;
+      }
+    }
 
     function renderFollows(items) {
       followList.replaceChildren();
@@ -1481,8 +1593,12 @@
     }
     function deskUpdatedLabel(value) {
       const date = new Date(value || '');
-      if (!Number.isFinite(date.getTime())) return 'Havuz verisi';
-      return 'Veri ' + new Intl.DateTimeFormat('tr-TR', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'}).format(date);
+      if (!Number.isFinite(date.getTime())) return {label:'Havuz zamanı bilinmiyor', stale:true};
+      const ageMinutes = Math.max(0, Math.floor((Date.now() - date.getTime()) / 60000));
+      const stamp = new Intl.DateTimeFormat('tr-TR', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'}).format(date);
+      return ageMinutes > 180
+        ? {label:'Veri bayat · ' + stamp, stale:true}
+        : {label:'Veri ' + stamp, stale:false};
     }
     function renderDeskStat(item) {
       const card = document.createElement('article'); card.className = 'desk-stat';
@@ -1551,7 +1667,8 @@
       const sections = Array.isArray(payload.sections) ? payload.sections : [];
       stats.forEach(item => deskStats.appendChild(renderDeskStat(item || {})));
       sections.forEach(section => deskSections.appendChild(renderDeskSection(section || {})));
-      text(deskFresh, deskUpdatedLabel(payload.updated_at));
+      const freshness = deskUpdatedLabel(payload.updated_at);
+      text(deskFresh, freshness.label); deskFresh.classList.toggle('stale', freshness.stale);
       const disclosure = deskPublicText(payload.disclosure);
       deskDisclosure.hidden = !disclosure; text(deskDisclosure, disclosure);
       const itemCount = sections.reduce((sum, section) => sum + (Array.isArray(section.items) ? section.items.length : 0), 0);
@@ -1602,7 +1719,10 @@
       if (activeView === 'follows') {
         text(heroEyebrow, 'Akıllı takip'); headlineYaz('Takiplerin, ', 'kontrolün sende.');
         text(heroLead, 'Aktif takiplerini, tarama durumunu ve gerçek teslim geçmişini buradan yönet.');
-        if (shouldLoad) loadFollows();
+        if (shouldLoad) {
+          loadFollows();
+          loadDna();
+        }
       } else if (activeView === 'desk') {
         text(heroEyebrow, 'Profesyonel radar'); headlineYaz('Bugünün işini, ', 'öne taşı.');
         text(heroLead, 'Galerici ve emlakçı için canlı fırsat, portföy ve hareket ekranı.');
@@ -1620,6 +1740,7 @@
     deskRealtor.addEventListener('click', () => loadDesk('realtor'));
     deskRetry.addEventListener('click', () => loadDesk(deskRole));
     followCreateButton.addEventListener('click', createFollow);
+    dnaToggle.addEventListener('click', toggleDna);
 
     async function searchSpec() {
       if (!initData) { authGate.classList.add('show'); return; }
@@ -1636,7 +1757,7 @@
       } catch (error) {
         if (version !== searchVersion) return;
         clearInterval(progressTimer); button.disabled = false;
-        const message = friendlyError(error); setStatus(true, message[0], message[1]); text(count, 'Tekrar denenebilir');
+        const message = friendlyError(error); setStatus(true, message[0], message[1]); statusRetry.hidden = false; text(count, 'Tekrar denenebilir');
       } finally {
         // denetim: arama bitince düğme HEP yeniden kullanılabilir — sayaç ucu düşükken sonSayi=0
         // kalıp 'Getir'i kalıcı kilitliyordu (tek kaçış formu sıfırlamaktı).
@@ -1644,6 +1765,7 @@
       }
     }
     fGetir.addEventListener('click', searchSpec);
+    statusRetry.addEventListener('click', searchSpec);
     function formSifirla() {                   // ↺ donma/karisma panik dugmesi: 0'dan basla
       ++searchVersion;                          // aktif arama/poll varsa DUSER (uzerine yazma biter)
       listeKapat();                             // #2: envanter listesi de sifirlanir
