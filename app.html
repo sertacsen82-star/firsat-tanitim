@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
   <!-- Aşama-2 (Codex): TEK KAYNAK = repo web/app.html; deploy'da BotFather URL ?v= BU sürümle artırılır -->
-  <meta name="af-app-version" content="20260802-panel-donma-fix">
+  <meta name="af-app-version" content="20260802-full-surface-parity">
   <meta name="theme-color" content="#0c2726">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://telegram.org; style-src 'self' 'unsafe-inline'; connect-src https://srv1756048.hstgr.cloud; img-src 'self' data: https:; object-src 'none'; base-uri 'none'; form-action 'self'">
   <title>Akıllı Fırsat · Oto ve Emlak Fırsat Motoru</title>
@@ -1795,7 +1795,21 @@
       try { tg && tg.HapticFeedback && tg.HapticFeedback.impactOccurred('light'); } catch (_) {}
     }
     $('fSifirla').addEventListener('click', formSifirla);
-    setView('search', false);
+
+    // Telegram dokunmatik menüsü ile Mini App aynı ürün yüzeyine açılır.
+    // v cache anahtarıdır; view/role/category yalnız başlangıç görünümünü seçer,
+    // filtre sözleşmesini değiştirmez. Arama ve takip yine tek specKur kullanır.
+    const launchParams = new URLSearchParams(window.location.search);
+    const requestedView = launchParams.get('view');
+    const requestedRole = launchParams.get('role');
+    const requestedCategory = launchParams.get('category');
+    const initialView = ['search', 'follows', 'desk'].includes(requestedView) ? requestedView : 'search';
+    if (['dealer', 'realtor'].includes(requestedRole)) deskRole = requestedRole;
+    if (['oto', 'emlak'].includes(requestedCategory) && requestedCategory !== kategori) {
+      const categoryButton = $('fKat').querySelector('button[data-cat="' + requestedCategory + '"]');
+      if (categoryButton) categoryButton.click();
+    }
+    setView(initialView, Boolean(initData));
   })();
   </script>
 </body>
