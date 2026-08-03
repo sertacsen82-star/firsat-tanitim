@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
   <!-- Aşama-2 (Codex): TEK KAYNAK = repo web/app.html; deploy'da BotFather URL ?v= BU sürümle artırılır -->
-  <meta name="af-app-version" content="20260802-telegram-launch-fallback">
+  <meta name="af-app-version" content="20260802-panel-donma-fix">
   <meta name="theme-color" content="#0c2726">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://telegram.org; style-src 'self' 'unsafe-inline'; connect-src https://srv1756048.hstgr.cloud; img-src 'self' data: https:; object-src 'none'; base-uri 'none'; form-action 'self'">
   <title>Akıllı Fırsat · Oto ve Emlak Fırsat Motoru</title>
@@ -907,15 +907,20 @@
     async function katalogGetir(tur, parent) {
       const url = API_KATALOG + '?tur=' + tur + (parent ? '&parent=' + parent : '');
       const getir = () => request(url, {timeoutMs: 8000});
-      try {
-        const data = await getir();
-        return Array.isArray(data.items) ? data.items : [];
-      } catch (ilkHata) {
-        if ([401, 403, 429].includes(Number(ilkHata.status))) throw ilkHata;
-        await delay(500);
-        const data = await getir();
-        return Array.isArray(data.items) ? data.items : [];
+      let sonHata;
+      // Hostinger TLS ilk preflight'i aralikli dusurebiliyor. Katalog GET'i salt-okur
+      // ve idempotenttir; auth/rate hatalarini asla tekrar etmeden ag hatasini sinirli dener.
+      for (let deneme = 0; deneme < 5; deneme += 1) {
+        try {
+          const data = await getir();
+          return Array.isArray(data.items) ? data.items : [];
+        } catch (hata) {
+          if ([401, 403, 429].includes(Number(hata.status))) throw hata;
+          sonHata = hata;
+          if (deneme < 4) await delay(300 * (deneme + 1));
+        }
       }
+      throw sonHata;
     }
     function selectDoldur(sel, items, bosEtiket) {
       sel.replaceChildren(new Option(bosEtiket, ''));
