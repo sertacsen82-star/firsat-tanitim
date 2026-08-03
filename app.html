@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
   <!-- Aşama-2 (Codex): TEK KAYNAK = repo web/app.html; deploy'da BotFather URL ?v= BU sürümle artırılır -->
-  <meta name="af-app-version" content="20260802-panel-donma-fix">
+  <meta name="af-app-version" content="20260802-telegram-launch-fallback">
   <meta name="theme-color" content="#0c2726">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://telegram.org; style-src 'self' 'unsafe-inline'; connect-src https://srv1756048.hstgr.cloud; img-src 'self' data: https:; object-src 'none'; base-uri 'none'; form-action 'self'">
   <title>Akıllı Fırsat · Oto ve Emlak Fırsat Motoru</title>
@@ -537,7 +537,10 @@
     const API_DNA = API.replace('/search', '/dna');
     const API_DESK = API.replace('/search', '/desk');
     const tg = window.Telegram && window.Telegram.WebApp;
-    const initData = tg && tg.initData ? tg.initData : '';
+    // Telegram SDK'si ag/engelleyici nedeniyle yuklenemese bile Web App imzasi
+    // launch hash'inde bulunur. Sunucu HMAC'i yine fail-closed dogrular.
+    const telegramLaunchParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+    const initData = tg && tg.initData ? tg.initData : (telegramLaunchParams.get('tgWebAppData') || '');
     const form = document.getElementById('searchForm');
     const input = document.getElementById('query');
     const button = document.getElementById('searchButton');
@@ -852,7 +855,11 @@
       return true;
     }
     async function quickRoute(name) {
-      if (!initData) return;
+      if (!initData) {
+        authGate.classList.add('show');
+        authGate.scrollIntoView({behavior: 'smooth', block: 'center'});
+        return;
+      }
       if (!katalogYuklendi) {
         katalogYuklendi = true;
         await Promise.all([illeriYukle(), markalariYukle()]);
